@@ -1,0 +1,23 @@
+---
+title: "Welcome to pulvinla"
+description: |
+  Il lockdown visto con INLA!
+author:
+  - name: GF
+    affiliation: Varie
+date: 02-10-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+# Learn more about creating blogs with Distill at:
+# https://rstudio.github.io/distill/blog.html
+
+```
+
+
+
