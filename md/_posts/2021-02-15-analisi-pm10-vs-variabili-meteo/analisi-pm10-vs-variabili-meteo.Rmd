@@ -1,0 +1,175 @@
+---
+title: "Analisi PM10 vs variabili meteo"
+description: |
+  A short description of the post.
+author: Maria Gabriall Villani
+date: 02-15-2021
+params:
+  parametro: pm10
+  regione: Lombardia
+output:
+  distill::distill_article:
+    self_contained: false
+---
+```{r setup, include=FALSE,message=FALSE,warning=FALSE,echo=FALSE}
+library("tidyverse")
+library("lombardia")
+library("datiMeteo")
+library("stazioniMonitoraggio")
+#library("regioniItalia") # shapefiles  da ISTAT
+library("sf")
+library("scico")
+library("janitor")
+library("GGally")
+library("gridExtra")
+library("patchwork")
+#library("ggspatial")
+#library("data.tree") da sviluppare
+#library("raster")
+
+knitr::opts_chunk$set(echo = FALSE,warning = FALSE,message=FALSE,include = TRUE,eval=TRUE,layout="l-page",fig.height = 3)
+
+theme_set(theme(text=element_text(family="Lato",size=6)))
+
+# PM10
+PARAMETRO<-params$parametro
+assign("inquinante",eval(parse(text=PARAMETRO)))
+
+#bug da correggere: alcune serie hanno record duplicati, eliminare righe con pollutant_fk==NA
+inquinante %>%
+  filter(!is.na(pollutant_fk))->inquinante
+
+stopifnot(nrow(inquinante)!=0)
+
+#codici stazioni dell'inquinante per tutta la regione: sono i codici delle stazioni che hanno dati (altrimenti non comparirebbero
+#nel pacchetto R).
+unique(inquinante$station_eu_code)->codiciStazioni
+
+left_join(inquinante,meteo,by=c("station_eu_code"="station_eu_code","date"="date"))->dati
+
+#selezioniamo serie nel periodo gennaio-giugno
+dati %>%
+  filter(mm %in% 1:6)->subDati
+
+left_join(subDati,stazioniMonitoraggio::stazioni[,c("station_eu_code","nome_stazione","tipo_zona")]) %>%
+  mutate(tipo_zona=as.factor(tipo_zona))->subDati
+```
+
+Numero stazioni: `r length(unique(dati$station_eu_code))`
+
+# Correlatione variabili meteo vs `r PARAMETRO`
+
+```{r}
+subMeteoNames <- c("value" , "t2m" , "tmin2m" ,"tmax2m","tp", "ptp", "rh" , "sp",
+                   "nirradiance", "pbl00","pbl12", "pblmin","pblmax","wdir", "wspeed","pwspeed" )
+```
+
+### Correlazioni complessive
+
+```{r}
+ggcorr(subDati[,subMeteoNames], palette = "RdBu", label = TRUE,color="#333333",size=2,label_size = 2) +
+  ggplot2::labs(title = str_wrap(paste0("Correlazione variabili meteo principali, anni 2013-2020 e ",PARAMETRO, " (value)"),width = 70))
+```
+
+### Correlazioni per anno
+
+A titolo di esempio: 2013, 2019
+
+```{r,eval=TRUE}
+purrr::map(c(2013,2019), .f=function(.x){
+
+  dfplot <- subDati[,c("yy",subMeteoNames)] %>% filter(yy == .x)
+  
+  ggcorr(
+        dfplot[,-1],
+        label=TRUE,
+        max_size = 6,
+        size = 2,
+        palette = "PuOr",label_color = "#333333",label_size = 1.5) + ggplot2::labs(title = .x)
+  
+})->plots
+
+purrr::reduce(plots,.f=`+`)+plot_layout(ncol=2,guides = "collect")
+
+```
+
+
+### Correlazioni per tipo di stazione_zona 
+
+```{r,eval=T}
+purrr::map(unique(subDati$tipo_zona), .f=function(.x){
+
+  dfplot <- subDati[,c("tipo_zona",subMeteoNames)] %>% filter(tipo_zona==.x)
+  
+  ifelse(.x=="U","Urban",ifelse(.x=="R","Rural","Suburban"))->etichetta
+  
+  ggcorr(
+    dfplot,
+    max_size = 6,
+    size = 1.5,
+    hjust = 0.75,
+    palette = "PuOr",label_color = "#333333") + ggplot2::labs(title = etichetta)
+
+})->plots
+purrr::reduce(plots[1:3],.f=`+`)+patchwork::plot_layout(ncol=3,guides = "collect")
+```
+
+# Studio scatterplots & correlazioni
+
+```{r,eval=F}
+subMeteoNames <- c("yy" ,"tipo_zona","value" , "t2m" , "tmin2m" ,"tmax2m","tp", "ptp", "rh" , "sp",
+                   "nirradiance", "pbl00","pbl12", "pblmin","pblmax","wdir", "wspeed","pwspeed" )
+```
+
+### Scatterplots temperature-radiazione
+
+```{r,eval=TRUE}
+nomecolns <- c("value" , "t2m" , "tmin2m" ,"tmax2m","nirradiance")
+
+#print(skimr::skim(subDati[,c("tipo_zona",nomecolns)] %>% group_by(tipo_zona) ))
+gg <- ggpairs(subDati[,c("tipo_zona",subMeteoNames)], columns = nomecolns, 
+              lower = list(continuous = wrap("smooth", alpha = 0.3, size=0.1,color="#CADBE0")),
+              upper = list(continuous = wrap("cor", size = 3,colour="#333333")))+
+  theme_bw()+
+  theme(panel.grid= element_blank(),text=element_text(family="Lato"))    
+gg
+```
+
+### Scatterplots precipitazione, umidità, surface pressure
+
+```{r,eval=TRUE}
+nomecolns <- c("value" , "tp", "ptp", "rh" , "sp")
+#print(skimr::skim(subDati[,c("tipo_zona",nomecolns)] %>% group_by(tipo_zona) ))
+gg <- ggpairs(subDati[,c("tipo_zona",subMeteoNames)], columns = nomecolns, 
+              lower = list(continuous = wrap("smooth", alpha = 0.3, size=0.1,color="#CADBE0")),
+              upper = list(continuous = wrap("cor", size = 3,colour="#333333")))+
+  theme_bw()+
+  theme(panel.grid= element_blank(),text=element_text(family="Lato"))    
+gg
+```
+
+### Scatterplots pbl
+
+```{r,eval=TRUE}
+nomecolns <- c("value" , "pbl00","pbl12", "pblmin","pblmax")
+#print(skimr::skim(subDati[,c("tipo_zona",nomecolns)] %>% group_by(tipo_zona) ))
+gg <- gg <- ggpairs(subDati[,c("tipo_zona",subMeteoNames)], columns = nomecolns, 
+              lower = list(continuous = wrap("smooth", alpha = 0.3, size=0.1,color="#CADBE0")),
+              upper = list(continuous = wrap("cor", size = 3,colour="#333333")))+
+  theme_bw()+
+  theme(panel.grid= element_blank(),text=element_text(family="Lato"))         
+gg
+```
+
+### Scatterplots wind
+
+```{r,eval=TRUE}
+nomecolns <- c("value" , "wdir", "wspeed","pwspeed")
+#print(skimr::skim(subDati[,c("tipo_zona",nomecolns)] %>% group_by(tipo_zona) ))
+gg <- ggpairs(subDati[,c("tipo_zona",subMeteoNames)], columns = nomecolns, 
+              lower = list(continuous = wrap("smooth", alpha = 0.3, size=0.1,color="#CADBE0")),
+              upper = list(continuous = wrap("cor", size = 3,colour="#333333")))+
+  theme_bw()+
+  theme(panel.grid= element_blank(),text=element_text(family="Lato"))      
+gg
+```
