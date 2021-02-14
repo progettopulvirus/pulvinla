@@ -5,7 +5,7 @@
     "description": "A short description of the post.",
     "author": [
       {
-        "name": "Maria Gabriall Villani",
+        "name": "Maria Gabriella Villani",
         "url": {}
       }
     ],
@@ -13,7 +13,7 @@
     "categories": [],
     "contents": "\nNumero stazioni: 48\nCorrelatione variabili meteo vs no2\n\n\n\nCorrelazioni complessive\n\n\n\nCorrelazioni per anno\nA titolo di esempio: 2013, 2019\n\n\n\nCorrelazioni per tipo di stazione_zona\n\n\n\nStudio scatterplots & correlazioni\n\n\n\nScatterplots temperature-radiazione\n\n\n\nScatterplots precipitazione, umidità, surface pressure\n\n\n\nScatterplots pbl\n\n\n\nScatterplots wind\n\n\n\n\n\n\n",
     "preview": "posts/2021-02-15-analisi-no2-vs-variabili-meteo/analisi-no2-vs-variabili-meteo_files/figure-html5/unnamed-chunk-2-1.png",
-    "last_modified": "2021-02-15T00:42:18+01:00",
+    "last_modified": "2021-02-15T00:56:52+01:00",
     "input_file": {}
   },
   {
@@ -22,7 +22,7 @@
     "description": "A short description of the post.",
     "author": [
       {
-        "name": "Maria Gabriall Villani",
+        "name": "Maria Gabriella Villani",
         "url": {}
       }
     ],
@@ -30,7 +30,7 @@
     "categories": [],
     "contents": "\nNumero stazioni: 51\nCorrelatione variabili meteo vs pm10\n\n\n\nCorrelazioni complessive\n\n\n\nCorrelazioni per anno\nA titolo di esempio: 2013, 2019\n\n\n\nCorrelazioni per tipo di stazione_zona\n\n\n\nStudio scatterplots & correlazioni\n\n\n\nScatterplots temperature-radiazione\n\n\n\nScatterplots precipitazione, umidità, surface pressure\n\n\n\nScatterplots pbl\n\n\n\nScatterplots wind\n\n\n\n\n\n\n",
     "preview": "posts/2021-02-15-analisi-pm10-vs-variabili-meteo/analisi-pm10-vs-variabili-meteo_files/figure-html5/unnamed-chunk-2-1.png",
-    "last_modified": "2021-02-15T00:39:39+01:00",
+    "last_modified": "2021-02-15T00:54:50+01:00",
     "input_file": {}
   },
   {

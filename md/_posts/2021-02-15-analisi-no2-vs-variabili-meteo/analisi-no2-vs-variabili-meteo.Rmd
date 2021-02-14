@@ -2,7 +2,7 @@
 title: "Analisi NO2 vs variabili meteo"
 description: |
   A short description of the post.
-author: Maria Gabriall Villani
+author: Maria Gabriella Villani
 date: 02-15-2021
 params:
   parametro: no2
