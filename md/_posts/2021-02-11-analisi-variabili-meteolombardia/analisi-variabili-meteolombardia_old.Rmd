@@ -1,0 +1,171 @@
+---
+title: "Analisi variabili meteo, Lombardia"
+description: |
+  Descrizione parametri meteoclimatici, rianalisi ERA5.
+author:
+  - name: Guido Fioravanti
+    affiliation: ISPRA
+date: 02-10-2021
+draft: true
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE,echo=FALSE,message=FALSE,warning=FALSE}
+library("tidyverse")
+library("lombardia")
+library("datiMeteo")
+library("stazioniMonitoraggio")
+library("regioniItalia")
+library("sf")
+library("scico")
+library("ggspatial")
+library("data.tree")
+library("raster")
+library("patchwork")
+
+knitr::opts_chunk$set(include = TRUE,echo=FALSE,message = FALSE,warning = FALSE)
+
+PARAMETRO<-c("pm10","no2")[2] 
+assign("inquinante",eval(parse(text=PARAMETRO)))
+#compare::compareIdentical(inquinante,no2)
+
+#bug da correggere: alcune serie hanno record duplicati, eliminare righe con pollutant_fk==NA
+inquinante %>%
+  filter(!is.na(pollutant_fk))->inquinante
+
+stopifnot(nrow(inquinante)!=0)
+
+#codici stazioni dell'inquinante per tutta la regione: sono i codici delle stazioni che hanno dati (altrimenti non comparirebbero
+#nel pacchetto R).
+unique(inquinante$station_eu_code)->codiciStazioni
+
+#load("brescia.rda")
+
+left_join(inquinante,meteo,by=c("station_eu_code"="station_eu_code","date"="date"))->dati
+
+#creo un oggetto spaziale
+stazioni[,c("station_eu_code","nome_stazione","st_x","st_y","altitudine")]->puntiStazione
+st_as_sf(puntiStazione ,coords = c("st_x","st_y"),crs=4326)->puntiStazione
+st_transform(puntiStazione,crs = 32632)->puntiStazioneUTM
+
+#stazioni che appartengono a "Area" (regione, provincia..)
+lombardia->Area
+st_intersection(puntiStazioneUTM,Area)->stazioniArea
+
+#stazioni che appartengono ad Area e con dati in "inquinante"
+stazioniArea[stazioniArea$station_eu_code %in% codiciStazioni,]->stazioniArea
+
+
+#' quante stazioni
+length(unique(stazioniArea$station_eu_code))
+
+raster("_dem.tif")->dem
+raster::crop(dem,Area)->demArea
+```
+
+```{r themeSet}
+theme_set(theme_bw()+theme(panel.grid.minor = element_blank(),
+                           panel.grid.major.x = element_blank(),
+                           axis.text.x.bottom =element_text(angle=90)))
+```
+
+```{r sintesi}
+#selezioniamo dati con codici in "stazioniArea" (stazioni che cadono in Area e con dati)
+#selezioniamo serie nel periodo gennaio-giugno
+dati %>%
+  filter(station_eu_code %in% stazioniArea$station_eu_code) %>%
+  filter(mm %in% 1:6)->subDati
+
+left_join(subDati,stazioniMonitoraggio::stazioni[,c("station_eu_code","nome_stazione","tipo_zona")]) %>%
+  mutate(tipo_zona=as.factor(tipo_zona))->subDati
+```
+
+### Descrizione parametri
+
+#### Temperatura
+
+```{r t2m,fig.height=8,fig.cap="Temperatura (media, massima e minima)",fig.width=10}
+
+subDati %>%
+  dplyr::select(station_eu_code,t2m,tmin2m,tmax2m,tipo_zona) %>%
+  gather(key="parametro",value="temperatura",-station_eu_code,-tipo_zona)->gsubDati
+
+ggplot(data=gsubDati)+
+  geom_boxplot(aes(x=station_eu_code,y=temperatura,fill=parametro))+
+  facet_wrap(~tipo_zona,scales = "free_x",nrow = 3)
+```
+
+#### t2m
+
+```{r }
+print(skimr::skim(subDati %>% dplyr::select(t2m,tipo_zona) %>%group_by(tipo_zona)))
+```
+
+#### tmin2m
+
+```{r }
+print(skimr::skim(subDati %>% dplyr::select(tmin2m,tipo_zona) %>%group_by(tipo_zona)))
+```
+
+#### tmax2m
+
+```{r }
+print(skimr::skim(subDati %>% dplyr::select(tmax2m,tipo_zona) %>%group_by(tipo_zona)))
+```
+
+#### Precipitazione
+
+```{r tp,fig.height=8,fig.cap="Precipitazione",fig.width=10}
+ggplot(data=subDati)+
+  geom_boxplot(aes(x=station_eu_code,y=tp,fill=tipo_zona))+
+  facet_wrap(~tipo_zona,scales = "free_x",nrow = 3)
+```
+
+#### tp
+
+```{r }
+print(skimr::skim(subDati %>% dplyr::select(tp,tipo_zona) %>%group_by(tipo_zona)))
+```
+
+#### Surface pressure
+
+```{r sp,fig.height=8,fig.cap="Surface pressure",fig.width=10}
+ggplot(data=subDati)+
+  geom_boxplot(aes(x=station_eu_code,y=sp,fill=tipo_zona))+
+  facet_wrap(~tipo_zona,scales = "free_x",nrow = 3)
+```
+
+#### sp
+
+```{r }
+print(skimr::skim(subDati %>% dplyr::select(sp,tipo_zona) %>%group_by(tipo_zona)))
+```
+
+#### Planet Boundary Layer
+
+```{r pbl,fig.height=8,fig.cap="Planet Boundary Layer (00:00, 12:00)",fig.width=10}
+
+subDati %>%
+  dplyr::select(station_eu_code,pbl00,pbl12,tipo_zona) %>%
+  gather(key="parametro",value="pbl",-station_eu_code,-tipo_zona)->gsubDati
+
+ggplot(data=gsubDati)+
+  geom_boxplot(aes(x=station_eu_code,y=pbl,fill=parametro))+
+  facet_wrap(~tipo_zona,scales = "free_x",nrow = 3)
+```
+
+#### pbl00
+
+```{r }
+print(skimr::skim(subDati %>% dplyr::select(pbl00,tipo_zona) %>%group_by(tipo_zona)))
+```
+
+
+#### pbl12
+
+```{r }
+print(skimr::skim(subDati %>% dplyr::select(pbl12,tipo_zona) %>%group_by(tipo_zona)))
+```

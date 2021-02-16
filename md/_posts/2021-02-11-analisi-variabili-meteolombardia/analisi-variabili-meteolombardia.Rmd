@@ -3,11 +3,10 @@ title: "Analisi variabili meteo, Lombardia"
 description: |
   Descrizione parametri meteoclimatici, rianalisi ERA5.
 author:
-  - name: Guido Fioravanti
-    affiliation: ISPRA
+  - name: Andrea Algieri
 date: 02-10-2021
-draft: true
-output:
+draft: false
+output: 
   distill::distill_article:
     self_contained: false
 ---
@@ -18,16 +17,22 @@ library("tidyverse")
 library("lombardia")
 library("datiMeteo")
 library("stazioniMonitoraggio")
-library("regioniItalia")
-library("sf")
-library("scico")
-library("ggspatial")
-library("data.tree")
-library("raster")
+#library("regioniItalia")
+#library("sf")
+#library("scico")
+#library("ggspatial")
+#library("data.tree")
+#library("raster")
 library("patchwork")
 
-knitr::opts_chunk$set(include = TRUE,echo=FALSE,message = FALSE,warning = FALSE)
-
+knitr::opts_chunk$set(
+	echo = FALSE,
+	message = FALSE,
+	warning = FALSE,
+	include = TRUE,
+	layout="l-page",
+	fig.height = 3
+)
 PARAMETRO<-c("pm10","no2")[2] 
 assign("inquinante",eval(parse(text=PARAMETRO)))
 #compare::compareIdentical(inquinante,no2)
@@ -46,37 +51,19 @@ unique(inquinante$station_eu_code)->codiciStazioni
 
 left_join(inquinante,meteo,by=c("station_eu_code"="station_eu_code","date"="date"))->dati
 
-#creo un oggetto spaziale
-stazioni[,c("station_eu_code","nome_stazione","st_x","st_y","altitudine")]->puntiStazione
-st_as_sf(puntiStazione ,coords = c("st_x","st_y"),crs=4326)->puntiStazione
-st_transform(puntiStazione,crs = 32632)->puntiStazioneUTM
 
-#stazioni che appartengono a "Area" (regione, provincia..)
-lombardia->Area
-st_intersection(puntiStazioneUTM,Area)->stazioniArea
-
-#stazioni che appartengono ad Area e con dati in "inquinante"
-stazioniArea[stazioniArea$station_eu_code %in% codiciStazioni,]->stazioniArea
-
-
-#' quante stazioni
-length(unique(stazioniArea$station_eu_code))
-
-raster("_dem.tif")->dem
-raster::crop(dem,Area)->demArea
 ```
 
 ```{r themeSet}
+#fisso il tema per ggplot
 theme_set(theme_bw()+theme(panel.grid.minor = element_blank(),
                            panel.grid.major.x = element_blank(),
                            axis.text.x.bottom =element_text(angle=90)))
 ```
 
 ```{r sintesi}
-#selezioniamo dati con codici in "stazioniArea" (stazioni che cadono in Area e con dati)
 #selezioniamo serie nel periodo gennaio-giugno
 dati %>%
-  filter(station_eu_code %in% stazioniArea$station_eu_code) %>%
   filter(mm %in% 1:6)->subDati
 
 left_join(subDati,stazioniMonitoraggio::stazioni[,c("station_eu_code","nome_stazione","tipo_zona")]) %>%
@@ -85,17 +72,20 @@ left_join(subDati,stazioniMonitoraggio::stazioni[,c("station_eu_code","nome_staz
 
 ### Descrizione parametri
 
+La lista dei parametri acquisiti da ERA5 è  disponibile alla pagina: [https://progettopulvirus.github.io/pulviruS/parametri.html](https://progettopulvirus.github.io/pulviruS/parametri.html)  
+
 #### Temperatura
 
 ```{r t2m,fig.height=8,fig.cap="Temperatura (media, massima e minima)",fig.width=10}
 
 subDati %>%
-  dplyr::select(station_eu_code,t2m,tmin2m,tmax2m,tipo_zona) %>%
-  gather(key="parametro",value="temperatura",-station_eu_code,-tipo_zona)->gsubDati
+  dplyr::select(station_eu_code,t2m,tmin2m,tmax2m,tipo_zona,nome_stazione) %>%
+  gather(key="parametro",value="temperatura",-station_eu_code,-tipo_zona,-nome_stazione)->gsubDati
 
 ggplot(data=gsubDati)+
-  geom_boxplot(aes(x=station_eu_code,y=temperatura,fill=parametro))+
-  facet_wrap(~tipo_zona,scales = "free_x",nrow = 3)
+  geom_boxplot(aes(x=nome_stazione,y=temperatura,fill=parametro))+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1,size=5))+
+  facet_wrap(~tipo_zona,scales = "free",nrow = 3)
 ```
 
 #### t2m
@@ -121,7 +111,7 @@ print(skimr::skim(subDati %>% dplyr::select(tmax2m,tipo_zona) %>%group_by(tipo_z
 ```{r tp,fig.height=8,fig.cap="Precipitazione",fig.width=10}
 ggplot(data=subDati)+
   geom_boxplot(aes(x=station_eu_code,y=tp,fill=tipo_zona))+
-  facet_wrap(~tipo_zona,scales = "free_x",nrow = 3)
+  facet_wrap(~tipo_zona,scales = "free",nrow = 3)
 ```
 
 #### tp
@@ -130,12 +120,27 @@ ggplot(data=subDati)+
 print(skimr::skim(subDati %>% dplyr::select(tp,tipo_zona) %>%group_by(tipo_zona)))
 ```
 
+#### Precipitazione giorno precedente
+
+```{r ptp,fig.height=8,fig.cap="Precipitazione",fig.width=10}
+ggplot(data=subDati)+
+  geom_boxplot(aes(x=station_eu_code,y=ptp,fill=tipo_zona))+
+  facet_wrap(~tipo_zona,scales = "free",nrow = 3)
+```
+
+#### ptp
+
+```{r }
+print(skimr::skim(subDati %>% dplyr::select(ptp,tipo_zona) %>%group_by(tipo_zona)))
+```
+
+
 #### Surface pressure
 
 ```{r sp,fig.height=8,fig.cap="Surface pressure",fig.width=10}
 ggplot(data=subDati)+
   geom_boxplot(aes(x=station_eu_code,y=sp,fill=tipo_zona))+
-  facet_wrap(~tipo_zona,scales = "free_x",nrow = 3)
+  facet_wrap(~tipo_zona,scales = "free",nrow = 3)
 ```
 
 #### sp
@@ -154,7 +159,7 @@ subDati %>%
 
 ggplot(data=gsubDati)+
   geom_boxplot(aes(x=station_eu_code,y=pbl,fill=parametro))+
-  facet_wrap(~tipo_zona,scales = "free_x",nrow = 3)
+  facet_wrap(~tipo_zona,scales = "free",nrow = 3)
 ```
 
 #### pbl00
@@ -169,3 +174,118 @@ print(skimr::skim(subDati %>% dplyr::select(pbl00,tipo_zona) %>%group_by(tipo_zo
 ```{r }
 print(skimr::skim(subDati %>% dplyr::select(pbl12,tipo_zona) %>%group_by(tipo_zona)))
 ```
+
+
+#### Planet Boundary Layer daily maximun and minimun
+
+```{r pblmaxmin,fig.height=8,fig.cap="Planet Boundary Layer daily  (max, min)",fig.width=10}
+
+subDati %>%
+  dplyr::select(station_eu_code,pblmax,pblmin,tipo_zona) %>%
+  gather(key="parametro",value="pbl",-station_eu_code,-tipo_zona)->gsubDati
+
+ggplot(data=gsubDati)+
+  geom_boxplot(aes(x=station_eu_code,y=pbl,fill=parametro))+
+  facet_wrap(~tipo_zona,scales = "free",nrow = 3)
+```
+
+
+#### pblmax
+
+```{r }
+print(skimr::skim(subDati %>% dplyr::select(pblmax,tipo_zona) %>%group_by(tipo_zona)))
+```
+
+#### pblmin
+
+```{r }
+print(skimr::skim(subDati %>% dplyr::select(pblmin,tipo_zona) %>%group_by(tipo_zona)))
+```
+
+
+#### Wind Speed
+
+```{r wspeed,fig.height=8,fig.cap="Wind Speed",fig.width=10}
+ggplot(data=subDati)+
+  geom_boxplot(aes(x=station_eu_code,y=wspeed,fill=tipo_zona))+
+  facet_wrap(~tipo_zona,scales = "free",nrow = 3)
+```
+
+#### wspeed
+
+```{r }
+print(skimr::skim(subDati %>% dplyr::select(wspeed,tipo_zona) %>%group_by(tipo_zona)))
+```
+
+#### Previous day wind speed
+
+```{r pwspeed,fig.height=8,fig.cap="previous day Wind Speed",fig.width=10}
+ggplot(data=subDati)+
+  geom_boxplot(aes(x=station_eu_code,y=pwspeed,fill=tipo_zona))+
+  facet_wrap(~tipo_zona,scales = "free",nrow = 3)
+```
+
+#### pwspeed
+
+```{r }
+print(skimr::skim(subDati %>% dplyr::select(pwspeed,tipo_zona) %>%group_by(tipo_zona)))
+```
+
+#### Wind direction
+
+```{r wdir,fig.height=8,fig.cap="Wind Dir",fig.width=10}
+ggplot(data=subDati)+
+  geom_boxplot(aes(x=station_eu_code,y=wdir,fill=tipo_zona))+
+  facet_wrap(~tipo_zona,scales = "free",nrow = 3)
+```
+
+#### wdir
+
+```{r }
+print(skimr::skim(subDati %>% dplyr::select(wdir,tipo_zona) %>%group_by(tipo_zona)))
+```
+
+#### Wind V component (10 meters) # vettore componente della direzione 
+
+```{r v10m,fig.height=8,fig.cap="Wind V component-10 meters",fig.width=10}
+ggplot(data=subDati)+
+  geom_boxplot(aes(x=station_eu_code,y=v10m,fill=tipo_zona))+
+  facet_wrap(~tipo_zona,scales = "free",nrow = 3)
+```
+
+#### windVcomponent
+
+```{r }
+print(skimr::skim(subDati %>% dplyr::select(v10m,tipo_zona) %>%group_by(tipo_zona)))
+```
+
+
+#### Net irradiance
+
+```{r nirradiance,fig.height=8,fig.cap="Net irradiance",fig.width=10}
+ggplot(data=subDati)+
+  geom_boxplot(aes(x=station_eu_code,y=nirradiance,fill=tipo_zona))+
+  facet_wrap(~tipo_zona,scales = "free",nrow = 3)
+```
+
+#### net irradiance
+
+```{r }
+print(skimr::skim(subDati %>% dplyr::select(nirradiance,tipo_zona) %>%group_by(tipo_zona)))
+```
+
+
+#### Relative Humidity
+
+```{r rh,fig.height=8,fig.cap="Relative Humidity",fig.width=10}
+ggplot(data=subDati)+
+  geom_boxplot(aes(x=station_eu_code,y=rh,fill=tipo_zona))+
+  facet_wrap(~tipo_zona,scales = "free",nrow = 3)
+```
+
+#### relative Humidity
+
+```{r }
+print(skimr::skim(subDati %>% dplyr::select(rh,tipo_zona) %>%group_by(tipo_zona)))
+```
+

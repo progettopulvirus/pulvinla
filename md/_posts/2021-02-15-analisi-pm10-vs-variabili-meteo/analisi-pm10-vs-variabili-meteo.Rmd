@@ -1,17 +1,19 @@
 ---
 title: "Analisi PM10 vs variabili meteo"
 description: |
-  A short description of the post.
+  Studio di correlazioni e scatterplots tra PM10 e le variabili meteo derivate da ERA5.
+  Per i parametri metereologici fare riferimento a https://progettopulvirus.github.io/pulviruS/parametri.html
 author: Maria Gabriella Villani
 date: 02-15-2021
 params:
   parametro: pm10
   regione: Lombardia
 output:
-  distill::distill_article:
+  distill::distill_article:    
     self_contained: false
 ---
 ```{r setup, include=FALSE,message=FALSE,warning=FALSE,echo=FALSE}
+library("distill")
 library("tidyverse")
 library("lombardia")
 library("datiMeteo")
