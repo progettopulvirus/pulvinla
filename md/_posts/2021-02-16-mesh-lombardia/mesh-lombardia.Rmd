@@ -1,0 +1,117 @@
+---
+title: "Mesh Lombardia"
+description: |
+  Una possibile mesh per la Lombardia.
+author:
+  - name: Guido Fioravanti
+date: 02-16-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+```{r setup,include=FALSE,message=FALSE,echo=FALSE,warning=FALSE,echo=FALSE}
+rm(list=objects())
+library("tidyverse")
+library("INLA")
+library("sf")
+library("sp")
+library("rpulvinla")
+options(warn=-2)
+
+knitr::opts_chunk$set(layout="l-body-outset",fig.height = 7)
+
+set.seed(1)
+
+REGIONE<-"lombardia"
+#inla.setOption(pardiso.license="~/pardiso/licenza.txt")
+
+#dati meteo standardizzati
+datiMeteo::meteo_standardizzati->meteo
+
+#oggetto sf della regione (da sovrapporre su grafico mesh)
+`::`("regioniItalia","lombardia")->shapeRegione
+in_km(shapeRegione)->shapeRegione
+
+##dati
+`::`("lombardia","pm10")->datiTemp
+
+#risolviamo problema attuale dati con duplicati in attesa che venga aggiornato il database
+datiTemp %>%
+  filter(!is.na(pollutant_fk))->datiTemp
+
+prepara_dati(.x = datiTemp %>% filter(mm %in% seq(1,6)),logaritmo = TRUE,lockdown = TRUE)->dati
+left_join(dati,meteo)->dati
+rm(datiTemp)
+
+
+st_as_sf(dati,coords = c("coordx","coordy"),crs=32632)->sfDati
+in_km(sfDati)->sfDati
+st_coordinates(sfDati)->coordinateOsservazioni
+rm(sfDati)
+dati$coordx_km<-coordinateOsservazioni[,1] 
+dati$coordy_km<-coordinateOsservazioni[,2]
+rm(coordinateOsservazioni)
+
+unique(dati$station_eu_code)->CODICI
+numero_giorni(dati)->n_giorni
+
+#estensione
+st_bbox(shapeRegione)->estensione
+
+####Priors:
+#list(theta1=list(prior="pc.prec",param=c(0.2,0.2)),theta2=list(prior="pc.cor1",param=c(0.6,0.9)))->rho_hyper
+list(prior="pc.cor1",param=c(0.8,0.4))->theta_hyper #<-------------- questa la prior usata ne modello per ar1
+####
+
+#16 luglio
+list(theta = list(prior="pc.prec", param=c(1,0.01)))->prec_hyper
+
+
+######################## FORMULA MODELLO: la parte random (spde, etc) va aggiunta prima del comando inla()
+as.formula(lvalue~Intercept+lockdown+altitudedem+pbl00+pbl12+sp+t2m+tp+ptp-1)->myformula
+terms(myformula)->termini
+attr(termini,which="term.labels")->VARIABILI
+########################
+
+
+#Utilizzo sfStazioni per costruire la mesh (cioe' la mesh la costruisco utilizzando anche i punti per la validazione)
+dati[!duplicated(dati$station_eu_code),c("coordx","coordy")]->stazioni
+st_as_sf(stazioni,coords = c("coordx","coordy"),crs=32632)->sfStazioni
+in_km(sfStazioni)->sfStazioni
+
+
+st_coordinates(sfStazioni)->coordinateStazioni
+```
+
+### Sintesi distanze punti stazione
+
+```{r distanze,include=TRUE,message=FALSE,echo=FALSE,warning=FALSE,echo=FALSE}
+### Sintesi delle distanze
+st_distance(sfStazioni)->matriceDistanze
+units::drop_units(matriceDistanze)->matriceDistanze
+as.numeric(as.vector(matriceDistanze[lower.tri(matriceDistanze)]))->vettoreDistanze
+skimr::skim(vettoreDistanze)
+```
+
+### Mesh
+
+
+
+```{r mesh,include=TRUE,message=FALSE,echo=FALSE,warning=FALSE,echo=TRUE}
+########################
+#Mesh    
+########################
+inla.nonconvex.hull(points =  coordinateStazioni,convex = 90)->terraferma
+mesh<-inla.mesh.2d(boundary =terraferma, max.edge = c(5,15),cutoff=5,offset=c(5,30),min.angle = 25)
+```
+
+
+```{r plotMesh,include=TRUE,message=FALSE,echo=FALSE,warning=FALSE,echo=FALSE}
+plot(mesh)
+plot(st_geometry(shapeRegione),add=TRUE,lwd=2) #shRegioni mi serve solo per disegnare ogni regione con i suoi confini
+plot(st_geometry(sfStazioni),add=TRUE,bg="red",pch=21,cex=0.4)
+```
+
+
+

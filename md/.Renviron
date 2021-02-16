@@ -1,1 +1,2 @@
-../../.Renviron
+RSTUDIO_PANDOC="/usr/lib/rstudio/bin/pandoc/pandoc"
+PATH="/usr/lib/rstudio/bin/pandoc/:${PATH}"
