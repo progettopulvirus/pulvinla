@@ -16,6 +16,10 @@ library("tidyverse")
 library("INLA")
 library("sf")
 library("sp")
+# devtools::install_github("progettopulvirus/rpulvinla")
+# devtools::install_github("progettopulvirus/lombardia")
+# devtools::install_github("progettopulvirus/datiMeteo")
+# devtools::install_github("progettopulvirus/stazioniMonitoraggio")
 library("rpulvinla")
 options(warn=-2)
 
@@ -102,8 +106,8 @@ skimr::skim(vettoreDistanze)
 ########################
 #Mesh    
 ########################
-inla.nonconvex.hull(points =  coordinateStazioni,convex = 90)->terraferma
-mesh<-inla.mesh.2d(boundary =terraferma, max.edge = c(5,15),cutoff=5,offset=c(5,30),min.angle = 25)
+inla.nonconvex.hull(points =  coordinateStazioni,convex = 60,concave=90)->terraferma
+mesh<-inla.mesh.2d(boundary=terraferma, max.edge = c(10,30),cutoff=8,min.angle = 25,offset=c(5,20))
 ```
 
 
@@ -114,4 +118,17 @@ plot(st_geometry(sfStazioni),add=TRUE,bg="red",pch=21,cex=0.4)
 ```
 
 
+```{r mesh2,include=TRUE,message=FALSE,echo=FALSE,warning=FALSE,echo=TRUE}
+########################
+#Mesh    
+########################
+mesh<-inla.mesh.2d(loc =coordinateStazioni, max.edge = c(12.5,30),cutoff=5,min.angle = 30,offset=c(50,25))
+```
+
+
+```{r plotMesh2,include=TRUE,message=FALSE,echo=FALSE,warning=FALSE,echo=FALSE}
+plot(mesh)
+plot(st_geometry(shapeRegione),add=TRUE,lwd=2) #shRegioni mi serve solo per disegnare ogni regione con i suoi confini
+plot(st_geometry(sfStazioni),add=TRUE,bg="red",pch=21,cex=0.4)
+```
 

@@ -116,7 +116,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["analisi-pm10-lombardia_files/figure-html5/disponibilitaDatiSerie-1.png","analisi-pm10-lombardia_files/figure-html5/distribuzioneDati-1.png","analisi-pm10-lombardia_files/figure-html5/distribuzioneMensile-1.png","analisi-pm10-lombardia_files/figure-html5/mappaAra-1.png"]}
+  {"type":"character","attributes":{},"value":["analisi-pm10-lombardia_files/anchor-4.2.2/anchor.min.js","analisi-pm10-lombardia_files/bowser-1.9.3/bowser.min.js","analisi-pm10-lombardia_files/distill-2.2.21/template.v2.js","analisi-pm10-lombardia_files/figure-html5/disponibilitaDatiSerie-1.png","analisi-pm10-lombardia_files/figure-html5/distribuzioneDati-1.png","analisi-pm10-lombardia_files/figure-html5/distribuzioneMensile-1.png","analisi-pm10-lombardia_files/figure-html5/mappaAra-1.png","analisi-pm10-lombardia_files/header-attrs-2.6/header-attrs.js","analisi-pm10-lombardia_files/jquery-1.11.3/jquery.min.js","analisi-pm10-lombardia_files/popper-2.6.0/popper.min.js","analisi-pm10-lombardia_files/tippy-6.2.7/tippy-bundle.umd.min.js","analisi-pm10-lombardia_files/tippy-6.2.7/tippy-light-border.css","analisi-pm10-lombardia_files/tippy-6.2.7/tippy.css","analisi-pm10-lombardia_files/tippy-6.2.7/tippy.umd.min.js","analisi-pm10-lombardia_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
   <!--/radix_placeholder_navigation_in_header-->
@@ -1481,7 +1481,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <div class="layout-chunk" data-layout="l-body">
 <p><img src="analisi-pm10-lombardia_files/figure-html5/mappaAra-1.png" width="624" /></p>
 </div>
-<p>Numero stazioni: 51</p>
+<p>Numero stazioni: 49</p>
 <div class="layout-chunk" data-layout="l-body">
 
 </div>
@@ -1493,32 +1493,32 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <h3 id="distibuzione-pm10">Distibuzione pm10</h3>
 <div class="layout-chunk" data-layout="l-body">
 <pre><code>Skim summary statistics
- n obs: 73225 
+ n obs: 70507 
  n variables: 5 
  group variables:  
 
 ── Variable type:factor ──────────────────────────────────────────────
   variable missing complete     n n_unique
- tipo_zona       0    73225 73225        3
+ tipo_zona       0    70507 70507        3
                          top_counts ordered
- U: 52925, S: 14500, R: 5800, NA: 0   FALSE
+ U: 50207, S: 14500, R: 5800, NA: 0   FALSE
 
 ── Variable type:numeric ─────────────────────────────────────────────
- variable missing complete     n    mean    sd   p0    p25  p50  p75
-       dd       0    73225 73225   15.62  8.74    1    8     16   23
-       mm       0    73225 73225    3.51  1.71    1    2      4    5
-    value    2997    70228 73225   31.82 21.77    0   16.7   26   41
-       yy       0    73225 73225 2016.51  2.29 2013 2015   2017 2019
-   p100     hist
-   31   ▇▇▇▇▆▇▇▆
-    6   ▇▇▁▇▇▁▇▇
-  263.5 ▇▃▁▁▁▁▁▁
- 2020   ▇▇▇▇▇▇▇▇</code></pre>
+ variable missing complete     n    mean    sd   p0     p25     p50
+       dd       0    70507 70507   15.62  8.74    1    8      16   
+       mm       0    70507 70507    3.51  1.71    1    2       4   
+    value    2775    67732 70507   32.11 21.87    0   16.95   26.29
+       yy       0    70507 70507 2016.52  2.29 2013 2015    2017   
+     p75   p100     hist
+   23      31   ▇▇▇▇▆▇▇▆
+    5       6   ▇▇▁▇▇▁▇▇
+   41.38  263.5 ▇▃▁▁▁▁▁▁
+ 2019    2020   ▇▇▇▇▇▇▇▇</code></pre>
 </div>
 <h3 id="distibuzione-pm10-per-tipo-di-zona-urban-suburban-rural">Distibuzione pm10 per tipo di zona (Urban, Suburban, Rural)</h3>
 <div class="layout-chunk" data-layout="l-body">
 <pre><code>Skim summary statistics
- n obs: 73225 
+ n obs: 70507 
  n variables: 2 
  group variables: tipo_zona 
 
@@ -1526,11 +1526,11 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
  tipo_zona variable missing complete     n  mean    sd p0   p25  p50
          R    value     257     5543  5800 29.35 21.1   0 14.94 24.4
          S    value     615    13885 14500 32.86 21.57  0 17.6  27.2
-         U    value    2125    50800 52925 31.8  21.87  0 16.65 25.9
-  p75   p100     hist
- 38.4 165.7  ▇▇▂▁▁▁▁▁
- 42.3 263.5  ▇▃▁▁▁▁▁▁
- 41   238.96 ▇▅▁▁▁▁▁▁</code></pre>
+         U    value    1903    48304 50207 32.22 22.02  0 17    26.2
+   p75   p100     hist
+ 38.4  165.7  ▇▇▂▁▁▁▁▁
+ 42.3  263.5  ▇▃▁▁▁▁▁▁
+ 41.49 238.96 ▇▅▁▁▁▁▁▁</code></pre>
 </div>
 <p><br></p>
 <div class="layout-chunk" data-layout="l-body">

@@ -117,7 +117,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["mesh-lombardia_files/anchor-4.2.2/anchor.min.js","mesh-lombardia_files/bowser-1.9.3/bowser.min.js","mesh-lombardia_files/distill-2.2.21/template.v2.js","mesh-lombardia_files/figure-html5/mesh-1.png","mesh-lombardia_files/figure-html5/plotMesh-1.png","mesh-lombardia_files/header-attrs-2.6/header-attrs.js","mesh-lombardia_files/jquery-1.11.3/jquery.min.js","mesh-lombardia_files/popper-2.6.0/popper.min.js","mesh-lombardia_files/tippy-6.2.7/tippy-bundle.umd.min.js","mesh-lombardia_files/tippy-6.2.7/tippy-light-border.css","mesh-lombardia_files/tippy-6.2.7/tippy.css","mesh-lombardia_files/tippy-6.2.7/tippy.umd.min.js","mesh-lombardia_files/webcomponents-2.0.0/webcomponents.js"]}
+  {"type":"character","attributes":{},"value":["mesh-lombardia_files/anchor-4.2.2/anchor.min.js","mesh-lombardia_files/bowser-1.9.3/bowser.min.js","mesh-lombardia_files/distill-2.2.21/template.v2.js","mesh-lombardia_files/figure-html5/mesh-1.png","mesh-lombardia_files/figure-html5/plotMesh-1.png","mesh-lombardia_files/figure-html5/plotMesh2-1.png","mesh-lombardia_files/header-attrs-2.6/header-attrs.js","mesh-lombardia_files/jquery-1.11.3/jquery.min.js","mesh-lombardia_files/popper-2.6.0/popper.min.js","mesh-lombardia_files/tippy-6.2.7/tippy-bundle.umd.min.js","mesh-lombardia_files/tippy-6.2.7/tippy-light-border.css","mesh-lombardia_files/tippy-6.2.7/tippy.css","mesh-lombardia_files/tippy-6.2.7/tippy.umd.min.js","mesh-lombardia_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
 <meta name="distill:offset" content="../.."/>
@@ -2104,10 +2104,10 @@ document.addEventListener('DOMContentLoaded', function() {
 Skim summary statistics
 
 ── Variable type:numeric ─────────────────────────────────────────────
-        variable missing complete    n  mean    sd p0   p25   p50
- vettoreDistanze       0     1275 1275 71.55 39.21  0 42.45 65.16
-  p75   p100     hist
- 94.2 204.97 ▃▇▇▅▃▂▁▁</code></pre>
+        variable missing complete    n  mean    sd   p0   p25   p50
+ vettoreDistanze       0     1176 1176 71.29 39.47 0.79 42.09 64.44
+   p75   p100     hist
+ 94.15 204.97 ▃▇▇▅▃▂▁▁</code></pre>
 </div>
 <h3 id="mesh">Mesh</h3>
 <div class="layout-chunk" data-layout="l-body-outset">
@@ -2115,13 +2115,25 @@ Skim summary statistics
 <pre class="sourceCode r"><code class="sourceCode r"><span class='co'>########################</span>
 <span class='co'>#Mesh    </span>
 <span class='co'>########################</span>
-<span class='fu'>inla.nonconvex.hull</span><span class='op'>(</span>points <span class='op'>=</span>  <span class='va'>coordinateStazioni</span>,convex <span class='op'>=</span> <span class='fl'>90</span><span class='op'>)</span><span class='op'>-&gt;</span><span class='va'>terraferma</span>
-<span class='va'>mesh</span><span class='op'>&lt;-</span><span class='fu'>inla.mesh.2d</span><span class='op'>(</span>boundary <span class='op'>=</span><span class='va'>terraferma</span>, max.edge <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>,<span class='fl'>15</span><span class='op'>)</span>,cutoff<span class='op'>=</span><span class='fl'>5</span>,offset<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>,<span class='fl'>30</span><span class='op'>)</span>,min.angle <span class='op'>=</span> <span class='fl'>25</span><span class='op'>)</span>
+<span class='fu'>inla.nonconvex.hull</span><span class='op'>(</span>points <span class='op'>=</span>  <span class='va'>coordinateStazioni</span>,convex <span class='op'>=</span> <span class='fl'>60</span>,concave<span class='op'>=</span><span class='fl'>90</span><span class='op'>)</span><span class='op'>-&gt;</span><span class='va'>terraferma</span>
+<span class='va'>mesh</span><span class='op'>&lt;-</span><span class='fu'>inla.mesh.2d</span><span class='op'>(</span>boundary<span class='op'>=</span><span class='va'>terraferma</span>, max.edge <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>10</span>,<span class='fl'>30</span><span class='op'>)</span>,cutoff<span class='op'>=</span><span class='fl'>8</span>,min.angle <span class='op'>=</span> <span class='fl'>25</span>,offset<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>,<span class='fl'>20</span><span class='op'>)</span><span class='op'>)</span>
 </code></pre>
 </div>
 </div>
 <div class="layout-chunk" data-layout="l-body-outset">
 <p><img src="mesh-lombardia_files/figure-html5/plotMesh-1.png" width="624" /></p>
+</div>
+<div class="layout-chunk" data-layout="l-body-outset">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'>########################</span>
+<span class='co'>#Mesh    </span>
+<span class='co'>########################</span>
+<span class='va'>mesh</span><span class='op'>&lt;-</span><span class='fu'>inla.mesh.2d</span><span class='op'>(</span>loc <span class='op'>=</span><span class='va'>coordinateStazioni</span>, max.edge <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>12.5</span>,<span class='fl'>30</span><span class='op'>)</span>,cutoff<span class='op'>=</span><span class='fl'>5</span>,min.angle <span class='op'>=</span> <span class='fl'>30</span>,offset<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>50</span>,<span class='fl'>25</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body-outset">
+<p><img src="mesh-lombardia_files/figure-html5/plotMesh2-1.png" width="624" /></p>
 </div>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
