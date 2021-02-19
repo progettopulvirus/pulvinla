@@ -1,4 +1,3 @@
-#19 febbraio 2021
 rm(list=objects())
 library("tidyverse")
 library("INLA")
@@ -108,7 +107,7 @@ coordinateOsservazioni %>%
          scoordy_km=scale(coordy_km))->coordinateOsservazioni
 
 left_join(dati, coordinateOsservazioni %>%dplyr::select(station_eu_code,date,matches("^scoord[xy]_km")))->dati
-
+saveRDS(dati,glue::glue("dati_{REGIONE}.RDS"))
 
 #Altre info
 unique(dati$station_eu_code)->CODICI
@@ -135,6 +134,7 @@ as.matrix(stazioni)->stazioni
 
 ### Quale mesh?
 mesh<-inla.mesh.2d(loc =stazioni, max.edge = c(12.5,30),cutoff=5,min.angle = 30,offset=c(50,25))
+saveRDS(mesh,glue::glue("mesh_{REGIONE}.RDS"))
 
 
 if(DISEGNA_MESH){

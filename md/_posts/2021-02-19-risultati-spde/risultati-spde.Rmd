@@ -1,0 +1,142 @@
+---
+title: "Risultati SPDE"
+description: |
+  Descrizione spde, gennaio - maggio2020.
+author:
+  - name: Guido Fioravanti
+    affiliation: ISPRA
+date: 02-19-2021
+params:
+  regione: lombardia
+  inquinante: no2
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+```{r intro,include=FALSE,echo=FALSE,warning=FALSE}
+library("tidyverse")
+library("janitor")
+library("INLA")
+library("brinla")
+library("sf")
+library("cowplot")
+library("knitr")
+library("skimr")
+library("raster")
+library("sp")
+library("rpulvinla")
+library("downloadthis")
+
+`::`("regioniItalia","lombardia")->shapeRegione
+knitr::opts_chunk$set(layout="l-body-outset",warning = FALSE,message = FALSE,echo=FALSE,fig.height=4,include = FALSE,eval = TRUE)
+set.seed(1)
+```
+
+# `r params$inquinante`  
+
+
+```{r download,include=TRUE}
+download_file(path="risultati-spde.Rmd",output_name = "risultati-spde.Rmd",button_label="Scarica codice analisi spde",button_type = "primary")
+```
+
+
+```{r leggiRisultati}
+readRDS(glue::glue("dati_{params$regione}.RDS"))->dati
+numero_giorni(dati)->n_giorni
+
+if(!exists("inla.out")) {readRDS(glue::glue("result_{params$regione}.RDS"))->inla.out}
+readRDS(glue::glue("iset_{params$regione}.RDS"))->iset
+readRDS(glue::glue("stack.training_{params$regione}.RDS"))->mystack
+try({readRDS(glue::glue("spde_{params$regione}.RDS"))->spde})
+readRDS(glue::glue("mesh_{params$regione}.RDS"))->mesh
+
+#riporto le coordinate in km
+#mesh$loc[,1]<-mesh$loc[,1]*1000
+#mesh$loc[,2]<-mesh$loc[,2]*1000 
+```
+
+
+```{r myformula,include=TRUE}
+as.formula(inla.out$.args$formula)->myformula
+```
+
+### Formula
+
+`r as.character(myformula)`
+
+---
+
+## SPDE
+
+```{r spde,include=TRUE,include=FALSE}
+inla.spde.result(inla.out,name="i",spde=spde,do.transform=TRUE)->spdeResults
+#spdeResults$summary.hyperpar
+```
+
+Range (mean value): `r try({round(exp(spdeResults$summary.log.range.nominal$mean),0)})` km
+
+```{r,fig.width=8,fig.height=4}
+par(mfrow=c(1,2))
+spdeResults$marginals.range.nominal[[1]][,1]->X
+spdeResults$marginals.range.nominal[[1]][,2]->Y  
+plot(X,Y,type="l",main="Range spde",xlim=c(150,250))
+spdeResults$marginals.variance.nominal[[1]][,1]->XX
+spdeResults$marginals.variance.nominal[[1]][,2]->YY
+plot(XX,YY,type="l",main="Varianza spde",xlim=c(10,70))
+```
+
+### Latent field
+
+```{r graficoLatentField,include=TRUE,fig.width=5}
+in_km(shapeRegione)->shapeRegione
+st_crs(shapeRegione)->crsKM
+st_bbox(shapeRegione)->estensione
+as_Spatial(shapeRegione)->sp_shapeRegione
+
+#n_giorni: variabile globale in parametri.R  
+
+purrr::walk(seq(1,n_giorni,by = 20),.f=function(BB){
+  
+  
+  inla.out$summary.random$i[iset$i.group==BB,"mean"]->campo #
+  inla.mesh.projector(mesh,xlim=c(estensione["xmin"],estensione["xmax"]),ylim=c(estensione["ymin"],estensione["ymax"]),dims = c(250,250))->myproj
+  inla.mesh.project(myproj,campo)->campoProj
+  raster(list(x=myproj$x,y=myproj$y,z=campoProj))->myraster
+  crs(myraster)<-crsKM
+
+  mask(myraster,sp_shapeRegione)->myraster
+  plot(myraster)
+  plot(mesh,add=TRUE,lwd=0.5)
+  plot(st_geometry(shapeRegione),add=TRUE,lwd=2)
+
+})
+```
+
+
+```{r graficoLatentFieldSd,fig.height=5,fig.width=5,eval=FALSE}
+## Latent field (SD)
+
+purrr::walk(seq(1,n_giorni,by=5),.f=function(BB){
+  
+  inla.out$summary.random$i[iset$i.group==BB,"sd"]->campo #
+  
+  inla.mesh.projector(mesh,xlim=c(estensione["xmin"],estensione["xmax"]),ylim=c(estensione["ymin"],estensione["ymax"]),dims = c(250,250))->myproj
+  inla.mesh.project(myproj,campo)->campoProj
+  raster(list(x=myproj$x,y=myproj$y,z=campoProj))->myraster
+  #exp(myraster)-1->myraster
+  
+  crs(myraster)<-CRS("+init=epsg:32632")
+  #raster::mask(myraster,italia.utm)->myraster
+  #myraster+xx[xx$nomi=="Intercept","mean"]->myraster
+  
+  #myraster[myraster< -20]<-NA
+  #myraster[myraster>20]<-NA
+  
+  plot(myraster) 
+  plot(mesh,add=TRUE,lwd=0.5)
+  plot(st_geometry(sp_shapeRegione),add=TRUE)
+
+})
+```
+
