@@ -1,5 +1,22 @@
 [
   {
+    "path": "posts/2021-02-19-analisi-covariate/",
+    "title": "Analisi covariate",
+    "description": {},
+    "author": [
+      {
+        "name": "Guido",
+        "url": {}
+      }
+    ],
+    "date": "2021-02-19",
+    "categories": [],
+    "contents": "\nno2\n\n\n Scarica codice analisi covariate\n\n\n\n\n\nFormula\n~, value, t2m + tp + ptp + sp + wdir + wspeed + pblmax + pblmin + altitudedem + scoordx_km + scoordy_km + f(i, model = spde, group = i.group, control.group = list(model = “ar1”, hyper = list(theta = theta_hyper)))\n\n\n\nSummary fixed\n\n                    mean          sd   0.025quant     0.5quant\n(Intercept)  3.193727343 2.150379486 -1.030815554  3.185269488\nt2m          0.119418658 0.039448945  0.041860925  0.119450433\ntp           0.018716751 0.011254239 -0.003391821  0.018719925\nptp         -0.027146677 0.010923745 -0.048582178 -0.027151889\nsp           0.099144359 0.123909140 -0.145731799  0.099638308\nwdir        -0.003086369 0.003728263 -0.010405485 -0.003086804\nwspeed      -0.101923082 0.011310573 -0.124111000 -0.101930288\npblmax      -0.049538276 0.008221329 -0.065649700 -0.049549269\npblmin      -0.088839336 0.021711133 -0.131452019 -0.088845264\naltitudedem -4.841199784 0.246699858 -5.329843448 -4.839694355\nscoordx_km   0.305664518 0.858770980 -1.384516830  0.306852903\nscoordy_km   1.402989017 0.841165088 -0.266777093  1.409185414\n              0.975quant         mode          kld\n(Intercept)  7.460134085  3.168835138 1.738757e-12\nt2m          0.196728636  0.119517623 8.917629e-15\ntp           0.040787293  0.018727270 6.634065e-15\nptp         -0.005702212 -0.027161424 1.044876e-14\nsp           0.341052816  0.100635683 1.394243e-13\nwdir         0.004228438 -0.003087361 4.265651e-16\nwspeed      -0.079715723 -0.101943815 0.000000e+00\npblmax      -0.033380939 -0.049570711 8.020403e-15\npblmin      -0.046233007 -0.088855353 1.840074e-15\naltitudedem -4.361282743 -4.836618663 5.837440e-14\nscoordx_km   1.987684792  0.309325660 4.368518e-14\nscoordy_km   3.037270215  1.421911157 2.285379e-13\n\nSummary hyper\n\n                                               mean           sd\nPrecision for the Gaussian observations  40.4198823 0.9472312417\nRange for i                             194.9216544 8.2515316665\nStdev for i                               5.0573708 0.5326966549\nGroupRho for i                            0.9993066 0.0001463841\n                                         0.025quant    0.5quant\nPrecision for the Gaussian observations  38.5744090  40.4140285\nRange for i                             179.4595566 194.6304453\nStdev for i                               4.1330589   5.0133202\nGroupRho for i                            0.9989888   0.9993171\n                                         0.975quant        mode\nPrecision for the Gaussian observations  42.3048625  40.4105281\nRange for i                             211.9063399 193.8938263\nStdev for i                               6.2207934   4.9082824\nGroupRho for i                            0.9995603   0.9993356\n\n\n\n\n",
+    "preview": "posts/2021-02-19-analisi-covariate/analisi-covariate_files/figure-html5/marginaliPlot-1.png",
+    "last_modified": "2021-02-19T16:44:08+01:00",
+    "input_file": {}
+  },
+  {
     "path": "posts/2021-02-19-codice-modello-prima-versione/",
     "title": "Codice modello, prima versione",
     "description": "Implementazione mediante INLA del modello descritto da Cameletti, regione Lombardia (NO2).",
