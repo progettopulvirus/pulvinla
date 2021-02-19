@@ -67,7 +67,6 @@ as.formula(inla.out$.args$formula)->myformula
 
 ---
 
-## SPDE
 
 ```{r spde,include=TRUE,include=FALSE}
 inla.spde.result(inla.out,name="i",spde=spde,do.transform=TRUE)->spdeResults
@@ -76,7 +75,7 @@ inla.spde.result(inla.out,name="i",spde=spde,do.transform=TRUE)->spdeResults
 
 Range (mean value): `r try({round(exp(spdeResults$summary.log.range.nominal$mean),0)})` km
 
-```{r,fig.width=8,fig.height=4}
+```{r,fig.width=8,fig.height=4,include=TRUE}
 par(mfrow=c(1,2))
 spdeResults$marginals.range.nominal[[1]][,1]->X
 spdeResults$marginals.range.nominal[[1]][,2]->Y  

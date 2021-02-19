@@ -28,9 +28,9 @@
     ],
     "date": "2021-02-19",
     "categories": [],
-    "contents": "\nno2\n\n\n Scarica codice analisi spde\n\n\n\n\n\nFormula\n~, value, t2m + tp + ptp + sp + wdir + wspeed + pblmax + pblmin + altitudedem + scoordx_km + scoordy_km + f(i, model = spde, group = i.group, control.group = list(model = “ar1”, hyper = list(theta = theta_hyper)))\nSPDE\nRange (mean value): 195 km\nLatent field\n\n\n\n\n\n\n",
-    "preview": "posts/2021-02-19-risultati-spde/risultati-spde_files/figure-html5/graficoLatentField-1.png",
-    "last_modified": "2021-02-19T16:06:27+01:00",
+    "contents": "\nno2\n\n\n Scarica codice analisi spde\n\n\n\n\n\nFormula\n~, value, t2m + tp + ptp + sp + wdir + wspeed + pblmax + pblmin + altitudedem + scoordx_km + scoordy_km + f(i, model = spde, group = i.group, control.group = list(model = “ar1”, hyper = list(theta = theta_hyper)))\nRange (mean value): 195 km\n\n\n\nLatent field\n\n\n\n\n\n\n",
+    "preview": "posts/2021-02-19-risultati-spde/risultati-spde_files/figure-html5/unnamed-chunk-1-1.png",
+    "last_modified": "2021-02-19T16:19:08+01:00",
     "input_file": {}
   },
   {
