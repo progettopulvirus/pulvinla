@@ -51,13 +51,19 @@ left_join(inquinante,meteo,by=c("station_eu_code"="station_eu_code","date"="date
 
 #selezioniamo serie nel periodo gennaio-giugno
 dati %>%
-  filter(mm %in% 1:6)->subDati
+  filter(mm %in% 1:5) %>%
+  filter(yy==2020) %>%
+  mutate(wday=as.factor(lubridate::wday(date)))->subDati
 
 left_join(subDati,stazioniMonitoraggio::stazioni[,c("station_eu_code","nome_stazione","tipo_zona")]) %>%
   mutate(tipo_zona=as.factor(tipo_zona))->subDati
 ```
 
 
+```{r wday,eval=F}
+ggplot(data=subDati,aes(x=wday,y=value))+
+  geom_boxplot(aes(fill=wday))
+```
 
 Numero stazioni: `r length(unique(dati$station_eu_code))`
 

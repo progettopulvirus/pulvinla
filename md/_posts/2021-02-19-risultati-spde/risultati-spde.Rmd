@@ -79,10 +79,10 @@ Range (mean value): `r try({round(exp(spdeResults$summary.log.range.nominal$mean
 par(mfrow=c(1,2))
 spdeResults$marginals.range.nominal[[1]][,1]->X
 spdeResults$marginals.range.nominal[[1]][,2]->Y  
-plot(X,Y,type="l",main="Range spde",xlim=c(150,250))
+plot(X,Y,type="l",main="Range spde",xlim=c(50,200))
 spdeResults$marginals.variance.nominal[[1]][,1]->XX
 spdeResults$marginals.variance.nominal[[1]][,2]->YY
-plot(XX,YY,type="l",main="Varianza spde",xlim=c(10,70))
+plot(XX,YY,type="l",main="Varianza spde",xlim=c(0,20))
 ```
 
 ### Latent field

@@ -24,17 +24,21 @@ METEO<-c("t2m","tp","ptp","sp","wdir","wspeed","pblmax","pblmin","altitudedem")
 
 reduce(METEO,.f=str_c,sep="+")->formula.regressori
 paste0("value~",formula.regressori)->myformula
-
 as.formula(myformula)->myformula
+update(myformula,.~.+lockdown)->myformula
+
+
 
 ###############################
-###Inserire le coordinate?
+###Inserire le coordinate?Inserire trend su mese?
 ###############################
 SCOORDX_KM<-c(TRUE,FALSE)[1] 
 SCOORDY_KM<-c(TRUE,FALSE)[1] 
+MM<-c(TRUE,FALSE)[1] 
 
 if(SCOORDX_KM) update(myformula,.~.+scoordx_km)->myformula
 if(SCOORDY_KM) update(myformula,.~.+scoordy_km)->myformula
+if(MM) update(myformula,.~.+mm)->myformula
 
 print("###############################")
 print("Formula, solo fixed effects - parametri meteoclimatici")
@@ -160,13 +164,13 @@ saveRDS(iset,glue::glue("iset_{REGIONE}.RDS"))
 #training
 inla.spde.make.A(mesh=mesh,loc=as.matrix(coordinateOsservazioni[,c("coordx_km","coordy_km")]),group =dati$banda,n.spde=spde$n.spde,n.group =n_giorni )->A.training
 #La variabile target si chiama value, che sia il logaritmo o no
-inla.stack(data=list(value=dati$value),A=list(A.training,1),effects=list(iset,dati[c(attr(termini,"term.labels"))]),tag="training")->stack.training
+inla.stack(data=list(value=dati$value),A=list(A.training,1),effects=list(iset,dati[c("station_eu_code",attr(termini,"term.labels"))]),tag="training")->stack.training
 saveRDS(stack.training,glue::glue("stack.training_{REGIONE}.RDS"))
 
 ########################
 #Random effects
 ########################
-update(myformula,.~.+f(i,model=spde,group = i.group,control.group = list(model="ar1",hyper=list(theta=theta_hyper))))->myformula
+update(myformula,.~.+f(station_eu_code,model="iid")+f(i,model=spde,group = i.group,control.group = list(model="ar1",hyper=list(theta=theta_hyper))))->myformula
 
 print("###############################")
 print("Formula finale modello:")
