@@ -113,7 +113,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["analisi-covariate_files/figure-html5/marginaliPlot-1.png","dati_lombardia.RDS","iset_lombardia.RDS","mesh_lombardia.RDS","result_lombardia.RDS","spde_lombardia.RDS","stack.training_lombardia.RDS"]}
+  {"type":"character","attributes":{},"value":["analisi-covariate_files/figure-html5/marginaliPlot-1.png","dati_lombardia.RDS","iset_lombardia.RDS","mesh_lombardia.RDS","result_lombardia.RDS","risultati-spde_files/anchor-4.2.2/anchor.min.js","risultati-spde_files/bowser-1.9.3/bowser.min.js","risultati-spde_files/distill-2.2.21/template.v2.js","risultati-spde_files/figure-html5/graficoLatentField-1.png","risultati-spde_files/figure-html5/graficoLatentField-2.png","risultati-spde_files/figure-html5/graficoLatentField-3.png","risultati-spde_files/figure-html5/graficoLatentField-4.png","risultati-spde_files/figure-html5/graficoLatentField-5.png","risultati-spde_files/figure-html5/graficoLatentField-6.png","risultati-spde_files/figure-html5/graficoLatentField-7.png","risultati-spde_files/figure-html5/graficoLatentField-8.png","risultati-spde_files/figure-html5/unnamed-chunk-1-1.png","risultati-spde_files/font-awesome-5.13.0/css/all.min.css","risultati-spde_files/font-awesome-5.13.0/css/v4-shims.min.css","risultati-spde_files/font-awesome-5.13.0/js/script.js","risultati-spde_files/font-awesome-5.13.0/webfonts/fa-brands-400.eot","risultati-spde_files/font-awesome-5.13.0/webfonts/fa-brands-400.svg","risultati-spde_files/font-awesome-5.13.0/webfonts/fa-brands-400.ttf","risultati-spde_files/font-awesome-5.13.0/webfonts/fa-brands-400.woff","risultati-spde_files/font-awesome-5.13.0/webfonts/fa-brands-400.woff2","risultati-spde_files/font-awesome-5.13.0/webfonts/fa-regular-400.eot","risultati-spde_files/font-awesome-5.13.0/webfonts/fa-regular-400.svg","risultati-spde_files/font-awesome-5.13.0/webfonts/fa-regular-400.ttf","risultati-spde_files/font-awesome-5.13.0/webfonts/fa-regular-400.woff","risultati-spde_files/font-awesome-5.13.0/webfonts/fa-regular-400.woff2","risultati-spde_files/font-awesome-5.13.0/webfonts/fa-solid-900.eot","risultati-spde_files/font-awesome-5.13.0/webfonts/fa-solid-900.svg","risultati-spde_files/font-awesome-5.13.0/webfonts/fa-solid-900.ttf","risultati-spde_files/font-awesome-5.13.0/webfonts/fa-solid-900.woff","risultati-spde_files/font-awesome-5.13.0/webfonts/fa-solid-900.woff2","risultati-spde_files/header-attrs-2.6/header-attrs.js","risultati-spde_files/jquery-1.11.3/jquery.min.js","risultati-spde_files/popper-2.6.0/popper.min.js","risultati-spde_files/tippy-6.2.7/tippy-bundle.umd.min.js","risultati-spde_files/tippy-6.2.7/tippy-light-border.css","risultati-spde_files/tippy-6.2.7/tippy.css","risultati-spde_files/tippy-6.2.7/tippy.umd.min.js","risultati-spde_files/webcomponents-2.0.0/webcomponents.js","risultati-spde.html","spde_lombardia.RDS","stack.training_lombardia.RDS"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
   <!--/radix_placeholder_navigation_in_header-->
@@ -1487,7 +1487,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
 </div>
 <h3 id="formula">Formula</h3>
-<p>~, value, t2m + tp + ptp + sp + wdir + wspeed + pblmax + pblmin + altitudedem + lockdown + scoordx_km + scoordy_km + mm + f(station_eu_code, model = “iid”) + f(i, model = spde, group = i.group, control.group = list(model = “ar1”, hyper = list(theta = theta_hyper)))</p>
+<p>~, value, t2m + tp + ptp + sp + wdir + wspeed + pblmax + pblmin + altitudedem + lockdown + scoordx_km + scoordy_km + f(station_eu_code, model = “iid”) + f(banda2, model = “rw1”, hyper = prec_hyper) + f(i, model = spde, group = i.group, control.group = list(model = “ar1”, hyper = list(theta = theta_hyper)))</p>
 <hr />
 <div class="layout-chunk" data-layout="l-page">
 <p><img src="analisi-covariate_files/figure-html5/marginaliPlot-1.png" width="624" /></p>
@@ -1495,56 +1495,57 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <h2 id="summary-fixed">Summary fixed</h2>
 <div class="layout-chunk" data-layout="l-body-outset">
 <pre><code>                    mean          sd   0.025quant     0.5quant
-(Intercept)  1.899940398 0.296360686  1.312488399  1.900401199
-t2m          0.126856833 0.038084144  0.051985722  0.126885916
-tp           0.020384835 0.011156596 -0.001528183  0.020386616
-ptp         -0.028796966 0.010861048 -0.050101766 -0.028804850
-sp           0.151843538 0.102422437 -0.049967376  0.152033904
-wdir        -0.002256636 0.003515371 -0.009158144 -0.002256934
-wspeed      -0.100386476 0.011231404 -0.122413316 -0.100395633
-pblmax      -0.050959051 0.007975015 -0.066586124 -0.050970319
-pblmin      -0.094150199 0.021420640 -0.136197481 -0.094154465
-altitudedem -0.257918986 0.173772444 -0.603598918 -0.256889720
-lockdown    -0.216972006 0.151562653 -0.514623515 -0.217029621
-scoordx_km   0.133473376 0.248597990 -0.357056254  0.133077440
-scoordy_km   0.288269998 0.262138308 -0.225111948  0.286954128
-mm          -0.216362912 0.074021597 -0.361807644 -0.216369624
+(Intercept)  1.582375996 0.122632575  1.339596416  1.582628459
+t2m          0.194791997 0.036848799  0.122299973  0.194837486
+tp           0.025451974 0.010559316  0.004705779  0.025455665
+ptp         -0.023017370 0.010416666 -0.043464043 -0.023020328
+sp           0.051452336 0.108713291 -0.163804941  0.051992939
+wdir        -0.004454007 0.003437235 -0.011200118 -0.004454969
+wspeed      -0.095668954 0.010313114 -0.115904042 -0.095674468
+pblmax      -0.041518640 0.007764315 -0.056750888 -0.041523409
+pblmin      -0.108340105 0.019673207 -0.146927080 -0.108354565
+altitudedem -0.212806541 0.145991704 -0.502622301 -0.212113473
+lockdown    -0.144987246 0.208686698 -0.554503759 -0.145255345
+scoordx_km   0.092696337 0.130270603 -0.163792515  0.092338362
+scoordy_km   0.151193056 0.176750658 -0.195356547  0.150572550
               0.975quant         mode          kld
-(Intercept)  2.483901652  1.901300957 2.313238e-13
-t2m          0.201497377  0.126947507 1.016625e-14
-tp           0.042267678  0.020391146 8.928339e-15
-ptp         -0.007468311 -0.028819752 1.102930e-14
-sp           0.352395779  0.152417113 2.331626e-13
-wdir         0.004640189 -0.002257234 1.096675e-15
-wspeed      -0.078329243 -0.100413077 1.031391e-14
-pblmax      -0.035284082 -0.050992307 6.818789e-15
-pblmin      -0.052117940 -0.094161213 9.451601e-16
-altitudedem  0.081567595 -0.254951561 1.144691e-12
-lockdown     0.080702161 -0.217129713 2.624976e-13
-scoordx_km   0.625397278  0.132345476 5.453350e-13
-scoordy_km   0.808571655  0.284468518 1.827307e-12
-mm          -0.071027776 -0.216376603 3.105862e-13</code></pre>
+(Intercept)  1.823389308  1.583131845 3.826752e-06
+t2m          0.266967256  0.194932036 7.831270e-07
+tp           0.046158641  0.025463984 1.129555e-07
+ptp         -0.002573322 -0.023025395 2.649745e-08
+sp           0.263506029  0.053082352 2.039068e-06
+wdir         0.002291139 -0.004456613 1.189412e-07
+wspeed      -0.075422154 -0.095684678 1.128997e-08
+pblmax      -0.026274204 -0.041532380 1.495597e-08
+pblmin      -0.069709738 -0.108381971 3.723801e-07
+altitudedem  0.072681224 -0.210860733 4.892919e-06
+lockdown     0.265576887 -0.145770369 1.906407e-09
+scoordx_km   0.350924661  0.091693795 5.707845e-06
+scoordy_km   0.500888388  0.149465489 4.128527e-06</code></pre>
 </div>
 <h2 id="summary-hyper">Summary hyper</h2>
 <div class="layout-chunk" data-layout="l-body-outset">
-<pre><code>                                               mean          sd
-Precision for the Gaussian observations  56.3155093 1.581039256
-Precision for station_eu_code            28.7631789 8.661067234
-Range for i                             154.7553508 6.569464676
-Stdev for i                               1.1029753 0.108647119
-GroupRho for i                            0.9825835 0.003263122
-                                         0.025quant    0.5quant
-Precision for the Gaussian observations  53.2552926  56.2985717
-Precision for station_eu_code            15.5663385  27.4928651
-Range for i                             142.2275221 154.6215867
-Stdev for i                               0.9250321   1.0899551
-GroupRho for i                            0.9759884   0.9826352
-                                         0.975quant        mode
-Precision for the Gaussian observations  59.4801286  56.2732553
-Precision for station_eu_code            49.2179485  25.1350038
-Range for i                             168.0738063 154.3667416
-Stdev for i                               1.3485771   1.0547858
-GroupRho for i                            0.9886777   0.9825798</code></pre>
+<pre><code>                                              mean          sd
+Precision for the Gaussian observations 61.3237065 1.824760473
+Precision for station_eu_code           28.8325690 8.700666745
+Precision for banda2                    26.2265072 3.683952946
+Range for i                             77.7003899 5.138185215
+Stdev for i                              0.6681900 0.062028852
+GroupRho for i                           0.9757436 0.004255758
+                                        0.025quant   0.5quant
+Precision for the Gaussian observations 57.8148366 61.2964769
+Precision for station_eu_code           15.1577157 27.7249826
+Precision for banda2                    19.9198954 25.8896626
+Range for i                             68.0252371 77.5528797
+Stdev for i                              0.5520278  0.6665569
+GroupRho for i                           0.9661979  0.9761884
+                                        0.975quant       mode
+Precision for the Gaussian observations 64.9927520 61.2431205
+Precision for station_eu_code           48.9923246 25.6197456
+Precision for banda2                    34.3842752 25.1562714
+Range for i                             88.2510069 77.2903714
+Stdev for i                              0.7949898  0.6647456
+GroupRho for i                           0.9828261  0.9771100</code></pre>
 </div>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
