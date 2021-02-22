@@ -13,7 +13,7 @@ output:
 
 Caratteristiche modello:
 
-- iid su control group
+- ar1 su control group
 
 - rw1 su day
 
