@@ -1,0 +1,56 @@
+---
+title: "Codice modello PM10: spde con ar1, rw1 su day"
+description: |
+  A short description of the post.
+author:
+  - name: guidofioravanti
+date: 02-22-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+Caratteristiche modello:
+
+- ar1 su control group
+
+- rw1 su giorni
+
+- iid su station_eu_code (codice centralina)
+
+
+### Codice modello 
+
+```{r download1,echo=FALSE}
+library("downloadthis")
+downloadthis::download_file(path="modelloPulvirus.R",output.name="modelloPulvirus.R",button_label="Scarica codice modello",button_type = "primary")
+```
+
+
+### Risultati effetti fissi e random effects
+
+```{r download2,echo=FALSE}
+library("downloadthis")
+downloadthis::download_file(path="analisi-covariate.html",output.name="analisi-covariate.html",button_label="Scarica html",button_type = "primary")
+```
+
+### Risultati residui
+
+```{r download3,echo=FALSE}
+library("downloadthis")
+downloadthis::download_file(path="analisi-residui-modello.html",output.name="analisi-residui-modello.html",button_label="Scarica html",button_type = "primary")
+```
+
+### Risultati spde
+
+```{r download4,echo=FALSE}
+library("downloadthis")
+downloadthis::download_file(path="risultati-spde.html",output.name="risultati-spde.html",button_label="Scarica html",button_type = "primary")
+```
+
+---
+
+```{r codice, include=TRUE,echo=TRUE,code=xfun::read_utf8("modelloPulvirus.R"),eval=FALSE}
+```
+
+
