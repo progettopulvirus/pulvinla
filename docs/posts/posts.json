@@ -2,7 +2,7 @@
   {
     "path": "posts/2021-02-22-analisi-no2-toscana/",
     "title": "Analisi NO2 Toscana",
-    "description": "A short description of the post.",
+    "description": "Descrizione NO2, serie 2013-2020.",
     "author": [
       {
         "name": "guidofioravanti",
@@ -13,13 +13,13 @@
     "categories": [],
     "contents": "\n\n\n\nNumero stazioni: 34\n\n\n\nNumero di osservazioni per anno per stazione\nTutte le serie coprono il periodo 2013-2020 (ad eccezione di una stazione).\n\n\n\nDistibuzione no2\n\nSkim summary statistics\n n obs: 46603 \n n variables: 5 \n group variables:  \n\n── Variable type:factor ──────────────────────────────────────────────\n  variable missing complete     n n_unique\n tipo_zona       0    46603 46603        3\n                        top_counts ordered\n U: 35008, R: 7245, S: 4350, NA: 0   FALSE\n\n── Variable type:numeric ─────────────────────────────────────────────\n variable missing complete     n    mean    sd     p0     p25     p50\n       dd       0    46603 46603   15.63  8.74    1      8      16   \n       mm       0    46603 46603    3.51  1.71    1      2       4   \n    value     910    45693 46603   22.5  16.56    0.1   10.17   18.43\n       yy       0    46603 46603 2016.66  2.24 2013   2015    2017   \n     p75    p100     hist\n   23      31    ▇▇▇▇▆▇▇▆\n    5       6    ▇▇▁▇▇▁▇▇\n   31.26  114.39 ▇▆▃▂▁▁▁▁\n 2019    2020    ▆▇▇▇▇▇▇▇\n\nDistibuzione no2 per tipo di zona (Urban, Suburban, Rural)\n\nSkim summary statistics\n n obs: 46603 \n n variables: 2 \n group variables: tipo_zona \n\n── Variable type:numeric ─────────────────────────────────────────────\n tipo_zona variable missing complete     n  mean    sd   p0   p25\n         R    value     163     7082  7245  8.62  8.72 0.1   2.83\n         S    value     130     4220  4350 15.14 11.65 0.1   6.35\n         U    value     617    34391 35008 26.26 16.48 0.13 13.61\n   p50   p75   p100     hist\n  5.52 11.22  58.57 ▇▃▁▁▁▁▁▁\n 12.48 20.13  66.48 ▇▇▅▂▁▁▁▁\n 22.26 35.13 114.39 ▆▇▅▂▁▁▁▁\n\n\n\n\n\nDistribuzione mensile no2\n\n\n\n\n\n\n",
     "preview": "posts/2021-02-22-analisi-no2-toscana/analisi-no2-toscana_files/figure-html5/mappaAra-1.png",
-    "last_modified": "2021-02-22T23:21:44+01:00",
+    "last_modified": "2021-02-22T23:53:31+01:00",
     "input_file": {}
   },
   {
     "path": "posts/2021-02-22-analisi-pm10-toscana/",
     "title": "Analisi PM10 Toscana",
-    "description": "A short description of the post.",
+    "description": "Descrizione PM10, serie 2013-2020.",
     "author": [
       {
         "name": "guidofioravanti",
@@ -30,7 +30,7 @@
     "categories": [],
     "contents": "\n\n\n\nNumero stazioni: 33\n\n\n\nNumero di osservazioni per anno per stazione\nTutte le serie coprono il periodo 2013-2020 (ad eccezione di una stazione).\n\n\n\nDistibuzione pm10\n\nSkim summary statistics\n n obs: 44660 \n n variables: 5 \n group variables:  \n\n── Variable type:factor ──────────────────────────────────────────────\n  variable missing complete     n n_unique\n tipo_zona       0    44660 44660        3\n                        top_counts ordered\n U: 37430, S: 4344, R: 2886, NA: 0   FALSE\n\n── Variable type:numeric ─────────────────────────────────────────────\n variable missing complete     n    mean    sd   p0  p25  p50  p75\n       dd       0    44660 44660   15.63  8.74    1    8   16   23\n       mm       0    44660 44660    3.51  1.71    1    2    4    5\n    value    1401    43259 44660   21.75 13.66    0   13   19   26\n       yy       0    44660 44660 2016.69  2.22 2013 2015 2017 2019\n p100     hist\n   31 ▇▇▇▇▆▇▇▆\n    6 ▇▇▁▇▇▁▇▇\n  168 ▇▅▁▁▁▁▁▁\n 2020 ▆▆▇▇▇▇▇▇\n\nDistibuzione pm10 per tipo di zona (Urban, Suburban, Rural)\n\nSkim summary statistics\n n obs: 44660 \n n variables: 2 \n group variables: tipo_zona \n\n── Variable type:numeric ─────────────────────────────────────────────\n tipo_zona variable missing complete     n  mean    sd p0 p25 p50 p75\n         R    value     149     2737  2886 18.59 16.72  0   9  14  22\n         S    value     124     4220  4344 17.84 12.4   0  10  15  22\n         U    value    1128    36302 37430 22.44 13.43  0  14  19  27\n p100     hist\n  168 ▇▂▁▁▁▁▁▁\n  138 ▇▅▁▁▁▁▁▁\n  164 ▇▆▁▁▁▁▁▁\n\n\n\n\n\nDistribuzione mensile pm10\n\n\n\n\n\n\n",
     "preview": "posts/2021-02-22-analisi-pm10-toscana/analisi-pm10-toscana_files/figure-html5/mappaAra-1.png",
-    "last_modified": "2021-02-22T23:21:44+01:00",
+    "last_modified": "2021-02-22T23:55:29+01:00",
     "input_file": {}
   },
   {

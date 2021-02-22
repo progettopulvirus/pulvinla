@@ -1,7 +1,7 @@
 ---
 title: "Analisi NO2 Toscana"
 description: |
-  A short description of the post.
+  Descrizione NO2, serie 2013-2020.
 author:
   - name: guidofioravanti
 date: 02-22-2021
