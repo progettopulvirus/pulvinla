@@ -1,0 +1,99 @@
+---
+title: "Analisi covariate"
+author: Guido
+date: 02-19-2021
+params:
+  regione: lombardia
+  inquinante: pm10
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r intro,include=FALSE,echo=FALSE,warning=FALSE}
+library("tidyverse")
+library("janitor")
+library("INLA")
+library("brinla")
+library("sf")
+library("cowplot")
+library("knitr")
+library("skimr")
+library("raster")
+library("sp")
+library("rpulvinla")
+library("downloadthis")
+
+
+knitr::opts_chunk$set(layout="l-body-outset",warning = FALSE,message = FALSE,echo=FALSE,fig.height=4,include = FALSE,eval = TRUE)
+set.seed(1)
+```
+
+# `r params$inquinante`  
+
+
+```{r download,include=TRUE}
+download_file(path="analisi-covariate.Rmd",output_name = "analisi-covariate.Rmd",button_label="Scarica codice analisi covariate",button_type = "primary")
+```
+
+
+```{r leggiRisultati}
+readRDS(glue::glue("dati_{params$regione}.RDS"))->dati
+numero_giorni(dati)->n_giorni
+
+if(!exists("inla.out")) {readRDS(glue::glue("result_{params$regione}.RDS"))->inla.out}
+readRDS(glue::glue("iset_{params$regione}.RDS"))->iset
+readRDS(glue::glue("stack.training_{params$regione}.RDS"))->mystack
+try({readRDS(glue::glue("spde_{params$regione}.RDS"))->spde})
+readRDS(glue::glue("mesh_{params$regione}.RDS"))->mesh
+```
+
+
+```{r myformula,include=TRUE}
+as.formula(inla.out$.args$formula)->myformula
+```
+
+### Formula
+
+`r as.character(myformula)`
+
+---
+
+## Random effects
+
+### rw1 su day
+
+```{r day,include=TRUE,fig.height=6,layout="l-page",eval=T}
+try(brinla::bri.band.ggplot(inla.out,name="day"))
+```
+
+### rw1 su wday
+
+```{r wday,include=TRUE,fig.height=6,layout="l-page",eval=T}
+try(brinla::bri.band.ggplot(inla.out,name="wday"))
+```
+
+### rw1 su week
+
+```{r week,include=TRUE,fig.height=6,layout="l-page",eval=F}
+try(brinla::bri.band.ggplot(inla.out,name="week"))
+```
+
+## Fixed effects
+
+```{r marginaliPlot,include=TRUE,fig.height=6,layout="l-page"}
+brinla::bri.fixed.plot(inla.out)
+```
+
+
+```{r summaryFixed,include=TRUE}
+inla.out$summary.fixed
+```
+
+## Summary hyper
+
+```{r summaryHyper,include=TRUE}
+inla.out$summary.hyperpar
+```
+

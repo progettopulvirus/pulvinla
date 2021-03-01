@@ -1,0 +1,63 @@
+---
+title: "Serie fittate vs serie osservate"
+author: Guido
+date: 02-19-2021
+params:
+  regione: lombardia
+  inquinante: no2
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE}
+library("tidyverse")
+library("purrr")
+library("tidyverse")
+library("downloadthis")
+knitr::opts_chunk$set(layout="l-screen")
+```
+
+# `r params$inquinante`  
+
+
+```{r download,include=TRUE}
+download_file(path="serieFittate.Rmd",output_name = "serieFittate.Rmd",button_label="Scarica codice analisi covariate",button_type = "primary")
+```
+
+
+```{r leggiRisultati}
+readRDS(glue::glue("dati_{params$regione}.RDS"))->dati
+unique(dati$station_eu_code)->CODICI
+sample(CODICI,size = 8,replace = FALSE)->CAMPIONE
+
+```
+
+
+```{r esempio1,echo=FALSE,fig.height=12}
+#grafico tutti mesi, con residui insieme a valori osservati
+ggplot(data=dati %>% filter(station_eu_code %in% CAMPIONE))+
+  geom_line(aes(x=date,y=value),colour="black",lwd=0.5)+
+  geom_line(aes(x=date,y=fitted),colour="red",lty=1,alpha=1,lwd=0.5)+
+  facet_wrap(~station_eu_code,scales = "free",nrow = 8)+
+  theme_bw()+
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.grid.major.y = element_blank())
+```
+
+
+```{r esempio2,echo=FALSE,fig.height=12}
+#grafico tutti mesi, con residui insieme a valori osservati
+ggplot(data=dati %>% filter(station_eu_code %in% CAMPIONE))+
+  geom_point(aes(x=value,y=fitted,fill=residui,alpha=residui),pch=21)+
+  geom_abline(colour="red",slope = 1,intercept = 0)+
+  facet_wrap(~station_eu_code,scales = "free",nrow = 8)+
+  scale_fill_viridis_c()+
+  theme_bw()+
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.grid.major.y = element_blank())
+```

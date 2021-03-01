@@ -1,0 +1,258 @@
+---
+title: "Analisi residui modello"
+description: |
+  Descrizione residui, gennaio - maggio 2020.
+author:
+  - name: guidofioravanti
+date: 02-20-2021
+params:
+  regione: toscana
+  inquinante: no2
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+```{r intro,include=FALSE,echo=FALSE,warning=FALSE}
+library("tidyverse")
+library("janitor")
+library("INLA")
+library("brinla")
+library("sf")
+library("cowplot")
+library("knitr")
+library("skimr")
+library("raster")
+library("sp")
+library("rpulvinla")
+library("downloadthis")
+
+knitr::opts_chunk$set(layout="l-body-outset",warning = FALSE,message = FALSE,echo=FALSE,fig.height=4,include = FALSE,eval = TRUE)
+set.seed(1)
+```
+
+# `r params$inquinante`  
+
+
+```{r download,include=TRUE}
+download_file(path="analisi-residui-modello.Rmd",output_name = "analisi-residui-modello.Rmd",button_label="Scarica codice analisi residui",button_type = "primary")
+```
+
+
+```{r leggiRisultati}
+readRDS(glue::glue("dati_{params$regione}.RDS"))->dati
+dati %>%
+  mutate(error=)
+numero_giorni(dati)->n_giorni
+
+if(!exists("inla.out")) {readRDS(glue::glue("result_{params$regione}.RDS"))->inla.out}
+readRDS(glue::glue("iset_{params$regione}.RDS"))->iset
+readRDS(glue::glue("stack.training_{params$regione}.RDS"))->mystack
+#try({readRDS(glue::glue("spde_{params$regione}.RDS"))->spde})
+#readRDS(glue::glue("mesh_{params$regione}.RDS"))->mesh
+
+mystack$data$index$training->righe
+
+#calcolo residui su scala logaritmica e su scala esponenziale
+inla.out$summary.fitted.values$mean[righe]->dati$fitted
+
+dati %>% mutate(error=value-fitted)->dati
+left_join(dati,datiMeteo::meteo_standardizzati[,c("date","station_eu_code","rh","nirradiance","pwspeed","pbl00","pbl12","tmax2m","tmin2m")])->dati
+```
+
+### date
+
+```{r,include=TRUE}
+ggplot(data=dati,aes(x=date,y=error))+
+  geom_point(aes(fill=error),alpha=0.25,pch=21)+
+  geom_smooth(col="red")+
+  scale_fill_viridis_c()
+```
+
+### t2m
+
+```{r,include=TRUE}
+ggplot(data=dati,aes(x=t2m,y=error))+
+  geom_point(aes(fill=error),alpha=0.25,pch=21)+
+  geom_smooth(col="red")+
+  scale_fill_viridis_c()
+```
+
+### tp
+
+```{r,include=TRUE}
+ggplot(data=dati,aes(x=tp,y=error))+
+  geom_point(aes(fill=error),alpha=0.25,pch=21)+
+  geom_smooth(col="red")+
+  scale_fill_viridis_c()
+```
+
+### ptp
+
+```{r,include=TRUE}
+ggplot(data=dati,aes(x=ptp,y=error))+
+  geom_point(aes(fill=error),alpha=0.25,pch=21)+
+  geom_smooth(col="red")+
+  scale_fill_viridis_c()
+```
+
+### sp
+
+```{r,include=TRUE}
+ggplot(data=dati,aes(x=sp,y=error))+
+  geom_point(aes(fill=error),alpha=0.25,pch=21)+
+  geom_smooth(col="red")+
+  scale_fill_viridis_c()
+```
+
+### pblmax
+
+```{r,include=TRUE}
+ggplot(data=dati,aes(x=pblmax,y=error))+
+  geom_point(aes(fill=error),alpha=0.25,pch=21)+
+  geom_smooth(col="red")+
+  scale_fill_viridis_c()
+```
+
+### pblmin
+
+```{r,include=TRUE}
+ggplot(data=dati,aes(x=pblmin,y=error))+
+  geom_point(aes(fill=error),alpha=0.25,pch=21)+
+  geom_smooth(col="red")+
+  scale_fill_viridis_c()
+```
+
+### wdir
+
+```{r,include=TRUE}
+ggplot(data=dati,aes(x=wdir,y=error))+
+  geom_point(aes(fill=error),alpha=0.25,pch=21)+
+  geom_smooth(col="red")+
+  scale_fill_viridis_c()
+```
+
+### wspeed
+
+```{r,include=TRUE}
+ggplot(data=dati,aes(x=wspeed,y=error))+
+  geom_point(aes(fill=error),alpha=0.25,pch=21)+
+  geom_smooth(col="red")+
+  scale_fill_viridis_c()
+```
+
+### scoordx_km
+
+```{r,include=TRUE}
+ggplot(data=dati,aes(x=scoordx_km,y=error))+
+  geom_point(aes(fill=error),alpha=0.25,pch=21)+
+  geom_smooth(col="red")+
+  scale_fill_viridis_c()
+```
+
+### scoordy_km
+
+```{r,include=TRUE}
+ggplot(data=dati,aes(x=coordy,y=error))+
+  geom_point(aes(fill=error),alpha=0.25,pch=21)+
+  geom_smooth(col="red")+
+  scale_fill_viridis_c()
+```
+
+### rh
+
+```{r,include=TRUE}
+ggplot(data=dati,aes(x=rh,y=error))+
+  geom_point(aes(fill=error),alpha=0.25,pch=21)+
+  geom_smooth(col="red")+
+  scale_fill_viridis_c()
+```
+
+### nirradiance
+
+```{r,include=TRUE}
+ggplot(data=dati,aes(x=nirradiance,y=error))+
+  geom_point(aes(fill=error),alpha=0.25,pch=21)+
+  geom_smooth(col="red")+
+  scale_fill_viridis_c()
+```
+
+### pwspeed
+
+```{r,include=TRUE}
+ggplot(data=dati,aes(x=pwspeed,y=error))+
+  geom_point(aes(fill=error),alpha=0.25,pch=21)+
+  geom_smooth(col="red")+
+  scale_fill_viridis_c()
+```
+
+
+### pbl00
+
+```{r,include=TRUE}
+ggplot(data=dati,aes(x=pbl00,y=error))+
+  geom_point(aes(fill=error),alpha=0.25,pch=21)+
+  geom_smooth(col="red")+
+  scale_fill_viridis_c()
+```
+
+### pbl12
+
+```{r,include=TRUE}
+ggplot(data=dati,aes(x=pbl12,y=error))+
+  geom_point(aes(fill=error),alpha=0.25,pch=21)+
+  geom_smooth(col="red")+
+  scale_fill_viridis_c()
+```
+
+### t2max
+
+```{r,include=TRUE}
+ggplot(data=dati,aes(x=tmax2m,y=error))+
+  geom_point(aes(fill=error),alpha=0.25,pch=21)+
+  geom_smooth(col="red")+
+  scale_fill_viridis_c()
+```
+
+### t2min
+
+```{r,include=TRUE}
+ggplot(data=dati,aes(x=tmin2m,y=error))+
+  geom_point(aes(fill=error),alpha=0.25,pch=21)+
+  geom_smooth(col="red")+
+  scale_fill_viridis_c()
+```
+
+### week
+
+```{r,include=TRUE}
+dati$week<-lubridate::week(dati$date)
+
+ggplot(data=dati,aes(x=week,y=error))+
+  geom_point(aes(fill=error),alpha=0.25,pch=21)+
+  geom_smooth(col="red")+
+  scale_fill_viridis_c()
+```
+
+### seno
+
+```{r,include=TRUE}
+
+
+ggplot(data=dati,aes(x=seno,y=error))+
+  geom_point(aes(fill=error),alpha=0.25,pch=21)+
+  geom_smooth(col="red")+
+  scale_fill_viridis_c()
+```
+
+
+### coseno
+
+```{r,include=TRUE}
+dati$week<-lubridate::week(dati$date)
+
+ggplot(data=dati,aes(x=coseno,y=error))+
+  geom_point(aes(fill=error),alpha=0.25,pch=21)+
+  geom_smooth(col="red")+
+  scale_fill_viridis_c()
+```
