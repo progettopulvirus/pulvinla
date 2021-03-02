@@ -1,0 +1,40 @@
+---
+title: "NO2 Lombardia, modello con iid su spde, senza iid su station_eu_code"
+description: |
+  Serie Lombardia, gennaio-maggio 2020.
+author:
+  - name: guidofioravanti
+date: 03-02-2021
+params:
+  regione: lombardia
+  inquinante: no2
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+Tenendo conto dei [risultati](https://progettopulvirus.github.io/pulvinla/posts/2021-03-02-arimax-no2-con-pvalue/) ottenuti sulle singole serie mediante l'applicazione di `auto.arima` del pacchetto `forecast`, e' stato fittato un modello con `iid` su SPDE.
+
+Il modello inoltre presenta:
+
+- l'effetto (lineare) della concentrazione dell'inquinante nel giorno precedente (variabile `pvalue` ovvero previous value)
+
+- l'effetto lineare del giorno (variabile `day`)
+
+- l'effetto non lineare (rw1) del giorno della settimana (variabile `wday`)
+
+Questo modello **NON** include un random effect sulle centraline (iid sulla variabile `station_eu_code`).
+
+Risultati del modello:
+
+- [stima effetti fissi ed effetti random](analisi-covariate.html) 
+
+- [campo spde](risultati-spde.html)  
+
+- [variogramma spazio temporale, serie osservate vs residui](disegnaVariogramma.html)
+
+- [analisi dei residui del modello](analisi-residui-modello.html)
+
+- [esempio di serie ricostruite dal modello: serie di training non di validazione!](serieFittate.html)
+
+- [codice del modello](codice-modello-prima-versione.html) 
