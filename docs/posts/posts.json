@@ -1,5 +1,22 @@
 [
   {
+    "path": "posts/2021-03-03-no2-lombardia-modello-con-rw1-su-day-iid-su-spde-e-stationeucode/",
+    "title": "NO2 Lombardia, modello con rw1 su day, iid su spde e station_eu_code",
+    "description": "Serie Lombardia, gennaio-maggio 2020.",
+    "author": [
+      {
+        "name": "guidofioravanti",
+        "url": {}
+      }
+    ],
+    "date": "2021-03-03",
+    "categories": [],
+    "contents": "\nTenendo conto dei risultati ottenuti sulle singole serie mediante l’applicazione di auto.arima del pacchetto forecast, e’ stato fittato un modello con iid su SPDE.\nIl modello inoltre presenta:\nl’effetto (lineare) della concentrazione dell’inquinante nel giorno precedente (variabile pvalue ovvero previous value)\nl’effetto non lineare (rw1) del giorno (variabile day)\nl’effetto non lineare (rw1) del giorno della settimana (variabile wday)\nun random effect sulle centraline (iid sulla variabile station_eu_code).\nRisultati del modello:\nstima effetti fissi ed effetti random\ncampo spde\nvariogramma spazio temporale, serie osservate vs residui\nanalisi dei residui del modello\nesempio di serie ricostruite dal modello: serie di training non di validazione!\ncodice del modello\n\n\n\n",
+    "preview": {},
+    "last_modified": "2021-03-03T00:16:40+01:00",
+    "input_file": {}
+  },
+  {
     "path": "posts/2021-03-02-arimax-no2-con-pvalue/",
     "title": "ARIMAX serie NO2, gennaio-maggio 2020 ",
     "description": "Stima modello arimax utilizzando il valore dell'inquinante del giorno precedente.",
@@ -82,23 +99,6 @@
     "contents": "\nTenendo conto dei risultati ottenuti sulle singole serie mediante l’applicazione di auto.arima del pacchetto forecast, e’ stato fittato un modello con iid su SPDE.\nIl modello inoltre presenta:\nl’effetto (lineare) della concentrazione dell’inquinante nel giorno precedente (variabile pvalue ovvero previous value)\nl’effetto lineare del giorno (variabile day)\nl’effetto non lineare (rw1) del giorno della settimana (variabile wday)\nun random effect sulle centraline (iid sulla variabile station_eu_code).\nRisultati del modello:\nstima effetti fissi ed effetti random\ncampo spde\nvariogramma spazio temporale, serie osservate vs residui\nanalisi dei residui del modello\nesempio di serie ricostruite dal modello: serie di training non di validazione!\ncodice del modello\n\n\n\n",
     "preview": {},
     "last_modified": "2021-03-02T15:55:00+01:00",
-    "input_file": {}
-  },
-  {
-    "path": "posts/2021-03-02-no2-lombardia-modello-con-iid-su-spde-senza-iid-su-stationeucode/",
-    "title": "NO2 Lombardia, modello con iid su spde, senza iid su station_eu_code",
-    "description": "Serie Lombardia, gennaio-maggio 2020.",
-    "author": [
-      {
-        "name": "guidofioravanti",
-        "url": {}
-      }
-    ],
-    "date": "2021-03-02",
-    "categories": [],
-    "contents": "\nTenendo conto dei risultati ottenuti sulle singole serie mediante l’applicazione di auto.arima del pacchetto forecast, e’ stato fittato un modello con iid su SPDE.\nIl modello inoltre presenta:\nl’effetto (lineare) della concentrazione dell’inquinante nel giorno precedente (variabile pvalue ovvero previous value)\nl’effetto lineare del giorno (variabile day)\nl’effetto non lineare (rw1) del giorno della settimana (variabile wday)\nQuesto modello NON include un random effect sulle centraline (iid sulla variabile station_eu_code).\nRisultati del modello:\nstima effetti fissi ed effetti random\ncampo spde\nvariogramma spazio temporale, serie osservate vs residui\nanalisi dei residui del modello\nesempio di serie ricostruite dal modello: serie di training non di validazione!\ncodice del modello\n\n\n\n",
-    "preview": {},
-    "last_modified": "2021-03-02T16:09:38+01:00",
     "input_file": {}
   },
   {
