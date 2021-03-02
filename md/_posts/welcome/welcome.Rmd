@@ -11,13 +11,4 @@ output:
     self_contained: false
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
-
-# Learn more about creating blogs with Distill at:
-# https://rstudio.github.io/distill/blog.html
-
-```
-
-
-
+"*Impariamo dai fallimenti, non dai successi!*" (Dracula, Bram Stoker)
