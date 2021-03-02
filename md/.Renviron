@@ -1,2 +1,2 @@
-RSTUDIO_PANDOC="/home/guido/anaconda3/envs/rguido/bin/pandoc"
+RSTUDIO_PANDOC="/usr/lib/rstudio/bin/pandoc/pandoc"
 PATH="/usr/lib/rstudio/bin/pandoc/:${PATH}"
