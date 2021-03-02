@@ -12,7 +12,7 @@ output:
     self_contained: false
 ---
 
-Per ciascuna serie di `r params$inquinante`  e' stato stimato (in modo completamente automatico) un modello ARIMAX utilizzando la funzione auto.arima del pacchetto `forecast`.
+Per ciascuna serie di `r params$inquinante`  e' stato stimato (in modo completamente automatico) un modello ARIMAX utilizzando la funzione auto.arima del pacchetto `forecast`, imponendo come massimo ordine della componente AR p=1 e 0 come massimo ordine della componente MA (il modello INLA prevede una componente AR1 su spde e nessuna componente MA).
 
 La variabile target (value) e' il logaritmo del dato osservato.
 
@@ -119,7 +119,7 @@ purrr::walk(c("U"),.f=function(tipo){
       imputeTS::na_ma(subdati$value)->subdati$value
     
       auto.arima(y=subdati$value,xreg = as.matrix(subdati[,c("banda","t2m","sp","pblmax","pblmin","wdir","wspeed","tp","ptp","pvalue","seno","coseno","lockdown")]),
-                 stepwise = TRUE)->ris
+                 stepwise = TRUE,max.p=1,max.q=0)->ris
       
       print("###########################################\n")
       print(paste0("Codice stazione (station_eu_code):",cc))
@@ -148,7 +148,7 @@ purrr::walk(c("S"),.f=function(tipo){
       imputeTS::na_ma(subdati$value)->subdati$value
     
       auto.arima(y=subdati$value,xreg = as.matrix(subdati[,c("banda","t2m","sp","pblmax","pblmin","wdir","wspeed","tp","ptp","pvalue","seno","coseno","lockdown")]),
-                 stepwise = TRUE)->ris
+                 stepwise = TRUE,max.p=1,max.q=0)->ris
       print("###########################################\n")
       print(paste0("Codice stazione (station_eu_code):",cc))
       print("###########################################\n")  
@@ -175,7 +175,7 @@ purrr::walk(c("R"),.f=function(tipo){
       imputeTS::na_ma(subdati$value)->subdati$value
     
       auto.arima(y=subdati$value,xreg = as.matrix(subdati[,c("banda","t2m","sp","pblmax","pblmin","wdir","wspeed","tp","ptp","pvalue","seno","coseno","lockdown")]),
-                 stepwise = TRUE)->ris
+                 stepwise = TRUE,max.p=1,max.q=0)->ris
       print("###########################################\n")
       print(paste0("Codice stazione (station_eu_code):",cc))
       print("###########################################\n")  

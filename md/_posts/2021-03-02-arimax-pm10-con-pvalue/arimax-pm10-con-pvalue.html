@@ -116,7 +116,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"NULL"}
+  {"type":"character","attributes":{},"value":["arimax-pm10-con-pvalue_files/anchor-4.2.2/anchor.min.js","arimax-pm10-con-pvalue_files/bowser-1.9.3/bowser.min.js","arimax-pm10-con-pvalue_files/distill-2.2.21/template.v2.js","arimax-pm10-con-pvalue_files/header-attrs-2.6/header-attrs.js","arimax-pm10-con-pvalue_files/jquery-1.11.3/jquery.min.js","arimax-pm10-con-pvalue_files/popper-2.6.0/popper.min.js","arimax-pm10-con-pvalue_files/tippy-6.2.7/tippy-bundle.umd.min.js","arimax-pm10-con-pvalue_files/tippy-6.2.7/tippy-light-border.css","arimax-pm10-con-pvalue_files/tippy-6.2.7/tippy.css","arimax-pm10-con-pvalue_files/tippy-6.2.7/tippy.umd.min.js","arimax-pm10-con-pvalue_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
   <!--/radix_placeholder_navigation_in_header-->
@@ -1478,7 +1478,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </div>
 
 <div class="d-article">
-<p>Per ciascuna serie di pm10 e’ stato stimato (in modo completamente automatico) un modello ARIMAX utilizzando la funzione auto.arima del pacchetto <code>forecast</code>.</p>
+<p>Per ciascuna serie di pm10 e’ stato stimato (in modo completamente automatico) un modello ARIMAX utilizzando la funzione auto.arima del pacchetto <code>forecast</code>, imponendo come massimo ordine della componente AR p=1 e 0 come massimo ordine della componente MA (il modello INLA prevede una componente AR1 su spde e nessuna componente MA).</p>
 <p>La variabile target (value) e’ il logaritmo del dato osservato.</p>
 <p>Le variabili prese in esame sono:</p>
 <ul>
@@ -1507,7 +1507,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
       <span class='fu'>imputeTS</span><span class='fu'>::</span><span class='fu'><a href='https://SteffenMoritz.github.io/imputeTS/reference/na_ma.html'>na_ma</a></span><span class='op'>(</span><span class='va'>subdati</span><span class='op'>$</span><span class='va'>value</span><span class='op'>)</span><span class='op'>-&gt;</span><span class='va'>subdati</span><span class='op'>$</span><span class='va'>value</span>
     
       <span class='fu'>auto.arima</span><span class='op'>(</span>y<span class='op'>=</span><span class='va'>subdati</span><span class='op'>$</span><span class='va'>value</span>,xreg <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span><span class='op'>(</span><span class='va'>subdati</span><span class='op'>[</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"banda"</span>,<span class='st'>"t2m"</span>,<span class='st'>"sp"</span>,<span class='st'>"pblmax"</span>,<span class='st'>"pblmin"</span>,<span class='st'>"wdir"</span>,<span class='st'>"wspeed"</span>,<span class='st'>"tp"</span>,<span class='st'>"ptp"</span>,<span class='st'>"pvalue"</span>,<span class='st'>"seno"</span>,<span class='st'>"coseno"</span>,<span class='st'>"lockdown"</span><span class='op'>)</span><span class='op'>]</span><span class='op'>)</span>,
-                 stepwise <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>-&gt;</span><span class='va'>ris</span>
+                 stepwise <span class='op'>=</span> <span class='cn'>TRUE</span>,max.p<span class='op'>=</span><span class='fl'>1</span>,max.q<span class='op'>=</span><span class='fl'>0</span><span class='op'>)</span><span class='op'>-&gt;</span><span class='va'>ris</span>
       
       <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='st'>"###########################################\n"</span><span class='op'>)</span>
       <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"Codice stazione (station_eu_code):"</span>,<span class='va'>cc</span><span class='op'>)</span><span class='op'>)</span>
@@ -2066,27 +2066,27 @@ Training set 0.7442626 -0.06693226
 [1] &quot;Codice stazione (station_eu_code):IT1016A&quot;
 [1] &quot;###########################################\n&quot;
 Series: subdati$value 
-Regression with ARIMA(2,0,0) errors 
+Regression with ARIMA(1,0,0) errors 
 
 Coefficients:
-          ar1      ar2  intercept    banda      t2m      sp   pblmax
-      -0.4132  -0.1924     1.0046  -0.0001  -0.0705  0.0897  -0.0642
-s.e.   0.0957   0.0898     0.3032   0.0017   0.0650  0.1134   0.0232
-       pblmin     wdir   wspeed       tp      ptp  pvalue    seno
-      -0.2578  -0.0419  -0.2065  -0.0413  -0.0126  0.6580  0.0272
-s.e.   0.1467   0.0221   0.0478   0.0317   0.0293  0.0514  0.0230
-      coseno  lockdown
-      0.0190   -0.0983
-s.e.  0.0232    0.0576
+          ar1  intercept   banda      t2m      sp   pblmax   pblmin
+      -0.3251     1.1785  -7e-04  -0.0557  0.0735  -0.0634  -0.2591
+s.e.   0.0910     0.3320   2e-03   0.0736  0.1270   0.0251   0.1513
+         wdir   wspeed       tp      ptp  pvalue    seno  coseno
+      -0.0424  -0.2157  -0.0405  -0.0196  0.6248  0.0265  0.0177
+s.e.   0.0236   0.0493   0.0321   0.0293  0.0556  0.0250  0.0254
+      lockdown
+       -0.0956
+s.e.    0.0685
 
-sigma^2 estimated as 0.06464:  log likelihood=-3.02
-AIC=40.04   AICc=44.64   BIC=91.33
+sigma^2 estimated as 0.06633:  log likelihood=-5.2
+AIC=42.39   AICc=46.45   BIC=90.67
 
 Training set error measures:
-                       ME      RMSE       MAE        MPE     MAPE
-Training set 0.0004410882 0.2462334 0.1944896 -0.5310053 5.863634
-                  MASE       ACF1
-Training set 0.6604706 0.01454281
+                        ME      RMSE       MAE        MPE     MAPE
+Training set -0.0004741603 0.2503367 0.1991132 -0.5795524 5.993781
+                  MASE        ACF1
+Training set 0.6761721 -0.02711991
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT1868A&quot;
 [1] &quot;###########################################\n&quot;
@@ -2113,27 +2113,27 @@ Training set 0.7635297 -0.08491864
 [1] &quot;Codice stazione (station_eu_code):IT1743A&quot;
 [1] &quot;###########################################\n&quot;
 Series: subdati$value 
-Regression with ARIMA(2,0,0) errors 
+Regression with ARIMA(1,0,0) errors 
 
 Coefficients:
-          ar1      ar2  intercept    banda      t2m       sp   pblmax
-      -0.2768  -0.1955     1.3435  -0.0007  -0.0515  -0.0208  -0.1419
-s.e.   0.0970   0.0918     0.3899   0.0026   0.0920   0.1621   0.0331
-       pblmin     wdir   wspeed       tp      ptp  pvalue    seno
-      -0.3710  -0.0325  -0.3348  -0.0566  -0.0523  0.5386  0.0059
-s.e.   0.1919   0.0273   0.0716   0.0429   0.0368  0.0619  0.0331
-       coseno  lockdown
-      -0.0122   -0.0463
-s.e.   0.0339    0.0900
+          ar1  intercept    banda      t2m       sp   pblmax   pblmin
+      -0.2081     1.5819  -0.0019  -0.0075  -0.0414  -0.1422  -0.4135
+s.e.   0.0962     0.4270   0.0029   0.1040   0.1826   0.0356   0.1963
+         wdir   wspeed       tp      ptp  pvalue    seno   coseno
+      -0.0276  -0.3431  -0.0551  -0.0592  0.4962  0.0043  -0.0082
+s.e.   0.0277   0.0746   0.0441   0.0374  0.0658  0.0352   0.0361
+      lockdown
+       -0.0363
+s.e.    0.1057
 
-sigma^2 estimated as 0.1126:  log likelihood=-42.93
-AIC=119.87   AICc=124.47   BIC=171.16
+sigma^2 estimated as 0.1153:  log likelihood=-45.11
+AIC=122.23   AICc=126.29   BIC=170.5
 
 Training set error measures:
-                       ME      RMSE       MAE       MPE     MAPE
-Training set -0.002014036 0.3249139 0.2419013 -1.223378 7.798777
-                  MASE        ACF1
-Training set 0.6705486 -0.01181172
+                        ME      RMSE       MAE       MPE     MAPE
+Training set -0.0002422517 0.3301286 0.2446536 -1.191247 7.905986
+                  MASE       ACF1
+Training set 0.6781781 -0.0332131
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT1287A&quot;
 [1] &quot;###########################################\n&quot;
@@ -2357,7 +2357,7 @@ Training set 0.7158914 0.001622605</code></pre>
       <span class='fu'>imputeTS</span><span class='fu'>::</span><span class='fu'><a href='https://SteffenMoritz.github.io/imputeTS/reference/na_ma.html'>na_ma</a></span><span class='op'>(</span><span class='va'>subdati</span><span class='op'>$</span><span class='va'>value</span><span class='op'>)</span><span class='op'>-&gt;</span><span class='va'>subdati</span><span class='op'>$</span><span class='va'>value</span>
     
       <span class='fu'>auto.arima</span><span class='op'>(</span>y<span class='op'>=</span><span class='va'>subdati</span><span class='op'>$</span><span class='va'>value</span>,xreg <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span><span class='op'>(</span><span class='va'>subdati</span><span class='op'>[</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"banda"</span>,<span class='st'>"t2m"</span>,<span class='st'>"sp"</span>,<span class='st'>"pblmax"</span>,<span class='st'>"pblmin"</span>,<span class='st'>"wdir"</span>,<span class='st'>"wspeed"</span>,<span class='st'>"tp"</span>,<span class='st'>"ptp"</span>,<span class='st'>"pvalue"</span>,<span class='st'>"seno"</span>,<span class='st'>"coseno"</span>,<span class='st'>"lockdown"</span><span class='op'>)</span><span class='op'>]</span><span class='op'>)</span>,
-                 stepwise <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>-&gt;</span><span class='va'>ris</span>
+                 stepwise <span class='op'>=</span> <span class='cn'>TRUE</span>,max.p<span class='op'>=</span><span class='fl'>1</span>,max.q<span class='op'>=</span><span class='fl'>0</span><span class='op'>)</span><span class='op'>-&gt;</span><span class='va'>ris</span>
       <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='st'>"###########################################\n"</span><span class='op'>)</span>
       <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"Codice stazione (station_eu_code):"</span>,<span class='va'>cc</span><span class='op'>)</span><span class='op'>)</span>
       <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='st'>"###########################################\n"</span><span class='op'>)</span>  
@@ -2614,7 +2614,7 @@ Training set 0.6981094 0.009690811</code></pre>
       <span class='fu'>imputeTS</span><span class='fu'>::</span><span class='fu'><a href='https://SteffenMoritz.github.io/imputeTS/reference/na_ma.html'>na_ma</a></span><span class='op'>(</span><span class='va'>subdati</span><span class='op'>$</span><span class='va'>value</span><span class='op'>)</span><span class='op'>-&gt;</span><span class='va'>subdati</span><span class='op'>$</span><span class='va'>value</span>
     
       <span class='fu'>auto.arima</span><span class='op'>(</span>y<span class='op'>=</span><span class='va'>subdati</span><span class='op'>$</span><span class='va'>value</span>,xreg <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span><span class='op'>(</span><span class='va'>subdati</span><span class='op'>[</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"banda"</span>,<span class='st'>"t2m"</span>,<span class='st'>"sp"</span>,<span class='st'>"pblmax"</span>,<span class='st'>"pblmin"</span>,<span class='st'>"wdir"</span>,<span class='st'>"wspeed"</span>,<span class='st'>"tp"</span>,<span class='st'>"ptp"</span>,<span class='st'>"pvalue"</span>,<span class='st'>"seno"</span>,<span class='st'>"coseno"</span>,<span class='st'>"lockdown"</span><span class='op'>)</span><span class='op'>]</span><span class='op'>)</span>,
-                 stepwise <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>-&gt;</span><span class='va'>ris</span>
+                 stepwise <span class='op'>=</span> <span class='cn'>TRUE</span>,max.p<span class='op'>=</span><span class='fl'>1</span>,max.q<span class='op'>=</span><span class='fl'>0</span><span class='op'>)</span><span class='op'>-&gt;</span><span class='va'>ris</span>
       <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='st'>"###########################################\n"</span><span class='op'>)</span>
       <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"Codice stazione (station_eu_code):"</span>,<span class='va'>cc</span><span class='op'>)</span><span class='op'>)</span>
       <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='st'>"###########################################\n"</span><span class='op'>)</span>  
@@ -2652,27 +2652,27 @@ Training set 0.7200346 -0.03977699
 [1] &quot;Codice stazione (station_eu_code):IT1392A&quot;
 [1] &quot;###########################################\n&quot;
 Series: subdati$value 
-Regression with ARIMA(2,0,0) errors 
+Regression with ARIMA(1,0,0) errors 
 
 Coefficients:
-         ar1     ar2  intercept    banda     t2m       sp   pblmax
-      0.3157  0.1213     4.6526  -0.0160  0.4386  -0.6798  -0.2071
-s.e.  0.1556  0.1018     1.0916   0.0063  0.2271   0.3610   0.0396
-       pblmin     wdir   wspeed       tp      ptp  pvalue    seno
-      -0.0443  -0.0205  -0.1520  -0.1356  -0.3038  0.1113  0.0576
-s.e.   0.0673   0.0424   0.0469   0.0878   0.0738  0.1350  0.0531
-       coseno  lockdown
-      -0.0416    0.5831
-s.e.   0.0522    0.2393
+         ar1  intercept    banda     t2m       sp   pblmax   pblmin
+      0.4472     5.3307  -0.0192  0.4939  -0.8335  -0.1979  -0.0487
+s.e.  0.1364     1.1039   0.0063  0.2295   0.3823   0.0395   0.0652
+         wdir   wspeed       tp      ptp  pvalue    seno   coseno
+      -0.0203  -0.1389  -0.1483  -0.2930  0.0137  0.0495  -0.0541
+s.e.   0.0420   0.0452   0.0871   0.0745  0.1338  0.0591   0.0580
+      lockdown
+        0.6760
+s.e.    0.2457
 
-sigma^2 estimated as 0.1516:  log likelihood=-64.54
-AIC=163.08   AICc=167.72   BIC=214.27
+sigma^2 estimated as 0.1515:  log likelihood=-65.15
+AIC=162.29   AICc=166.38   BIC=210.46
 
 Training set error measures:
-                       ME      RMSE       MAE       MPE     MAPE
-Training set 0.0001417199 0.3770618 0.2964371 -1.665902 10.05507
-                 MASE         ACF1
-Training set 0.713849 -0.001271061
+                        ME      RMSE       MAE       MPE     MAPE
+Training set -3.990558e-05 0.3783943 0.2953888 -1.706239 9.983741
+                  MASE        ACF1
+Training set 0.7113246 -0.02533451
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT1812A&quot;
 [1] &quot;###########################################\n&quot;
@@ -2699,27 +2699,27 @@ Training set 0.7358798 0.07527265
 [1] &quot;Codice stazione (station_eu_code):IT1464A&quot;
 [1] &quot;###########################################\n&quot;
 Series: subdati$value 
-Regression with ARIMA(5,0,0) errors 
+Regression with ARIMA(1,0,0) errors 
 
 Coefficients:
-          ar1     ar2     ar3      ar4     ar5  intercept    banda
-      -0.2590  -0.062  -0.031  -0.1563  0.1429     1.3309  -0.0027
-s.e.   0.1775   0.188   0.169   0.1291  0.1395     0.8266   0.0046
-          t2m       sp   pblmax   pblmin     wdir   wspeed       tp
-      -0.0142  -0.2395  -0.1031  -0.4658  -0.0192  -0.2901  -0.1197
-s.e.   0.1859   0.2258   0.0447   0.2245   0.0373   0.0714   0.0572
-          ptp  pvalue    seno   coseno  lockdown
-      -0.0697  0.5604  0.0342  -0.0121    0.1215
-s.e.   0.0492  0.1194  0.0379   0.0368    0.1017
+          ar1  intercept    banda     t2m       sp   pblmax   pblmin
+      -0.2453     1.5009  -0.0033  0.0011  -0.2221  -0.1094  -0.4039
+s.e.   0.1008     0.4855   0.0031  0.1141   0.1806   0.0367   0.2265
+         wdir   wspeed       tp      ptp  pvalue    seno   coseno
+      -0.0127  -0.2651  -0.0829  -0.1226  0.5335  0.0424  -0.0120
+s.e.   0.0341   0.0721   0.0553   0.0483  0.0744  0.0351   0.0351
+      lockdown
+        0.1444
+s.e.    0.1004
 
-sigma^2 estimated as 0.1117:  log likelihood=-41.29
-AIC=122.58   AICc=129.04   BIC=182.92
+sigma^2 estimated as 0.1138:  log likelihood=-44.45
+AIC=120.89   AICc=124.95   BIC=169.17
 
 Training set error measures:
-                      ME      RMSE      MAE        MPE     MAPE
-Training set 0.001892703 0.3212033 0.251917 -0.9390036 7.844579
-                  MASE        ACF1
-Training set 0.6969167 0.002451393</code></pre>
+                        ME     RMSE       MAE       MPE     MAPE
+Training set -0.0006723083 0.329053 0.2527639 -1.072093 7.874841
+                  MASE         ACF1
+Training set 0.6992595 -0.007997209</code></pre>
 </div>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
