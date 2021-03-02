@@ -2103,7 +2103,6 @@ document.addEventListener('DOMContentLoaded', function() {
 <p>Le variabili prese in esame sono:</p>
 <ul>
 <li><p>le variabili meteoclimatiche</p></li>
-<li><p>seno e coseno (introdotte per catturare eventuali ciclicita’ settimanali non colte da <strong>wday</strong>)</p></li>
 <li><p>la variabile <strong>banda</strong> (variabile che assume valori da 1 al numero dei giorni)</p></li>
 <li><p>la variabile <strong>wday</strong> (variabile che assume valori da 1 a 7, per cogliere un eventuale ciclo settimanale)</p></li>
 <li><p>la variabile <strong>pvalue</strong> (previous value, ovvero il valore dell’inquinante, in scala logaritmica, nel giorno precedente.)</p></li>
@@ -2126,7 +2125,7 @@ document.addEventListener('DOMContentLoaded', function() {
       <span class='va'>dati2</span><span class='op'>[</span><span class='va'>dati2</span><span class='op'>$</span><span class='va'>station_eu_code</span><span class='op'>==</span><span class='va'>cc</span>,<span class='op'>]</span><span class='op'>-&gt;</span><span class='va'>subdati</span>
       <span class='fu'>imputeTS</span><span class='fu'>::</span><span class='fu'><a href='https://SteffenMoritz.github.io/imputeTS/reference/na_ma.html'>na_ma</a></span><span class='op'>(</span><span class='va'>subdati</span><span class='op'>$</span><span class='va'>value</span><span class='op'>)</span><span class='op'>-&gt;</span><span class='va'>subdati</span><span class='op'>$</span><span class='va'>value</span>
     
-      <span class='fu'>auto.arima</span><span class='op'>(</span>y<span class='op'>=</span><span class='va'>subdati</span><span class='op'>$</span><span class='va'>value</span>,xreg <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span><span class='op'>(</span><span class='va'>subdati</span><span class='op'>[</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"banda"</span>,<span class='st'>"t2m"</span>,<span class='st'>"sp"</span>,<span class='st'>"pblmax"</span>,<span class='st'>"pblmin"</span>,<span class='st'>"wdir"</span>,<span class='st'>"wspeed"</span>,<span class='st'>"tp"</span>,<span class='st'>"ptp"</span>,<span class='st'>"pvalue"</span>,<span class='st'>"seno"</span>,<span class='st'>"coseno"</span>,<span class='st'>"lockdown"</span><span class='op'>)</span><span class='op'>]</span><span class='op'>)</span>,
+      <span class='fu'>auto.arima</span><span class='op'>(</span>y<span class='op'>=</span><span class='va'>subdati</span><span class='op'>$</span><span class='va'>value</span>,xreg <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span><span class='op'>(</span><span class='va'>subdati</span><span class='op'>[</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"banda"</span>,<span class='st'>"t2m"</span>,<span class='st'>"sp"</span>,<span class='st'>"pblmax"</span>,<span class='st'>"pblmin"</span>,<span class='st'>"wdir"</span>,<span class='st'>"wspeed"</span>,<span class='st'>"tp"</span>,<span class='st'>"ptp"</span>,<span class='st'>"pvalue"</span>,<span class='st'>"lockdown"</span><span class='op'>)</span><span class='op'>]</span><span class='op'>)</span>,
                  stepwise <span class='op'>=</span> <span class='cn'>TRUE</span>,max.p<span class='op'>=</span><span class='fl'>1</span>,max.q<span class='op'>=</span><span class='fl'>0</span><span class='op'>)</span><span class='op'>-&gt;</span><span class='va'>ris</span>
       
       <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='st'>"###########################################\n"</span><span class='op'>)</span>
@@ -2148,20 +2147,20 @@ Regression with ARIMA(0,0,0) errors
 
 Coefficients:
       intercept    banda     t2m       sp   pblmax   pblmin    wdir
-         1.4191  -0.0049  0.1214  -0.0891  -0.0838  -0.0831  0.0211
-s.e.     0.3897   0.0022  0.1015   0.1820   0.0300   0.1616  0.0237
-       wspeed       tp      ptp  pvalue    seno  coseno  lockdown
-      -0.5260  -0.1150  -0.0314  0.5399  0.0690  0.0262   -0.0027
-s.e.   0.1289   0.0407   0.0353  0.0600  0.0348  0.0351    0.0985
+         1.4005  -0.0043  0.0818  -0.0504  -0.0806  -0.1116  0.0307
+s.e.     0.3915   0.0022  0.1011   0.1837   0.0304   0.1604  0.0236
+       wspeed       tp      ptp  pvalue  lockdown
+      -0.5029  -0.1124  -0.0255  0.5348   -0.0079
+s.e.   0.1304   0.0411   0.0357  0.0607    0.0999
 
-sigma^2 estimated as 0.08424:  log likelihood=-23.13
-AIC=76.26   AICc=79.81   BIC=121.52
+sigma^2 estimated as 0.0856:  log likelihood=-25.32
+AIC=76.63   AICc=79.29   BIC=115.86
 
 Training set error measures:
                         ME      RMSE       MAE        MPE     MAPE
-Training set -4.811053e-16 0.2841319 0.2081561 -0.8898364 6.918113
+Training set -7.339678e-16 0.2884796 0.2099802 -0.9311119 7.014396
                   MASE      ACF1
-Training set 0.7029428 0.0300006
+Training set 0.7091027 0.0489391
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT0706A&quot;
 [1] &quot;###########################################\n&quot;
@@ -2170,23 +2169,20 @@ Regression with ARIMA(1,0,0) errors
 
 Coefficients:
           ar1  intercept    banda      t2m      sp   pblmax   pblmin
-      -0.1115     1.7747  -0.0024  -0.0269  0.1855  -0.0904  -0.2167
-s.e.   0.1004     0.4012   0.0025   0.0961  0.1666   0.0320   0.1793
-         wdir   wspeed       tp      ptp  pvalue    seno   coseno
-      -0.0487  -0.2567  -0.0679  -0.0485  0.4676  0.0171  -0.0328
-s.e.   0.0303   0.0574   0.0427   0.0377  0.0692  0.0330   0.0333
-      lockdown
-       -0.0134
-s.e.    0.0928
+      -0.1056     1.7426  -0.0021  -0.0327  0.1786  -0.0934  -0.2512
+s.e.   0.1000     0.4032   0.0025   0.0957  0.1678   0.0321   0.1772
+         wdir   wspeed       tp      ptp  pvalue  lockdown
+      -0.0436  -0.2600  -0.0696  -0.0528  0.4664   -0.0193
+s.e.   0.0302   0.0575   0.0427   0.0376  0.0691    0.0932
 
-sigma^2 estimated as 0.09613:  log likelihood=-30.1
-AIC=92.19   AICc=96.25   BIC=140.47
+sigma^2 estimated as 0.09551:  log likelihood=-30.7
+AIC=89.41   AICc=92.5   BIC=131.65
 
 Training set error measures:
-                        ME      RMSE       MAE        MPE     MAPE
-Training set -0.0003866531 0.2953294 0.2328806 -0.7929036 6.961887
-                  MASE        ACF1
-Training set 0.6982744 -0.01033009
+                       ME      RMSE       MAE       MPE     MAPE
+Training set -0.000349528 0.2965199 0.2347439 -0.799532 7.015167
+                  MASE         ACF1
+Training set 0.7038613 -0.009846414
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT2062A&quot;
 [1] &quot;###########################################\n&quot;
@@ -2194,24 +2190,21 @@ Series: subdati$value
 Regression with ARIMA(1,0,0) errors 
 
 Coefficients:
-          ar1  intercept    banda     t2m       sp   pblmax   pblmin
-      -0.0216     1.9294  -0.0028  0.0552  -0.1799  -0.1473  -0.0231
-s.e.   0.1132     0.4460   0.0027  0.1105   0.1875   0.0326   0.1691
-         wdir   wspeed       tp      ptp  pvalue    seno  coseno
-      -0.0157  -0.4314  -0.0650  -0.1896  0.4464  0.0733  0.0197
-s.e.   0.0251   0.0774   0.0466   0.0435  0.0723  0.0352  0.0371
-      lockdown
-       -0.0725
-s.e.    0.1038
+         ar1  intercept    banda     t2m       sp   pblmax   pblmin
+      0.0122     1.9640  -0.0026  0.0252  -0.1616  -0.1367  -0.0508
+s.e.  0.1174     0.4615   0.0027  0.1125   0.1944   0.0328   0.1675
+         wdir  wspeed       tp      ptp  pvalue  lockdown
+      -0.0076  -0.437  -0.0617  -0.1851  0.4204   -0.0688
+s.e.   0.0247   0.079   0.0474   0.0437  0.0756    0.1085
 
-sigma^2 estimated as 0.08587:  log likelihood=-24.65
-AIC=81.29   AICc=85.35   BIC=129.57
+sigma^2 estimated as 0.08735:  log likelihood=-26.89
+AIC=81.78   AICc=84.87   BIC=124.02
 
 Training set error measures:
-                        ME      RMSE       MAE        MPE     MAPE
-Training set -0.0001612344 0.2878296 0.2254555 -0.8328672 7.062364
-                  MASE         ACF1
-Training set 0.6628479 0.0003027931
+                       ME      RMSE      MAE        MPE    MAPE
+Training set 8.719278e-05 0.2924164 0.229429 -0.8549323 7.23625
+                  MASE          ACF1
+Training set 0.6745303 -0.0002776313
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT0707A&quot;
 [1] &quot;###########################################\n&quot;
@@ -2220,20 +2213,20 @@ Regression with ARIMA(0,0,0) errors
 
 Coefficients:
       intercept    banda     t2m      sp   pblmax   pblmin     wdir
-         1.5521  -0.0020  0.0311  0.0172  -0.1572  -0.2980  -0.0212
-s.e.     0.4104   0.0026  0.1081  0.1891   0.0345   0.2728   0.0239
-       wspeed       tp      ptp  pvalue    seno   coseno  lockdown
-      -0.3330  -0.1074  -0.1052  0.4847  0.0550  -0.0229   -0.0945
-s.e.   0.0958   0.0451   0.0385  0.0588  0.0375   0.0378    0.1078
+         1.4904  -0.0016  0.0063  0.0129  -0.1558  -0.3668  -0.0212
+s.e.     0.4103   0.0026  0.1079  0.1901   0.0343   0.2703   0.0241
+       wspeed       tp      ptp  pvalue  lockdown
+      -0.3315  -0.1122  -0.1077  0.4788   -0.1044
+s.e.   0.0965   0.0452   0.0386  0.0589    0.1085
 
-sigma^2 estimated as 0.109:  log likelihood=-40.12
-AIC=110.24   AICc=113.79   BIC=155.5
+sigma^2 estimated as 0.1092:  log likelihood=-41.38
+AIC=108.76   AICc=111.41   BIC=147.98
 
 Training set error measures:
-                       ME      RMSE       MAE       MPE     MAPE
-Training set 6.209908e-15 0.3156083 0.2523559 -1.093418 8.275616
-                  MASE       ACF1
-Training set 0.6815801 -0.0162219
+                       ME      RMSE      MAE       MPE     MAPE
+Training set 2.844964e-14 0.3182525 0.252747 -1.115279 8.320192
+                  MASE         ACF1
+Training set 0.6826364 -0.001570327
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT0692A&quot;
 [1] &quot;###########################################\n&quot;
@@ -2242,20 +2235,20 @@ Regression with ARIMA(0,0,0) errors
 
 Coefficients:
       intercept    banda      t2m      sp   pblmax   pblmin     wdir
-         1.4756  -0.0032  -0.0023  0.1733  -0.0534  -0.1340  -0.0828
-s.e.     0.3608   0.0025   0.1023  0.1843   0.0308   0.0981   0.0306
-       wspeed       tp      ptp  pvalue     seno   coseno  lockdown
-      -0.1628  -0.0038  -0.0734  0.5539  -0.0011  -0.0217    0.0202
-s.e.   0.0460   0.0547   0.0479  0.0583   0.0348   0.0353    0.1012
+         1.4623  -0.0031  -0.0055  0.1649  -0.0577  -0.1363  -0.0805
+s.e.     0.3589   0.0025   0.0999  0.1840   0.0300   0.0982   0.0299
+       wspeed       tp      ptp  pvalue  lockdown
+      -0.1635  -0.0076  -0.0786  0.5551    0.0195
+s.e.   0.0459   0.0539   0.0472  0.0583    0.1008
 
-sigma^2 estimated as 0.08997:  log likelihood=-25.64
-AIC=81.27   AICc=84.83   BIC=126.53
+sigma^2 estimated as 0.08891:  log likelihood=-25.83
+AIC=77.66   AICc=80.31   BIC=116.88
 
 Training set error measures:
                         ME      RMSE       MAE        MPE     MAPE
-Training set -2.094278e-14 0.2867471 0.2238126 -0.8331451 7.209422
+Training set -3.764576e-16 0.2871099 0.2241867 -0.8348621 7.215084
                   MASE        ACF1
-Training set 0.7322634 -0.03221168
+Training set 0.7334874 -0.02956895
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT0709A&quot;
 [1] &quot;###########################################\n&quot;
@@ -2264,20 +2257,20 @@ Regression with ARIMA(0,0,0) errors
 
 Coefficients:
       intercept    banda      t2m      sp   pblmax   pblmin     wdir
-         1.5974  -0.0027  -0.0202  0.0304  -0.0884  -0.2297  -0.0549
-s.e.     0.4348   0.0030   0.1204  0.1776   0.0317   0.1476   0.0417
-       wspeed       tp      ptp  pvalue    seno   coseno  lockdown
-      -0.1543  -0.2991  -0.0196  0.5039  0.0372  -0.0430    0.1013
-s.e.   0.0475   0.0723   0.0669  0.0662  0.0394   0.0383    0.1146
+         1.5241  -0.0019  -0.0480  0.0386  -0.0926  -0.2449  -0.0400
+s.e.     0.4349   0.0030   0.1179  0.1788   0.0317   0.1479   0.0405
+       wspeed       tp      ptp  pvalue  lockdown
+      -0.1601  -0.3036  -0.0230  0.5027    0.0909
+s.e.   0.0475   0.0728   0.0673  0.0661    0.1149
 
-sigma^2 estimated as 0.11:  log likelihood=-40.82
-AIC=111.63   AICc=115.19   BIC=156.89
+sigma^2 estimated as 0.11:  log likelihood=-41.87
+AIC=109.75   AICc=112.4   BIC=148.97
 
 Training set error measures:
-                        ME      RMSE      MAE       MPE     MAPE
-Training set -5.495677e-14 0.3170712 0.240347 -1.230665 8.085111
-                  MASE       ACF1
-Training set 0.7027513 -0.0324913
+                        ME     RMSE       MAE       MPE     MAPE
+Training set -1.306535e-14 0.319297 0.2400958 -1.257734 8.107667
+                  MASE        ACF1
+Training set 0.7020169 -0.02604543
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT0771A&quot;
 [1] &quot;###########################################\n&quot;
@@ -2286,42 +2279,42 @@ Regression with ARIMA(0,0,0) errors
 
 Coefficients:
       intercept    banda      t2m      sp   pblmax   pblmin     wdir
-         1.8565  -0.0025  -0.0266  0.2256  -0.1163  -0.1811  -0.0123
-s.e.     0.3303   0.0023   0.0937  0.1765   0.0311   0.1346   0.0205
-       wspeed       tp      ptp  pvalue     seno   coseno  lockdown
-      -0.4012  -0.0432  -0.0757  0.4380  -0.0131  -0.0112   -0.1197
-s.e.   0.0792   0.0297   0.0283  0.0525   0.0333   0.0332    0.0941
+         1.8616  -0.0026  -0.0184  0.2205  -0.1175  -0.1757  -0.0135
+s.e.     0.3304   0.0023   0.0924  0.1762   0.0311   0.1324   0.0204
+       wspeed       tp      ptp  pvalue  lockdown
+      -0.4018  -0.0430  -0.0757  0.4407   -0.1182
+s.e.   0.0792   0.0297   0.0282  0.0522    0.0941
 
-sigma^2 estimated as 0.07887:  log likelihood=-18.01
-AIC=66.03   AICc=69.58   BIC=111.28
+sigma^2 estimated as 0.07789:  log likelihood=-18.15
+AIC=62.3   AICc=64.95   BIC=101.52
 
 Training set error measures:
-                        ME      RMSE      MAE        MPE     MAPE
-Training set -5.390305e-16 0.2739768 0.206002 -0.8497452 6.773613
+                        ME      RMSE       MAE        MPE     MAPE
+Training set -9.493973e-17 0.2742328 0.2059856 -0.8493698 6.765534
                   MASE        ACF1
-Training set 0.6377548 -0.01325444
+Training set 0.6377041 -0.01398632
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT0777A&quot;
 [1] &quot;###########################################\n&quot;
 Series: subdati$value 
-Regression with ARIMA(0,0,0) errors 
+Regression with ARIMA(1,0,0) errors 
 
 Coefficients:
-      intercept    banda      t2m       sp   pblmax   pblmin     wdir
-         1.8783  -0.0035  -0.0259  -0.0349  -0.0948  -0.1961  -0.0022
-s.e.     0.3428   0.0021   0.0865   0.1594   0.0284   0.1415   0.0190
-       wspeed       tp      ptp  pvalue   seno  coseno  lockdown
-      -0.3035  -0.0655  -0.0814  0.4746  0.071  0.0204   -0.0968
-s.e.   0.0661   0.0332   0.0342  0.0580  0.030  0.0312    0.0863
+         ar1  intercept    banda      t2m       sp   pblmax   pblmin
+      0.0820     2.0142  -0.0038  -0.0418  -0.0265  -0.0871  -0.2372
+s.e.  0.1059     0.4385   0.0024   0.0952   0.1702   0.0293   0.1437
+         wdir   wspeed       tp      ptp  pvalue  lockdown
+      -0.0012  -0.2987  -0.0663  -0.0783  0.4327   -0.0995
+s.e.   0.0194   0.0677   0.0341   0.0344  0.0770    0.0951
 
-sigma^2 estimated as 0.06941:  log likelihood=-6.51
-AIC=43.02   AICc=46.58   BIC=88.28
+sigma^2 estimated as 0.07137:  log likelihood=-9.15
+AIC=46.3   AICc=49.38   BIC=88.54
 
 Training set error measures:
-                        ME      RMSE       MAE        MPE     MAPE
-Training set -7.173527e-15 0.2527031 0.1947196 -0.5979579 5.928668
+                       ME      RMSE       MAE        MPE     MAPE
+Training set 0.0002846426 0.2571758 0.2001012 -0.6154404 6.126914
                   MASE       ACF1
-Training set 0.6737631 0.02670549
+Training set 0.6923844 0.01098397
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT0906A&quot;
 [1] &quot;###########################################\n&quot;
@@ -2330,23 +2323,20 @@ Regression with ARIMA(1,0,0) errors
 
 Coefficients:
          ar1  intercept    banda     t2m      sp   pblmax   pblmin
-      0.1152     4.3456  -0.0059  0.2032  0.5618  -0.0809  -0.1260
-s.e.  0.1295     0.9027   0.0031  0.1031  0.2329   0.0346   0.2105
-         wdir   wspeed       tp      ptp  pvalue    seno  coseno
-      -0.0295  -0.4005  -0.0428  -0.1146  0.3124  0.0170  0.0034
-s.e.   0.0252   0.1679   0.0443   0.0368  0.0902  0.0402  0.0403
-      lockdown
-       -0.1896
-s.e.    0.1243
+      0.1294     4.3809  -0.0061  0.2049  0.5595  -0.0778  -0.1358
+s.e.  0.1254     0.9034   0.0031  0.1040  0.2347   0.0340   0.2059
+         wdir   wspeed       tp      ptp  pvalue  lockdown
+      -0.0297  -0.3942  -0.0434  -0.1149  0.3030   -0.1939
+s.e.   0.0249   0.1677   0.0440   0.0364  0.0887    0.1239
 
-sigma^2 estimated as 0.09397:  log likelihood=-30.51
-AIC=93.02   AICc=97.08   BIC=141.3
+sigma^2 estimated as 0.09273:  log likelihood=-30.6
+AIC=89.21   AICc=92.29   BIC=131.45
 
 Training set error measures:
-                        ME      RMSE       MAE      MPE     MAPE
-Training set -0.0003183602 0.2990038 0.2274905 -1.41759 8.779605
+                        ME      RMSE       MAE       MPE    MAPE
+Training set -0.0003706588 0.2991804 0.2270349 -1.422048 8.76944
                   MASE       ACF1
-Training set 0.7598566 0.01331724
+Training set 0.7583346 0.01484398
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT0594A&quot;
 [1] &quot;###########################################\n&quot;
@@ -2355,20 +2345,20 @@ Regression with ARIMA(0,0,0) errors
 
 Coefficients:
       intercept    banda     t2m       sp   pblmax   pblmin    wdir
-         1.7520  -0.0044  0.1322  -0.4478  -0.1123  -0.5553  0.0269
-s.e.     0.4739   0.0030  0.1269   0.2059   0.0317   0.2527  0.0303
-       wspeed       tp      ptp  pvalue    seno  coseno  lockdown
-      -0.1960  -0.1792  -0.0769  0.4992  0.0564   0.036    0.0760
-s.e.   0.0806   0.0581   0.0500  0.0669  0.0402   0.040    0.1175
+         1.6748  -0.0037  0.0893  -0.4202  -0.1057  -0.5683  0.0329
+s.e.     0.4651   0.0029  0.1241   0.2072   0.0317   0.2492  0.0299
+       wspeed       tp      ptp  pvalue  lockdown
+      -0.2005  -0.1735  -0.0739  0.4965    0.0572
+s.e.   0.0810   0.0585   0.0504  0.0670    0.1176
 
-sigma^2 estimated as 0.12:  log likelihood=-47.39
-AIC=124.78   AICc=128.33   BIC=170.03
+sigma^2 estimated as 0.1205:  log likelihood=-48.79
+AIC=123.58   AICc=126.24   BIC=162.8
 
 Training set error measures:
-                       ME      RMSE       MAE       MPE     MAPE
-Training set 4.146799e-16 0.3311737 0.2556395 -1.192528 8.426351
-                  MASE        ACF1
-Training set 0.6981876 0.001316348
+                       ME      RMSE      MAE       MPE     MAPE
+Training set 3.540932e-15 0.3342628 0.257337 -1.219273 8.514471
+                  MASE       ACF1
+Training set 0.7028237 0.01470885
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT0908A&quot;
 [1] &quot;###########################################\n&quot;
@@ -2376,21 +2366,21 @@ Series: subdati$value
 Regression with ARIMA(0,0,0) errors 
 
 Coefficients:
-      intercept    banda     t2m      sp   pblmax  pblmin     wdir
-         3.5709  -0.0038  0.0256  0.2836  -0.0544  0.2491  -0.0792
-s.e.     1.6739   0.0035  0.1197  0.3476   0.0508  0.2280   0.0430
-       wspeed       tp      ptp  pvalue     seno   coseno  lockdown
-      -0.5440  -0.2616  -0.3642  0.1424  -0.0245  -0.0784   -0.1606
-s.e.   0.2036   0.0908   0.0861  0.0711   0.0584   0.0591    0.1707
+      intercept    banda     t2m      sp  pblmax  pblmin     wdir
+         3.4790  -0.0032  0.0237  0.2853  -0.061  0.2070  -0.0724
+s.e.     1.6832   0.0035  0.1204  0.3497   0.050  0.2271   0.0430
+       wspeed       tp      ptp  pvalue  lockdown
+      -0.5637  -0.2730  -0.3743  0.1509   -0.1849
+s.e.   0.2037   0.0906   0.0863  0.0698    0.1707
 
-sigma^2 estimated as 0.2531:  log likelihood=-103.73
-AIC=237.45   AICc=241.01   BIC=282.71
+sigma^2 estimated as 0.2527:  log likelihood=-104.69
+AIC=235.37   AICc=238.03   BIC=274.6
 
 Training set error measures:
-                        ME      RMSE       MAE       MPE     MAPE
-Training set -8.952112e-14 0.4809404 0.3156988 -2.733694 16.77646
+                       ME      RMSE       MAE       MPE     MAPE
+Training set 6.761661e-14 0.4840108 0.3148134 -2.909203 16.87351
                   MASE       ACF1
-Training set 0.6285535 0.06109832
+Training set 0.6267906 0.06867099
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT0912A&quot;
 [1] &quot;###########################################\n&quot;
@@ -2399,20 +2389,20 @@ Regression with ARIMA(0,0,0) errors
 
 Coefficients:
       intercept    banda     t2m      sp   pblmax   pblmin     wdir
-         1.7205  -0.0048  0.0392  0.2434  -0.0778  -0.4632  -0.1253
-s.e.     0.4750   0.0035  0.1448  0.2446   0.0419   0.1889   0.0500
-       wspeed       tp      ptp  pvalue    seno   coseno  lockdown
-      -0.1738  -0.0342  -0.0658  0.4533  0.0061  -0.0190    0.0882
-s.e.   0.0609   0.0698   0.0601  0.0638  0.0443   0.0458    0.1310
+         1.6890  -0.0045  0.0293  0.2477  -0.0805  -0.4624  -0.1206
+s.e.     0.4684   0.0034  0.1409  0.2446   0.0415   0.1887   0.0487
+       wspeed       tp      ptp  pvalue  lockdown
+      -0.1778  -0.0360  -0.0694  0.4541    0.0859
+s.e.   0.0602   0.0694   0.0595  0.0636    0.1304
 
-sigma^2 estimated as 0.1471:  log likelihood=-62.94
-AIC=155.88   AICc=159.44   BIC=201.14
+sigma^2 estimated as 0.1452:  log likelihood=-63.03
+AIC=152.07   AICc=154.73   BIC=191.29
 
 Training set error measures:
                         ME      RMSE       MAE       MPE     MAPE
-Training set -1.849365e-15 0.3691668 0.2820694 -1.751364 9.663077
+Training set -1.043312e-14 0.3693956 0.2830696 -1.751108 9.691275
                   MASE       ACF1
-Training set 0.7531166 -0.1077356
+Training set 0.7557871 -0.1067163
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT0776A&quot;
 [1] &quot;###########################################\n&quot;
@@ -2420,24 +2410,21 @@ Series: subdati$value
 Regression with ARIMA(1,0,0) errors 
 
 Coefficients:
-          ar1  intercept    banda     t2m      sp   pblmax  pblmin
-      -0.2275     1.9498  -0.0012  0.0101  0.3240  -0.2623  0.0073
-s.e.   0.0978     0.5939   0.0043  0.1880  0.3491   0.0660  0.3262
-         wdir   wspeed       tp      ptp  pvalue     seno   coseno
-      -0.0651  -0.6795  -0.0551  -0.2854  0.2771  -0.0023  -0.0287
-s.e.   0.0503   0.1978   0.0754   0.0650  0.0711   0.0647   0.0647
-      lockdown
-        0.0135
-s.e.    0.1802
+          ar1  intercept    banda     t2m      sp   pblmax   pblmin
+      -0.2256     1.9299  -0.0012  0.0118  0.3048  -0.2661  -0.0155
+s.e.   0.0974     0.5921   0.0043  0.1860  0.3465   0.0655   0.3173
+         wdir   wspeed       tp      ptp  pvalue  lockdown
+      -0.0673  -0.6789  -0.0580  -0.2896  0.2763    0.0144
+s.e.   0.0497   0.1979   0.0751   0.0643  0.0702    0.1806
 
-sigma^2 estimated as 0.4174:  log likelihood=-140.97
-AIC=313.94   AICc=318   BIC=362.21
+sigma^2 estimated as 0.4119:  log likelihood=-141.07
+AIC=310.14   AICc=313.22   BIC=352.38
 
 Training set error measures:
                         ME      RMSE       MAE       MPE     MAPE
-Training set -0.0006193559 0.6153592 0.3771686 -8.303828 24.80159
-                  MASE       ACF1
-Training set 0.7088082 -0.0107905
+Training set -0.0006120375 0.6157653 0.3796022 -8.399643 24.97915
+                  MASE        ACF1
+Training set 0.7133817 -0.01010468
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT0705A&quot;
 [1] &quot;###########################################\n&quot;
@@ -2446,23 +2433,20 @@ Regression with ARIMA(1,0,0) errors
 
 Coefficients:
           ar1  intercept    banda     t2m       sp   pblmax   pblmin
-      -0.0868     1.5250  -0.0020  0.0686  -0.0239  -0.0734  -0.5376
-s.e.   0.1057     0.4102   0.0024  0.0946   0.1561   0.0297   0.1686
-         wdir   wspeed       tp      ptp  pvalue    seno  coseno
-      -0.0484  -0.2297  -0.0592  -0.0430  0.5389  0.0115  0.0024
-s.e.   0.0271   0.0540   0.0361   0.0315  0.0703  0.0309  0.0312
-      lockdown
-       -0.0935
-s.e.    0.0866
+      -0.0842     1.5188  -0.0018  0.0627  -0.0239  -0.0730  -0.5433
+s.e.   0.1055     0.4085   0.0024  0.0934   0.1564   0.0296   0.1665
+         wdir   wspeed       tp      ptp  pvalue  lockdown
+      -0.0475  -0.2297  -0.0603  -0.0433  0.5369   -0.0967
+s.e.   0.0268   0.0539   0.0360   0.0314  0.0701    0.0864
 
-sigma^2 estimated as 0.08189:  log likelihood=-17.99
-AIC=67.98   AICc=72.04   BIC=116.25
+sigma^2 estimated as 0.08079:  log likelihood=-18.06
+AIC=64.12   AICc=67.21   BIC=106.37
 
 Training set error measures:
-                        ME     RMSE       MAE        MPE     MAPE
-Training set -0.0003363643 0.272578 0.2097463 -0.6927658 6.458757
-                  MASE        ACF1
-Training set 0.6765904 -0.00430664
+                        ME      RMSE       MAE        MPE     MAPE
+Training set -0.0003193478 0.2727101 0.2100963 -0.6944099 6.471634
+                  MASE         ACF1
+Training set 0.6777194 -0.004290848
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT0778A&quot;
 [1] &quot;###########################################\n&quot;
@@ -2470,24 +2454,21 @@ Series: subdati$value
 Regression with ARIMA(1,0,0) errors 
 
 Coefficients:
-          ar1  intercept    banda     t2m       sp   pblmax   pblmin
-      -0.2171     1.6927  -0.0036  0.0786  -0.0082  -0.1135  -0.2871
-s.e.   0.0968     0.3962   0.0025  0.0948   0.1617   0.0316   0.1987
-         wdir   wspeed       tp      ptp  pvalue    seno  coseno
-      -0.0340  -0.2567  -0.0831  -0.1012  0.5233  0.0424  0.0122
-s.e.   0.0304   0.0632   0.0501   0.0420  0.0655  0.0305  0.0310
-      lockdown
-        0.0251
-s.e.    0.0840
+          ar1  intercept    banda     t2m      sp   pblmax   pblmin
+      -0.2027     1.6836  -0.0033  0.0593  0.0034  -0.1095  -0.3097
+s.e.   0.0984     0.4003   0.0025  0.0949  0.1636   0.0315   0.1973
+         wdir   wspeed       tp      ptp  pvalue  lockdown
+      -0.0291  -0.2592  -0.0827  -0.0997  0.5128    0.0148
+s.e.   0.0303   0.0637   0.0503   0.0423  0.0668    0.0850
 
-sigma^2 estimated as 0.08551:  log likelihood=-23.76
-AIC=79.51   AICc=83.6   BIC=127.68
+sigma^2 estimated as 0.08551:  log likelihood=-24.79
+AIC=77.58   AICc=80.69   BIC=119.73
 
 Training set error measures:
                         ME      RMSE       MAE        MPE     MAPE
-Training set -0.0007295315 0.2852281 0.2161422 -0.8166353 6.727558
+Training set -0.0006782081 0.2873057 0.2176863 -0.8328232 6.797756
                   MASE        ACF1
-Training set 0.6769347 -0.01296267
+Training set 0.6817704 -0.01081222
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT1873A&quot;
 [1] &quot;###########################################\n&quot;
@@ -2495,24 +2476,21 @@ Series: subdati$value
 Regression with ARIMA(1,0,0) errors 
 
 Coefficients:
-         ar1  intercept   banda      t2m      sp   pblmax   pblmin
-      0.2376     1.8077  -0.002  -0.0548  0.5782  -0.0555  -0.2711
-s.e.  0.1086     0.4803   0.003   0.1218  0.2101   0.0353   0.1446
-         wdir   wspeed       tp      ptp  pvalue    seno   coseno
-      -0.0393  -0.1535  -0.0733  -0.0479  0.4052  0.0149  -0.0335
-s.e.   0.0221   0.0807   0.0373   0.0308  0.0850  0.0417   0.0417
-      lockdown
-       -0.1238
-s.e.    0.1304
+         ar1  intercept    banda      t2m     sp   pblmax   pblmin
+      0.2368     1.7726  -0.0018  -0.0612  0.566  -0.0588  -0.2888
+s.e.  0.1075     0.4781   0.0030   0.1207  0.210   0.0351   0.1435
+         wdir   wspeed       tp      ptp  pvalue  lockdown
+      -0.0372  -0.1573  -0.0764  -0.0516  0.4076   -0.1282
+s.e.   0.0219   0.0805   0.0372   0.0306  0.0835    0.1301
 
-sigma^2 estimated as 0.09774:  log likelihood=-32.01
-AIC=96.01   AICc=100.07   BIC=144.29
+sigma^2 estimated as 0.09683:  log likelihood=-32.39
+AIC=92.78   AICc=95.87   BIC=135.02
 
 Training set error measures:
-                      ME      RMSE       MAE       MPE     MAPE
-Training set 0.001034555 0.2997851 0.2345755 -1.082033 8.005557
-                 MASE       ACF1
-Training set 0.751125 0.02215188
+                       ME      RMSE       MAE       MPE     MAPE
+Training set 0.0009170557 0.3005559 0.2346482 -1.098009 8.027207
+                  MASE       ACF1
+Training set 0.7513579 0.02191334
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT1286A&quot;
 [1] &quot;###########################################\n&quot;
@@ -2521,23 +2499,20 @@ Regression with ARIMA(1,0,0) errors
 
 Coefficients:
           ar1  intercept    banda     t2m       sp   pblmax   pblmin
-      -0.2956     1.5140  -0.0029  0.0418  -0.2037  -0.1394  -0.3591
-s.e.   0.0912     0.3957   0.0027  0.0984   0.1687   0.0336   0.1775
-         wdir   wspeed       tp      ptp  pvalue    seno   coseno
-      -0.1402  -0.1532  -0.1021  -0.1159  0.5901  0.0195  -0.0238
-s.e.   0.0406   0.0556   0.0582   0.0511  0.0617  0.0324   0.0331
-      lockdown
-        0.1134
-s.e.    0.0922
+      -0.2916     1.4924  -0.0026  0.0328  -0.2023  -0.1421  -0.3711
+s.e.   0.0916     0.3977   0.0026  0.0979   0.1696   0.0335   0.1773
+         wdir   wspeed       tp      ptp  pvalue  lockdown
+      -0.1334  -0.1573  -0.1048  -0.1198  0.5872    0.1086
+s.e.   0.0401   0.0552   0.0581   0.0511  0.0619    0.0923
 
-sigma^2 estimated as 0.117:  log likelihood=-45.21
-AIC=122.42   AICc=126.48   BIC=170.7
+sigma^2 estimated as 0.116:  log likelihood=-45.64
+AIC=119.29   AICc=122.38   BIC=161.53
 
 Training set error measures:
-                       ME      RMSE       MAE      MPE     MAPE
-Training set -0.000665632 0.3268967 0.2503379 -1.01884 7.703291
+                        ME      RMSE       MAE       MPE     MAPE
+Training set -0.0006699383 0.3278474 0.2531749 -1.026159 7.775038
                   MASE        ACF1
-Training set 0.6937413 -0.01399169
+Training set 0.7016031 -0.01311886
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT1153A&quot;
 [1] &quot;###########################################\n&quot;
@@ -2545,24 +2520,21 @@ Series: subdati$value
 Regression with ARIMA(1,0,0) errors 
 
 Coefficients:
-          ar1  intercept    banda      t2m      sp   pblmax   pblmin
-      -0.2959     1.5002  -0.0015  -0.0392  -0.151  -0.1007  -0.3224
-s.e.   0.0920     0.4354   0.0027   0.0999   0.162   0.0280   0.1672
-         wdir   wspeed       tp      ptp  pvalue    seno   coseno
-      -0.0685  -0.1414  -0.0994  -0.0670  0.5797  0.0196  -0.0150
-s.e.   0.0347   0.0444   0.0700   0.0619  0.0682  0.0314   0.0312
-      lockdown
-        0.0302
-s.e.    0.0908
+          ar1  intercept    banda      t2m       sp   pblmax   pblmin
+      -0.2934     1.4893  -0.0012  -0.0497  -0.1640  -0.1026  -0.3449
+s.e.   0.0918     0.4357   0.0027   0.0991   0.1616   0.0280   0.1643
+         wdir   wspeed       tp      ptp  pvalue  lockdown
+      -0.0656  -0.1426  -0.1022  -0.0712  0.5764    0.0207
+s.e.   0.0346   0.0440   0.0699   0.0619  0.0677    0.0900
 
-sigma^2 estimated as 0.09804:  log likelihood=-33.12
-AIC=98.24   AICc=102.3   BIC=146.52
+sigma^2 estimated as 0.09704:  log likelihood=-33.43
+AIC=94.86   AICc=97.95   BIC=137.1
 
 Training set error measures:
                        ME      RMSE       MAE        MPE     MAPE
-Training set 0.0005309593 0.3033077 0.2302707 -0.8368771 7.024923
-                MASE        ACF1
-Training set 0.72006 -0.03558668
+Training set 0.0005676418 0.3039585 0.2315366 -0.8416153 7.055216
+                  MASE       ACF1
+Training set 0.7240184 -0.0340853
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT1874A&quot;
 [1] &quot;###########################################\n&quot;
@@ -2570,49 +2542,43 @@ Series: subdati$value
 Regression with ARIMA(1,0,0) errors 
 
 Coefficients:
-          ar1  intercept    banda     t2m      sp   pblmax   pblmin
-      -0.1542     1.3918  -0.0039  0.0428  0.0733  -0.0402  -0.2781
-s.e.   0.1048     0.4638   0.0030  0.1190  0.2145   0.0354   0.2009
-         wdir   wspeed      tp      ptp  pvalue     seno   coseno
-      -0.1101  -0.1339  0.0389  -0.1024  0.6156  -0.0065  -0.0182
-s.e.   0.0389   0.0642  0.0542   0.0477  0.0781   0.0402   0.0397
-      lockdown
-       -0.0116
-s.e.    0.1056
+          ar1  intercept    banda     t2m     sp   pblmax   pblmin
+      -0.1556     1.3871  -0.0039  0.0457  0.064  -0.0428  -0.2834
+s.e.   0.1038     0.4621   0.0029  0.1145  0.213   0.0350   0.2007
+         wdir   wspeed      tp      ptp  pvalue  lockdown
+      -0.1099  -0.1342  0.0378  -0.1066  0.6181   -0.0104
+s.e.   0.0372   0.0633  0.0538   0.0468  0.0767    0.1051
 
-sigma^2 estimated as 0.1279:  log likelihood=-52.26
-AIC=136.53   AICc=140.59   BIC=184.8
+sigma^2 estimated as 0.1262:  log likelihood=-52.39
+AIC=132.77   AICc=135.86   BIC=175.02
 
 Training set error measures:
                         ME      RMSE       MAE       MPE     MAPE
-Training set -0.0005339941 0.3451929 0.2792015 -1.245012 8.867958
+Training set -0.0005341001 0.3454826 0.2784518 -1.245708 8.837795
                   MASE        ACF1
-Training set 0.8010144 -0.01879317
+Training set 0.7988635 -0.01897495
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT1104A&quot;
 [1] &quot;###########################################\n&quot;
 Series: subdati$value 
-Regression with ARIMA(1,0,0) errors 
+Regression with ARIMA(0,0,0) errors 
 
 Coefficients:
-          ar1  intercept    banda     t2m      sp   pblmax   pblmin
-      -0.2036     1.6762  -0.0050  0.1233  0.0605  -0.0482  -0.2063
-s.e.   0.0976     0.4177   0.0026  0.1018  0.1630   0.0301   0.1440
-         wdir   wspeed       tp      ptp  pvalue    seno  coseno
-      -0.0823  -0.1380  -0.0185  -0.0509  0.5802  0.0672  0.0019
-s.e.   0.0354   0.0462   0.0506   0.0436  0.0705  0.0298  0.0306
-      lockdown
-        0.0145
-s.e.    0.0837
+      intercept    banda     t2m      sp   pblmax   pblmin     wdir
+         2.1120  -0.0060  0.1371  0.0936  -0.0454  -0.2315  -0.0605
+s.e.     0.4068   0.0027  0.1085  0.1873   0.0319   0.1467   0.0358
+       wspeed       tp      ptp  pvalue  lockdown
+      -0.1324  -0.0180  -0.0605  0.4726   -0.0057
+s.e.   0.0468   0.0522   0.0447  0.0664    0.1008
 
-sigma^2 estimated as 0.08579:  log likelihood=-21.52
-AIC=75.04   AICc=79.1   BIC=123.32
+sigma^2 estimated as 0.08826:  log likelihood=-25.27
+AIC=76.55   AICc=79.2   BIC=115.77
 
 Training set error measures:
-                       ME      RMSE       MAE        MPE     MAPE
-Training set 8.216972e-05 0.2789936 0.2194226 -0.7369127 6.775545
+                        ME      RMSE       MAE        MPE     MAPE
+Training set -4.940953e-16 0.2860551 0.2280752 -0.7900308 7.073706
                   MASE        ACF1
-Training set 0.7386129 -0.01719141
+Training set 0.7677388 -0.08527498
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT1588A&quot;
 [1] &quot;###########################################\n&quot;
@@ -2620,21 +2586,21 @@ Series: subdati$value
 Regression with ARIMA(0,0,0) errors 
 
 Coefficients:
-      intercept    banda      t2m       sp   pblmax   pblmin     wdir
-         1.4906  -0.0009  -0.0307  -0.0023  -0.1182  -0.3701  -0.0277
-s.e.     0.3526   0.0024   0.1049   0.1874   0.0345   0.1612   0.0228
-       wspeed       tp      ptp  pvalue     seno  coseno  lockdown
-      -0.3848  -0.0142  -0.0981  0.4425  -0.0140  0.0049   -0.1503
-s.e.   0.0935   0.0332   0.0274  0.0558   0.0365  0.0369    0.1043
+      intercept    banda      t2m      sp   pblmax   pblmin     wdir
+         1.5022  -0.0010  -0.0243  0.0025  -0.1174  -0.3590  -0.0287
+s.e.     0.3514   0.0024   0.1034  0.1862   0.0342   0.1586   0.0227
+       wspeed       tp      ptp  pvalue  lockdown
+      -0.3845  -0.0124  -0.0972  0.4448   -0.1472
+s.e.   0.0935   0.0328   0.0271  0.0555    0.1040
 
-sigma^2 estimated as 0.1016:  log likelihood=-34.82
-AIC=99.63   AICc=103.19   BIC=144.89
+sigma^2 estimated as 0.1003:  log likelihood=-34.9
+AIC=95.8   AICc=98.45   BIC=135.02
 
 Training set error measures:
-                       ME      RMSE       MAE       MPE     MAPE
-Training set 3.554174e-15 0.3047199 0.2326451 -1.127482 8.045438
-               MASE        ACF1
-Training set 0.6637 -0.01583072
+                       ME      RMSE     MAE       MPE     MAPE
+Training set 2.708355e-14 0.3048836 0.23297 -1.125177 8.049824
+                 MASE        ACF1
+Training set 0.664627 -0.01772425
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT2007A&quot;
 [1] &quot;###########################################\n&quot;
@@ -2643,23 +2609,20 @@ Regression with ARIMA(1,0,0) errors
 
 Coefficients:
           ar1  intercept    banda      t2m       sp   pblmax   pblmin
-      -0.1750     1.1123  -0.0014  -0.0455  -0.0781  -0.1867  -0.1959
-s.e.   0.0887     0.3845   0.0028   0.1169   0.2054   0.0393   0.1834
-        wdir   wspeed      tp      ptp  pvalue     seno   coseno
-      0.0069  -0.7172  0.0019  -0.1788  0.5121  -0.0148  -0.0026
-s.e.  0.0275   0.1085  0.0394   0.0343  0.0505   0.0401   0.0404
-      lockdown
-       -0.1203
-s.e.    0.1113
+      -0.1755     1.1205  -0.0015  -0.0388  -0.0801  -0.1874  -0.1872
+s.e.   0.0885     0.3833   0.0028   0.1155   0.2046   0.0392   0.1785
+        wdir   wspeed      tp      ptp  pvalue  lockdown
+      0.0058  -0.7175  0.0027  -0.1788  0.5142   -0.1187
+s.e.  0.0273   0.1085  0.0393   0.0340  0.0502    0.1112
 
-sigma^2 estimated as 0.1507:  log likelihood=-64.15
-AIC=160.3   AICc=164.36   BIC=208.57
+sigma^2 estimated as 0.1487:  log likelihood=-64.22
+AIC=156.44   AICc=159.53   BIC=198.68
 
 Training set error measures:
-                        ME      RMSE       MAE       MPE     MAPE
-Training set -0.0004844151 0.3710262 0.2688566 -2.804393 11.35929
+                       ME      RMSE       MAE       MPE     MAPE
+Training set -0.000520509 0.3712006 0.2688605 -2.802519 11.35303
                   MASE         ACF1
-Training set 0.6013579 -0.005961604
+Training set 0.6013667 -0.006004656
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT1869A&quot;
 [1] &quot;###########################################\n&quot;
@@ -2668,20 +2631,20 @@ Regression with ARIMA(0,0,0) errors
 
 Coefficients:
       intercept    banda     t2m       sp   pblmax   pblmin     wdir
-         2.0103  -0.0056  0.0871  -0.2272  -0.1190  -0.2529  -0.0408
-s.e.     0.4625   0.0032  0.1262   0.1910   0.0324   0.1523   0.0368
-       wspeed       tp      ptp  pvalue    seno   coseno  lockdown
-      -0.1316  -0.2151  -0.0565  0.5098  0.0217  -0.0445    0.1665
-s.e.   0.0517   0.0729   0.0652  0.0669  0.0413   0.0398    0.1183
+         1.9780  -0.0053  0.0759  -0.2265  -0.1227  -0.2623  -0.0333
+s.e.     0.4635   0.0032  0.1234   0.1919   0.0324   0.1522   0.0358
+       wspeed       tp      ptp  pvalue  lockdown
+      -0.1392  -0.2178  -0.0597  0.5088    0.1632
+s.e.   0.0515   0.0732   0.0654  0.0667    0.1186
 
-sigma^2 estimated as 0.1165:  log likelihood=-45.56
-AIC=121.12   AICc=124.68   BIC=166.38
+sigma^2 estimated as 0.116:  log likelihood=-46.32
+AIC=118.63   AICc=121.29   BIC=157.86
 
 Training set error measures:
                         ME      RMSE       MAE       MPE     MAPE
-Training set -5.275318e-16 0.3285218 0.2578452 -1.132531 8.392296
-                  MASE        ACF1
-Training set 0.7442626 -0.06693226
+Training set -1.192098e-16 0.3301898 0.2579302 -1.145716 8.400476
+                 MASE        ACF1
+Training set 0.744508 -0.06382269
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT1016A&quot;
 [1] &quot;###########################################\n&quot;
@@ -2690,23 +2653,20 @@ Regression with ARIMA(1,0,0) errors
 
 Coefficients:
           ar1  intercept   banda      t2m      sp   pblmax   pblmin
-      -0.3251     1.1785  -7e-04  -0.0557  0.0735  -0.0634  -0.2591
-s.e.   0.0910     0.3320   2e-03   0.0736  0.1270   0.0251   0.1513
-         wdir   wspeed       tp      ptp  pvalue    seno  coseno
-      -0.0424  -0.2157  -0.0405  -0.0196  0.6248  0.0265  0.0177
-s.e.   0.0236   0.0493   0.0321   0.0293  0.0556  0.0250  0.0254
-      lockdown
-       -0.0956
-s.e.    0.0685
+      -0.3083     1.2008  -6e-04  -0.0683  0.0720  -0.0619  -0.2602
+s.e.   0.0913     0.3342   2e-03   0.0737  0.1288   0.0253   0.1505
+         wdir   wspeed       tp      ptp  pvalue  lockdown
+      -0.0419  -0.2160  -0.0440  -0.0184  0.6148   -0.1007
+s.e.   0.0236   0.0497   0.0322   0.0294  0.0562    0.0695
 
-sigma^2 estimated as 0.06633:  log likelihood=-5.2
-AIC=42.39   AICc=46.45   BIC=90.67
+sigma^2 estimated as 0.06612:  log likelihood=-5.99
+AIC=39.98   AICc=43.07   BIC=82.23
 
 Training set error measures:
-                        ME      RMSE       MAE        MPE     MAPE
-Training set -0.0004741603 0.2503367 0.1991132 -0.5795524 5.993781
+                        ME      RMSE       MAE       MPE     MAPE
+Training set -0.0004816345 0.2517624 0.2009003 -0.590139 6.063104
                   MASE        ACF1
-Training set 0.6761721 -0.02711991
+Training set 0.6822409 -0.02515175
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT1868A&quot;
 [1] &quot;###########################################\n&quot;
@@ -2715,20 +2675,20 @@ Regression with ARIMA(0,0,0) errors
 
 Coefficients:
       intercept    banda     t2m       sp   pblmax   pblmin     wdir
-         2.1674  -0.0057  0.1136  -0.2909  -0.1664  -0.3082  -0.0497
-s.e.     0.4840   0.0035  0.1373   0.2053   0.0380   0.1625   0.0393
-       wspeed       tp      ptp  pvalue    seno   coseno  lockdown
-      -0.0829  -0.2220  -0.0999  0.4771  0.0190  -0.0380    0.1637
-s.e.   0.0557   0.0786   0.0690  0.0682  0.0442   0.0428    0.1260
+         2.1458  -0.0054  0.1027  -0.2943  -0.1717  -0.3174  -0.0439
+s.e.     0.4845   0.0034  0.1342   0.2059   0.0376   0.1622   0.0383
+       wspeed       tp      ptp  pvalue  lockdown
+      -0.0881  -0.2266  -0.1032  0.4741    0.1590
+s.e.   0.0556   0.0787   0.0691  0.0679    0.1258
 
-sigma^2 estimated as 0.13:  log likelihood=-53.97
-AIC=137.93   AICc=141.49   BIC=183.19
+sigma^2 estimated as 0.129:  log likelihood=-54.45
+AIC=134.9   AICc=137.56   BIC=174.13
 
 Training set error measures:
-                        ME     RMSE       MAE       MPE    MAPE
-Training set -9.054563e-18 0.349301 0.2745248 -1.291254 9.02931
+                        ME      RMSE      MAE       MPE    MAPE
+Training set -1.328037e-14 0.3504553 0.272491 -1.302613 8.97846
                   MASE        ACF1
-Training set 0.7635297 -0.08491864
+Training set 0.7578733 -0.08394762
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT1743A&quot;
 [1] &quot;###########################################\n&quot;
@@ -2737,23 +2697,20 @@ Regression with ARIMA(1,0,0) errors
 
 Coefficients:
           ar1  intercept    banda      t2m       sp   pblmax   pblmin
-      -0.2081     1.5819  -0.0019  -0.0075  -0.0414  -0.1422  -0.4135
-s.e.   0.0962     0.4270   0.0029   0.1040   0.1826   0.0356   0.1963
-         wdir   wspeed       tp      ptp  pvalue    seno   coseno
-      -0.0276  -0.3431  -0.0551  -0.0592  0.4962  0.0043  -0.0082
-s.e.   0.0277   0.0746   0.0441   0.0374  0.0658  0.0352   0.0361
-      lockdown
-       -0.0363
-s.e.    0.1057
+      -0.2086     1.5706  -0.0018  -0.0099  -0.0424  -0.1429  -0.4226
+s.e.   0.0960     0.4246   0.0028   0.1026   0.1825   0.0354   0.1928
+         wdir   wspeed       tp      ptp  pvalue  lockdown
+      -0.0265  -0.3441  -0.0557  -0.0601  0.4960   -0.0393
+s.e.   0.0274   0.0745   0.0439   0.0372  0.0655    0.1050
 
-sigma^2 estimated as 0.1153:  log likelihood=-45.11
-AIC=122.23   AICc=126.29   BIC=170.5
+sigma^2 estimated as 0.1137:  log likelihood=-45.15
+AIC=118.29   AICc=121.38   BIC=160.53
 
 Training set error measures:
-                        ME      RMSE       MAE       MPE     MAPE
-Training set -0.0002422517 0.3301286 0.2446536 -1.191247 7.905986
+                       ME      RMSE       MAE       MPE     MAPE
+Training set -0.000227624 0.3302014 0.2451275 -1.191108 7.921223
                   MASE       ACF1
-Training set 0.6781781 -0.0332131
+Training set 0.6794916 -0.0330462
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT1287A&quot;
 [1] &quot;###########################################\n&quot;
@@ -2762,23 +2719,20 @@ Regression with ARIMA(1,0,0) errors
 
 Coefficients:
           ar1  intercept    banda      t2m       sp   pblmax   pblmin
-      -0.3241     1.4199  -0.0022  -0.0224  -0.0410  -0.1136  -0.2283
-s.e.   0.0911     0.3732   0.0023   0.0861   0.1471   0.0287   0.1454
-         wdir   wspeed       tp      ptp  pvalue    seno   coseno
-      -0.1128  -0.1355  -0.0999  -0.0899  0.6018  0.0151  -0.0325
-s.e.   0.0327   0.0428   0.0552   0.0510  0.0620  0.0288   0.0289
-      lockdown
-        0.0908
-s.e.    0.0809
+      -0.3169     1.4324  -0.0021  -0.0217  -0.0429  -0.1173  -0.2474
+s.e.   0.0917     0.3778   0.0023   0.0866   0.1485   0.0288   0.1445
+         wdir   wspeed       tp      ptp  pvalue  lockdown
+      -0.1078  -0.1391  -0.1027  -0.0954  0.5946    0.0875
+s.e.   0.0326   0.0427   0.0552   0.0512  0.0621    0.0814
 
-sigma^2 estimated as 0.09182:  log likelihood=-27.38
-AIC=86.75   AICc=90.81   BIC=135.03
+sigma^2 estimated as 0.09142:  log likelihood=-28.13
+AIC=84.26   AICc=87.34   BIC=126.5
 
 Training set error measures:
-                        ME      RMSE       MAE        MPE     MAPE
-Training set -5.396728e-05 0.2905614 0.2217289 -0.7028073 6.472353
-                 MASE        ACF1
-Training set 0.725429 -0.02010479
+                       ME      RMSE       MAE        MPE     MAPE
+Training set 1.875046e-05 0.2920396 0.2246141 -0.7096825 6.557988
+                  MASE        ACF1
+Training set 0.7348685 -0.01805102
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT1010A&quot;
 [1] &quot;###########################################\n&quot;
@@ -2787,20 +2741,20 @@ Regression with ARIMA(0,0,0) errors
 
 Coefficients:
       intercept    banda     t2m      sp   pblmax   pblmin     wdir
-         1.8210  -0.0026  0.0040  0.2476  -0.0282  -0.1944  -0.0496
-s.e.     0.3532   0.0023  0.0906  0.1700   0.0292   0.1349   0.0244
-       wspeed       tp      ptp  pvalue     seno   coseno  lockdown
-      -0.2361  -0.0368  -0.0666  0.4827  -0.0066  -0.0393   -0.1107
-s.e.   0.0558   0.0317   0.0272  0.0594   0.0334   0.0321    0.0910
+         1.8126  -0.0027  0.0128  0.2360  -0.0318  -0.2011  -0.0494
+s.e.     0.3550   0.0023  0.0893  0.1703   0.0292   0.1351   0.0239
+       wspeed       tp      ptp  pvalue  lockdown
+      -0.2412  -0.0373  -0.0697  0.4873   -0.1089
+s.e.   0.0554   0.0319   0.0271  0.0587    0.0912
 
-sigma^2 estimated as 0.07928:  log likelihood=-16.09
-AIC=62.18   AICc=65.74   BIC=107.44
+sigma^2 estimated as 0.07895:  log likelihood=-16.86
+AIC=59.71   AICc=62.37   BIC=98.94
 
 Training set error measures:
                        ME      RMSE       MAE        MPE     MAPE
-Training set 1.138162e-14 0.2691779 0.2099962 -0.6372146 6.291345
-                  MASE        ACF1
-Training set 0.7026953 -0.01609598
+Training set 2.505427e-14 0.2705476 0.2113454 -0.6442387 6.326787
+                MASE        ACF1
+Training set 0.70721 -0.01777448
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT1190A&quot;
 [1] &quot;###########################################\n&quot;
@@ -2809,20 +2763,20 @@ Regression with ARIMA(0,0,0) errors
 
 Coefficients:
       intercept    banda      t2m      sp   pblmax   pblmin     wdir
-         1.7306  -0.0020  -0.0070  0.2340  -0.0801  -0.1801  -0.0326
-s.e.     0.6239   0.0022   0.0858  0.2123   0.0302   0.1393   0.0257
-       wspeed       tp      ptp  pvalue     seno  coseno  lockdown
-      -0.7956  -0.0974  -0.0406  0.4784  -0.0212  0.0502   -0.2185
-s.e.   0.1418   0.0379   0.0330  0.0588   0.0355  0.0372    0.1024
+         1.8135  -0.0020  -0.0151  0.2742  -0.0786  -0.1713  -0.0264
+s.e.     0.6232   0.0022   0.0861  0.2117   0.0303   0.1402   0.0251
+       wspeed       tp      ptp  pvalue  lockdown
+      -0.7745  -0.0883  -0.0336  0.4885   -0.2088
+s.e.   0.1417   0.0377   0.0328  0.0586    0.1029
 
-sigma^2 estimated as 0.09605:  log likelihood=-30.87
-AIC=91.73   AICc=95.29   BIC=136.99
+sigma^2 estimated as 0.09607:  log likelihood=-31.97
+AIC=89.94   AICc=92.59   BIC=129.16
 
 Training set error measures:
-                        ME      RMSE      MAE       MPE     MAPE
-Training set -2.403262e-14 0.2972579 0.237093 -1.128596 8.488379
+                       ME     RMSE       MAE       MPE     MAPE
+Training set 5.832362e-16 0.299446 0.2384678 -1.137377 8.553351
                   MASE       ACF1
-Training set 0.7147859 0.07420951
+Training set 0.7189306 0.06687902
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT1692A&quot;
 [1] &quot;###########################################\n&quot;
@@ -2831,23 +2785,20 @@ Regression with ARIMA(1,0,0) errors
 
 Coefficients:
           ar1  intercept    banda      t2m       sp   pblmax   pblmin
-      -0.1577      1.396  -0.0022  -0.0277  -0.0010  -0.0746  -0.5043
-s.e.   0.0957      0.373   0.0024   0.0867   0.1493   0.0293   0.1687
-         wdir   wspeed       tp      ptp  pvalue     seno   coseno
-      -0.0530  -0.2649  -0.0435  -0.0516  0.5417  -0.0033  -0.0142
-s.e.   0.0268   0.0541   0.0360   0.0317  0.0626   0.0300   0.0301
-      lockdown
-       -0.0178
-s.e.    0.0835
+      -0.1587     1.3891  -0.0022  -0.0246  -0.0025  -0.0759  -0.5119
+s.e.   0.0953     0.3720   0.0023   0.0855   0.1493   0.0291   0.1665
+         wdir   wspeed       tp      ptp  pvalue  lockdown
+      -0.0518  -0.2664  -0.0430  -0.0528  0.5431   -0.0175
+s.e.   0.0265   0.0540   0.0359   0.0316  0.0622    0.0831
 
-sigma^2 estimated as 0.08336:  log likelihood=-19.34
-AIC=70.68   AICc=74.74   BIC=118.96
+sigma^2 estimated as 0.08229:  log likelihood=-19.46
+AIC=66.92   AICc=70.01   BIC=109.16
 
 Training set error measures:
-                        ME      RMSE       MAE        MPE     MAPE
-Training set -0.0005165874 0.2750123 0.2128879 -0.7554675 6.763276
+                        ME      RMSE       MAE       MPE     MAPE
+Training set -0.0005213217 0.2752298 0.2128747 -0.755743 6.759187
                   MASE        ACF1
-Training set 0.6744847 -0.01375908
+Training set 0.6744427 -0.01385054
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT0997A&quot;
 [1] &quot;###########################################\n&quot;
@@ -2855,21 +2806,21 @@ Series: subdati$value
 Regression with ARIMA(0,0,0) errors 
 
 Coefficients:
-      intercept    banda     t2m      sp   pblmax   pblmin    wdir
-         1.1798  -0.0010  0.0057  0.0095  -0.1332  -0.4985  0.0005
-s.e.     0.4207   0.0025  0.1137  0.1776   0.0328   0.2618  0.0225
-       wspeed       tp      ptp  pvalue    seno  coseno  lockdown
-      -0.2970  -0.0243  -0.1395  0.5548  0.0399  0.0034   -0.0807
-s.e.   0.0967   0.0430   0.0370  0.0582  0.0357  0.0360    0.1031
+      intercept    banda      t2m      sp   pblmax   pblmin    wdir
+         1.1680  -0.0008  -0.0070  0.0201  -0.1292  -0.5217  0.0023
+s.e.     0.4199   0.0025   0.1136  0.1775   0.0324   0.2589  0.0226
+       wspeed       tp      ptp  pvalue  lockdown
+      -0.2980  -0.0239  -0.1371  0.5494   -0.0880
+s.e.   0.0971   0.0429   0.0367  0.0582    0.1033
 
-sigma^2 estimated as 0.09701:  log likelihood=-31.9
-AIC=93.8   AICc=97.36   BIC=139.06
+sigma^2 estimated as 0.09643:  log likelihood=-32.53
+AIC=91.05   AICc=93.71   BIC=130.28
 
 Training set error measures:
-                        ME      RMSE       MAE        MPE     MAPE
-Training set -1.393665e-14 0.2997423 0.2416691 -0.8482955 7.508153
+                        ME      RMSE       MAE       MPE     MAPE
+Training set -1.310511e-14 0.3010008 0.2411896 -0.858808 7.514844
                   MASE       ACF1
-Training set 0.7317898 0.08799803
+Training set 0.7303379 0.09504323
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT1034A&quot;
 [1] &quot;###########################################\n&quot;
@@ -2877,21 +2828,21 @@ Series: subdati$value
 Regression with ARIMA(0,0,0) errors 
 
 Coefficients:
-      intercept    banda      t2m      sp   pblmax  pblmin     wdir
-         2.0920  -0.0041  -0.0373  0.1156  -0.0999  -0.217  -0.0193
-s.e.     0.3549   0.0023   0.0927  0.1683   0.0297   0.135   0.0207
-       wspeed       tp      ptp  pvalue    seno   coseno  lockdown
-      -0.2650  -0.0422  -0.0937  0.4292  0.0279  -0.0123   -0.0968
-s.e.   0.0643   0.0304   0.0328  0.0590  0.0334   0.0342    0.0920
+      intercept    banda      t2m      sp   pblmax   pblmin     wdir
+         2.0650  -0.0039  -0.0524  0.1145  -0.0994  -0.2459  -0.0180
+s.e.     0.3543   0.0022   0.0910  0.1679   0.0296   0.1313   0.0208
+       wspeed       tp      ptp  pvalue  lockdown
+      -0.2666  -0.0437  -0.0964  0.4254   -0.1031
+s.e.   0.0643   0.0305   0.0323  0.0587    0.0920
 
-sigma^2 estimated as 0.07365:  log likelihood=-14.66
-AIC=59.32   AICc=62.88   BIC=104.58
+sigma^2 estimated as 0.07303:  log likelihood=-15.08
+AIC=56.15   AICc=58.81   BIC=95.38
 
 Training set error measures:
                        ME      RMSE       MAE        MPE     MAPE
-Training set 4.330653e-16 0.2684859 0.2010606 -0.6984599 6.255624
+Training set 9.054957e-16 0.2692751 0.2030235 -0.7064133 6.337873
                   MASE       ACF1
-Training set 0.7171404 0.01619149
+Training set 0.7241417 0.02009392
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT1739A&quot;
 [1] &quot;###########################################\n&quot;
@@ -2900,23 +2851,20 @@ Regression with ARIMA(1,0,0) errors
 
 Coefficients:
           ar1  intercept   banda      t2m       sp   pblmax   pblmin
-      -0.2647     1.0921  0.0002  -0.1085  -0.0467  -0.0836  -0.3523
-s.e.   0.0896     0.3495  0.0021   0.0783   0.1313   0.0236   0.1381
-         wdir   wspeed       tp     ptp  pvalue    seno   coseno
-      -0.0862  -0.1183  -0.1533  0.0128  0.6343  0.0247  -0.0081
-s.e.   0.0289   0.0365   0.0566  0.0494  0.0587  0.0264   0.0263
-      lockdown
-        0.0367
-s.e.    0.0757
+      -0.2602     1.0741  0.0005  -0.1197  -0.0540  -0.0846  -0.3792
+s.e.   0.0900     0.3502  0.0021   0.0778   0.1319   0.0236   0.1359
+         wdir   wspeed       tp     ptp  pvalue  lockdown
+      -0.0835  -0.1177  -0.1595  0.0098  0.6307    0.0275
+s.e.   0.0288   0.0363   0.0565  0.0494  0.0587    0.0756
 
-sigma^2 estimated as 0.0702:  log likelihood=-7.37
-AIC=46.74   AICc=50.8   BIC=95.02
+sigma^2 estimated as 0.06965:  log likelihood=-7.86
+AIC=43.72   AICc=46.81   BIC=85.96
 
 Training set error measures:
-                       ME      RMSE       MAE        MPE     MAPE
-Training set 0.0001990399 0.2540646 0.1910735 -0.5423377 5.585749
-                  MASE       ACF1
-Training set 0.6844487 -0.0102951
+                      ME      RMSE       MAE        MPE     MAPE
+Training set 0.000324532 0.2549051 0.1915582 -0.5443549 5.595192
+                  MASE         ACF1
+Training set 0.6861848 -0.008260936
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT1965A&quot;
 [1] &quot;###########################################\n&quot;
@@ -2925,20 +2873,20 @@ Regression with ARIMA(0,0,0) errors
 
 Coefficients:
       intercept    banda     t2m       sp   pblmax   pblmin     wdir
-         1.7915  -0.0031  0.0592  -0.0717  -0.1376  -0.3325  -0.0763
-s.e.     0.3778   0.0026  0.1005   0.1714   0.0317   0.1528   0.0361
-       wspeed       tp      ptp  pvalue    seno   coseno  lockdown
-      -0.2140  -0.0847  -0.0724  0.4819  0.0208  -0.0152    0.1403
-s.e.   0.0467   0.0511   0.0440  0.0585  0.0333   0.0339    0.0993
+         1.7765  -0.0028  0.0517  -0.0739  -0.1388  -0.3437  -0.0720
+s.e.     0.3779   0.0026  0.0998   0.1717   0.0316   0.1523   0.0356
+       wspeed       tp      ptp  pvalue  lockdown
+      -0.2154  -0.0878  -0.0755  0.4797    0.1359
+s.e.   0.0465   0.0510   0.0439  0.0583    0.0991
 
-sigma^2 estimated as 0.08377:  log likelihood=-20.97
-AIC=71.94   AICc=75.5   BIC=117.2
+sigma^2 estimated as 0.08289:  log likelihood=-21.26
+AIC=68.52   AICc=71.18   BIC=107.75
 
 Training set error measures:
-                       ME      RMSE      MAE        MPE     MAPE
-Training set 2.691358e-15 0.2785408 0.225372 -0.7555303 7.006957
-                  MASE        ACF1
-Training set 0.6979312 -0.09050697
+                       ME      RMSE       MAE        MPE     MAPE
+Training set 4.088004e-14 0.2790828 0.2269189 -0.7592297 7.053882
+                  MASE       ACF1
+Training set 0.7027218 -0.0849946
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT1737A&quot;
 [1] &quot;###########################################\n&quot;
@@ -2947,20 +2895,20 @@ Regression with ARIMA(0,0,0) errors
 
 Coefficients:
       intercept    banda     t2m       sp   pblmax   pblmin    wdir
-         2.0413  -0.0049  0.0637  -0.3215  -0.0956  -0.4454  0.0241
-s.e.     0.4621   0.0027  0.1094   0.1759   0.0276   0.2184  0.0261
-       wspeed       tp      ptp  pvalue    seno  coseno  lockdown
-      -0.1957  -0.0936  -0.0794  0.4400  0.0730  0.0304    0.1308
-s.e.   0.0695   0.0506   0.0434  0.0692  0.0348  0.0350    0.1035
+         1.9104  -0.0038  0.0063  -0.2865  -0.0887  -0.4779  0.0333
+s.e.     0.4505   0.0026  0.1072   0.1784   0.0278   0.2170  0.0259
+       wspeed       tp      ptp  pvalue  lockdown
+      -0.2026  -0.0868  -0.0770  0.4406    0.1042
+s.e.   0.0705   0.0513   0.0442  0.0688    0.1042
 
-sigma^2 estimated as 0.08536:  log likelihood=-23.06
-AIC=76.12   AICc=79.68   BIC=121.38
+sigma^2 estimated as 0.08717:  log likelihood=-25.67
+AIC=77.33   AICc=79.99   BIC=116.56
 
 Training set error measures:
-                       ME      RMSE       MAE        MPE     MAPE
-Training set 7.495441e-14 0.2830717 0.2155643 -0.7583855 6.571303
-                  MASE        ACF1
-Training set 0.7158914 0.001622605</code></pre>
+                       ME    RMSE       MAE        MPE     MAPE
+Training set 2.756979e-14 0.28813 0.2147864 -0.7923309 6.589413
+                  MASE       ACF1
+Training set 0.7133079 0.01823422</code></pre>
 </div>
 <h3 id="stazioni-suburban">Stazioni Suburban</h3>
 <div class="layout-chunk" data-layout="l-body">
@@ -2976,7 +2924,7 @@ Training set 0.7158914 0.001622605</code></pre>
       <span class='va'>dati2</span><span class='op'>[</span><span class='va'>dati2</span><span class='op'>$</span><span class='va'>station_eu_code</span><span class='op'>==</span><span class='va'>cc</span>,<span class='op'>]</span><span class='op'>-&gt;</span><span class='va'>subdati</span>
       <span class='fu'>imputeTS</span><span class='fu'>::</span><span class='fu'><a href='https://SteffenMoritz.github.io/imputeTS/reference/na_ma.html'>na_ma</a></span><span class='op'>(</span><span class='va'>subdati</span><span class='op'>$</span><span class='va'>value</span><span class='op'>)</span><span class='op'>-&gt;</span><span class='va'>subdati</span><span class='op'>$</span><span class='va'>value</span>
     
-      <span class='fu'>auto.arima</span><span class='op'>(</span>y<span class='op'>=</span><span class='va'>subdati</span><span class='op'>$</span><span class='va'>value</span>,xreg <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span><span class='op'>(</span><span class='va'>subdati</span><span class='op'>[</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"banda"</span>,<span class='st'>"t2m"</span>,<span class='st'>"sp"</span>,<span class='st'>"pblmax"</span>,<span class='st'>"pblmin"</span>,<span class='st'>"wdir"</span>,<span class='st'>"wspeed"</span>,<span class='st'>"tp"</span>,<span class='st'>"ptp"</span>,<span class='st'>"pvalue"</span>,<span class='st'>"seno"</span>,<span class='st'>"coseno"</span>,<span class='st'>"lockdown"</span><span class='op'>)</span><span class='op'>]</span><span class='op'>)</span>,
+      <span class='fu'>auto.arima</span><span class='op'>(</span>y<span class='op'>=</span><span class='va'>subdati</span><span class='op'>$</span><span class='va'>value</span>,xreg <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span><span class='op'>(</span><span class='va'>subdati</span><span class='op'>[</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"banda"</span>,<span class='st'>"t2m"</span>,<span class='st'>"sp"</span>,<span class='st'>"pblmax"</span>,<span class='st'>"pblmin"</span>,<span class='st'>"wdir"</span>,<span class='st'>"wspeed"</span>,<span class='st'>"tp"</span>,<span class='st'>"ptp"</span>,<span class='st'>"pvalue"</span>,<span class='st'>"lockdown"</span><span class='op'>)</span><span class='op'>]</span><span class='op'>)</span>,
                  stepwise <span class='op'>=</span> <span class='cn'>TRUE</span>,max.p<span class='op'>=</span><span class='fl'>1</span>,max.q<span class='op'>=</span><span class='fl'>0</span><span class='op'>)</span><span class='op'>-&gt;</span><span class='va'>ris</span>
       <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='st'>"###########################################\n"</span><span class='op'>)</span>
       <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"Codice stazione (station_eu_code):"</span>,<span class='va'>cc</span><span class='op'>)</span><span class='op'>)</span>
@@ -2993,27 +2941,24 @@ Training set 0.7158914 0.001622605</code></pre>
 [1] &quot;Codice stazione (station_eu_code):IT0742A&quot;
 [1] &quot;###########################################\n&quot;
 Series: subdati$value 
-Regression with ARIMA(1,0,0) errors 
+Regression with ARIMA(0,0,0) errors 
 
 Coefficients:
-          ar1  intercept    banda      t2m       sp   pblmax  pblmin
-      -0.0713     1.3444  -0.0023  -0.0365  -0.3162  -0.0733  0.1087
-s.e.   0.1322     0.5327   0.0028   0.1222   0.1979   0.0299  0.1665
-        wdir   wspeed       tp      ptp  pvalue    seno  coseno
-      0.0184  -0.5719  -0.0856  -0.1260  0.5170  0.0855  0.0095
-s.e.  0.0278   0.1066   0.0493   0.0422  0.0966  0.0353  0.0354
-      lockdown
-       -0.0635
-s.e.    0.1022
+      intercept    banda      t2m       sp   pblmax  pblmin    wdir
+         1.4684  -0.0023  -0.0625  -0.3164  -0.0659  0.0515  0.0276
+s.e.     0.4085   0.0026   0.1180   0.1960   0.0304  0.1730  0.0273
+       wspeed       tp      ptp  pvalue  lockdown
+      -0.5696  -0.0851  -0.1273  0.4697   -0.0802
+s.e.   0.1060   0.0495   0.0427  0.0673    0.1080
 
-sigma^2 estimated as 0.08959:  log likelihood=-27.66
-AIC=87.33   AICc=91.39   BIC=135.61
+sigma^2 estimated as 0.09127:  log likelihood=-30.51
+AIC=87.02   AICc=89.68   BIC=126.25
 
 Training set error measures:
-                        ME     RMSE       MAE       MPE     MAPE
-Training set -3.668427e-05 0.293996 0.2241644 -1.056033 7.495315
-                  MASE        ACF1
-Training set 0.7061493 0.003691047
+                        ME      RMSE       MAE       MPE     MAPE
+Training set -2.326779e-15 0.2999698 0.2330479 -1.108855 7.827031
+                  MASE         ACF1
+Training set 0.7341335 -0.006892244
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT0839A&quot;
 [1] &quot;###########################################\n&quot;
@@ -3022,20 +2967,20 @@ Regression with ARIMA(0,0,0) errors
 
 Coefficients:
       intercept    banda      t2m      sp   pblmax   pblmin     wdir
-         1.6698  -0.0022  -0.0243  0.1009  -0.1215  -0.1828  -0.0618
-s.e.     0.3715   0.0026   0.1043  0.1774   0.0315   0.1474   0.0322
-       wspeed       tp      ptp  pvalue    seno   coseno  lockdown
-      -0.2284  -0.0945  -0.0850  0.4774  0.0335  -0.0292    0.1182
-s.e.   0.0530   0.0502   0.0457  0.0587  0.0350   0.0352    0.1039
+         1.6046  -0.0016  -0.0469  0.1058  -0.1236  -0.2082  -0.0528
+s.e.     0.3698   0.0026   0.1024  0.1782   0.0315   0.1468   0.0316
+       wspeed       tp      ptp  pvalue  lockdown
+      -0.2333  -0.0975  -0.0869  0.4765    0.1066
+s.e.   0.0531   0.0504   0.0459  0.0587    0.1038
 
-sigma^2 estimated as 0.09041:  log likelihood=-26.66
-AIC=83.31   AICc=86.87   BIC=128.57
+sigma^2 estimated as 0.09006:  log likelihood=-27.44
+AIC=80.88   AICc=83.54   BIC=120.1
 
 Training set error measures:
-                        ME      RMSE       MAE        MPE     MAPE
-Training set -8.691029e-15 0.2893727 0.2277707 -0.8690019 7.124422
-                  MASE       ACF1
-Training set 0.7193019 -0.1014949
+                        ME      RMSE       MAE       MPE     MAPE
+Training set -5.245745e-16 0.2908979 0.2323658 -0.877025 7.256163
+                  MASE        ACF1
+Training set 0.7338133 -0.09475157
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT0846A&quot;
 [1] &quot;###########################################\n&quot;
@@ -3043,21 +2988,21 @@ Series: subdati$value
 Regression with ARIMA(0,0,0) errors 
 
 Coefficients:
-      intercept    banda     t2m       sp   pblmax   pblmin    wdir
-         3.1821  -0.0092  0.1117  -0.1137  -0.0966  -0.2194  0.0025
-s.e.     0.5956   0.0041  0.1774   0.2998   0.0465   0.3644  0.0451
-       wspeed       tp      ptp  pvalue    seno  coseno  lockdown
-      -0.4171  -0.0651  -0.1696  0.1940  0.2045  0.0429    0.1003
-s.e.   0.1152   0.0844   0.0725  0.0759  0.0588  0.0596    0.1701
+      intercept    banda      t2m       sp   pblmax   pblmin    wdir
+         2.6764  -0.0057  -0.0588  -0.0330  -0.0801  -0.3581  0.0247
+s.e.     0.5794   0.0041   0.1773   0.3116   0.0482   0.3724  0.0461
+       wspeed       tp      ptp  pvalue  lockdown
+      -0.4371  -0.0587  -0.1622  0.2215    0.0221
+s.e.   0.1192   0.0878   0.0755  0.0759    0.1754
 
-sigma^2 estimated as 0.2517:  log likelihood=-103.31
-AIC=236.62   AICc=240.18   BIC=281.88
+sigma^2 estimated as 0.2694:  log likelihood=-109.53
+AIC=245.07   AICc=247.72   BIC=284.29
 
 Training set error measures:
                        ME      RMSE       MAE      MPE     MAPE
-Training set 3.158597e-15 0.4796236 0.3021701 1.545845 10.88577
-                  MASE        ACF1
-Training set 0.6628234 -0.05614799
+Training set -6.11735e-16 0.4997948 0.3088276 1.544828 11.28445
+                  MASE       ACF1
+Training set 0.6774268 -0.0323631
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT0840A&quot;
 [1] &quot;###########################################\n&quot;
@@ -3066,23 +3011,20 @@ Regression with ARIMA(1,0,0) errors
 
 Coefficients:
           ar1  intercept   banda      t2m      sp   pblmax   pblmin
-      -0.2792     1.0398  0.0000  -0.0395  0.0696  -0.0909  -0.3056
-s.e.   0.0964     0.4137  0.0026   0.0989  0.1667   0.0351   0.1570
-         wdir   wspeed       tp      ptp  pvalue    seno   coseno
-      -0.0543  -0.1913  -0.0470  -0.0411  0.6387  0.0478  -0.0246
-s.e.   0.0327   0.0510   0.0546   0.0503  0.0660  0.0314   0.0316
-      lockdown
-        0.0104
-s.e.    0.0887
+      -0.2665     0.9771  0.0006  -0.0660  0.0975  -0.0890  -0.3414
+s.e.   0.0984     0.4210  0.0026   0.0995  0.1688   0.0354   0.1577
+         wdir   wspeed       tp      ptp  pvalue  lockdown
+      -0.0416  -0.1959  -0.0489  -0.0378  0.6321   -0.0084
+s.e.   0.0321   0.0515   0.0553   0.0507  0.0674    0.0897
 
-sigma^2 estimated as 0.08422:  log likelihood=-25.21
-AIC=82.42   AICc=86.48   BIC=130.7
+sigma^2 estimated as 0.0848:  log likelihood=-26.65
+AIC=81.3   AICc=84.39   BIC=123.55
 
 Training set error measures:
                       ME      RMSE      MAE        MPE     MAPE
-Training set 0.002936452 0.2901991 0.229175 -0.6634862 6.778003
+Training set 0.003264215 0.2933254 0.230748 -0.6751116 6.828659
                   MASE         ACF1
-Training set 0.7222896 -0.009858763
+Training set 0.7272474 -0.005329562
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT1646A&quot;
 [1] &quot;###########################################\n&quot;
@@ -3091,20 +3033,20 @@ Regression with ARIMA(0,0,0) errors
 
 Coefficients:
       intercept    banda      t2m      sp   pblmax   pblmin     wdir
-         1.6451  -0.0023  -0.0308  0.0526  -0.0990  -0.1907  -0.1255
-s.e.     0.3579   0.0025   0.1006  0.1693   0.0311   0.1464   0.0365
-       wspeed       tp      ptp  pvalue    seno   coseno  lockdown
-      -0.1493  -0.1308  -0.0541  0.4979  0.0176  -0.0306   -0.0075
-s.e.   0.0439   0.0565   0.0506  0.0596  0.0343   0.0341    0.1003
+         1.6267  -0.0020  -0.0389  0.0451  -0.1019  -0.2064  -0.1211
+s.e.     0.3587   0.0025   0.0994  0.1698   0.0310   0.1447   0.0363
+       wspeed       tp      ptp  pvalue  lockdown
+      -0.1532  -0.1349  -0.0609  0.4962   -0.0113
+s.e.   0.0435   0.0564   0.0504  0.0594    0.1000
 
-sigma^2 estimated as 0.08569:  log likelihood=-22.31
-AIC=74.62   AICc=78.18   BIC=119.88
+sigma^2 estimated as 0.08507:  log likelihood=-22.85
+AIC=71.69   AICc=74.35   BIC=110.92
 
 Training set error measures:
                        ME      RMSE       MAE        MPE     MAPE
-Training set 1.436777e-14 0.2807758 0.2197754 -0.8135138 7.050734
-                 MASE        ACF1
-Training set 0.703328 -0.01202346
+Training set 4.700536e-14 0.2817793 0.2215746 -0.8200997 7.096974
+                  MASE         ACF1
+Training set 0.7090857 -0.006641181
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT1459A&quot;
 [1] &quot;###########################################\n&quot;
@@ -3113,20 +3055,20 @@ Regression with ARIMA(0,0,0) errors
 
 Coefficients:
       intercept    banda     t2m      sp   pblmax   pblmin     wdir
-         1.8857  -0.0056  0.0625  0.4378  -0.1023  -0.2381  -0.0672
-s.e.     0.4323   0.0033  0.1272  0.2261   0.0419   0.1911   0.0285
-       wspeed       tp      ptp  pvalue    seno   coseno  lockdown
-      -0.1862  -0.0015  -0.1284  0.4426  0.0075  -0.0306   -0.0892
-s.e.   0.0965   0.0440   0.0368  0.0622  0.0467   0.0468    0.1314
+         1.8612  -0.0054  0.0591  0.4325  -0.1047  -0.2572  -0.0638
+s.e.     0.4309   0.0033  0.1252  0.2263   0.0417   0.1893   0.0279
+       wspeed       tp      ptp  pvalue  lockdown
+      -0.1914  -0.0021  -0.1314  0.4435   -0.0928
+s.e.   0.0959   0.0440   0.0365  0.0619    0.1308
 
-sigma^2 estimated as 0.1619:  log likelihood=-70
-AIC=170.01   AICc=173.56   BIC=215.27
+sigma^2 estimated as 0.1601:  log likelihood=-70.23
+AIC=166.45   AICc=169.11   BIC=205.68
 
 Training set error measures:
                        ME      RMSE       MAE       MPE     MAPE
-Training set 8.045799e-15 0.3846804 0.2890929 -4.089338 13.38642
+Training set 3.639986e-14 0.3852475 0.2891874 -4.108094 13.39411
                   MASE        ACF1
-Training set 0.7206444 -0.07069778
+Training set 0.7208798 -0.07162281
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT1463A&quot;
 [1] &quot;###########################################\n&quot;
@@ -3135,20 +3077,20 @@ Regression with ARIMA(0,0,0) errors
 
 Coefficients:
       intercept    banda     t2m       sp   pblmax   pblmin     wdir
-         1.8002  -0.0036  0.1037  -0.0627  -0.1130  -0.3529  -0.0179
-s.e.     0.3797   0.0025  0.1026   0.1866   0.0366   0.2065   0.0254
-       wspeed       tp      ptp  pvalue    seno  coseno  lockdown
-      -0.3115  -0.0823  -0.1263  0.4721  0.0506  0.0188   -0.0164
-s.e.   0.0807   0.0483   0.0405  0.0611  0.0365  0.0366    0.1035
+         1.7583  -0.0031  0.0765  -0.0451  -0.1070  -0.3730  -0.0121
+s.e.     0.3767   0.0025  0.1013   0.1875   0.0364   0.2044   0.0249
+       wspeed       tp      ptp  pvalue  lockdown
+      -0.3171  -0.0803  -0.1238  0.4663   -0.0275
+s.e.   0.0812   0.0485   0.0407  0.0613    0.1039
 
-sigma^2 estimated as 0.1004:  log likelihood=-33.92
-AIC=97.85   AICc=101.4   BIC=143.11
+sigma^2 estimated as 0.1004:  log likelihood=-35.03
+AIC=96.06   AICc=98.72   BIC=135.28
 
 Training set error measures:
-                        ME      RMSE       MAE        MPE     MAPE
-Training set -5.232312e-14 0.3029231 0.2354575 -0.9189557 7.472566
+                       ME      RMSE       MAE        MPE    MAPE
+Training set 9.116238e-17 0.3051484 0.2402863 -0.9336976 7.63522
                   MASE        ACF1
-Training set 0.6900934 -0.05435696
+Training set 0.7042459 -0.04760976
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT1876A&quot;
 [1] &quot;###########################################\n&quot;
@@ -3157,20 +3099,20 @@ Regression with ARIMA(0,0,0) errors
 
 Coefficients:
       intercept    banda     t2m       sp   pblmax   pblmin     wdir
-         1.8421  -0.0040  0.0736  -0.0770  -0.1284  -0.2904  -0.0480
-s.e.     0.3958   0.0027  0.1157   0.2102   0.0376   0.1865   0.0254
-       wspeed       tp      ptp  pvalue    seno   coseno  lockdown
-      -0.2675  -0.0736  -0.0998  0.4551  0.0106  -0.0204   -0.0178
-s.e.   0.0938   0.0469   0.0390  0.0620  0.0404   0.0404    0.1149
+         1.8202  -0.0038  0.0665  -0.0854  -0.1304  -0.3149  -0.0479
+s.e.     0.3943   0.0027  0.1140   0.2099   0.0372   0.1815   0.0254
+       wspeed       tp      ptp  pvalue  lockdown
+      -0.2667  -0.0765  -0.1024  0.4537   -0.0197
+s.e.   0.0939   0.0467   0.0388  0.0618    0.1149
 
-sigma^2 estimated as 0.1207:  log likelihood=-48.18
-AIC=126.37   AICc=129.95   BIC=171.53
+sigma^2 estimated as 0.1192:  log likelihood=-48.34
+AIC=122.69   AICc=125.37   BIC=161.83
 
 Training set error measures:
-                        ME      RMSE       MAE       MPE     MAPE
-Training set -4.549531e-14 0.3343522 0.2568704 -1.281694 8.593547
+                        ME      RMSE       MAE      MPE     MAPE
+Training set -3.696224e-14 0.3347135 0.2560971 -1.28567 8.582963
                   MASE        ACF1
-Training set 0.7314205 -0.06530851
+Training set 0.7292186 -0.06284114
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT1388A&quot;
 [1] &quot;###########################################\n&quot;
@@ -3179,20 +3121,20 @@ Regression with ARIMA(0,0,0) errors
 
 Coefficients:
       intercept    banda      t2m       sp   pblmax   pblmin    wdir
-         1.4722  -0.0023  -0.0270  -0.2061  -0.1204  -0.7236  0.0010
-s.e.     0.4591   0.0026   0.1156   0.1726   0.0280   0.2787  0.0252
-       wspeed       tp      ptp  pvalue    seno   coseno  lockdown
-      -0.0803  -0.1035  -0.1793  0.5224  0.0008  -0.0221    0.0741
-s.e.   0.0547   0.0574   0.0500  0.0646  0.0360   0.0351    0.1028
+         1.4723  -0.0024  -0.0231  -0.2096  -0.1219  -0.7281  0.0016
+s.e.     0.4563   0.0026   0.1122   0.1727   0.0280   0.2750  0.0249
+       wspeed       tp      ptp  pvalue  lockdown
+      -0.0849  -0.1045  -0.1802  0.5231    0.0752
+s.e.   0.0543   0.0575   0.0501  0.0646    0.1027
 
-sigma^2 estimated as 0.09383:  log likelihood=-28.81
-AIC=87.62   AICc=91.17   BIC=132.88
+sigma^2 estimated as 0.09273:  log likelihood=-29.01
+AIC=84.01   AICc=86.67   BIC=123.24
 
 Training set error measures:
-                       ME      RMSE      MAE        MPE     MAPE
-Training set 2.657477e-14 0.2928332 0.231736 -0.8356236 7.203855
+                        ME      RMSE       MAE        MPE     MAPE
+Training set -2.287793e-14 0.2932186 0.2321672 -0.8392602 7.219273
                   MASE        ACF1
-Training set 0.7290274 0.002741819
+Training set 0.7303839 0.002872627
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT1385A&quot;
 [1] &quot;###########################################\n&quot;
@@ -3201,23 +3143,20 @@ Regression with ARIMA(1,0,0) errors
 
 Coefficients:
          ar1  intercept    banda     t2m       sp   pblmax   pblmin
-      0.4291     3.1615  -0.0099  0.2465  -0.2087  -0.1413  -0.0288
-s.e.  0.1729     0.8731   0.0041  0.1717   0.2485   0.0278   0.1594
-        wdir   wspeed       tp      ptp  pvalue    seno  coseno
-      0.0101  -0.2507  -0.0475  -0.1124  0.1599  0.0265  0.0236
-s.e.  0.0222   0.1486   0.0288   0.0266  0.1344  0.0380  0.0392
-      lockdown
-        0.2234
-s.e.    0.1535
+      0.4427     3.2295  -0.0100  0.2464  -0.2066  -0.1395  -0.0271
+s.e.  0.1592     0.8313   0.0039  0.1637   0.2492   0.0277   0.1581
+        wdir   wspeed       tp      ptp  pvalue  lockdown
+      0.0119  -0.2291  -0.0472  -0.1117  0.1482    0.2201
+s.e.  0.0220   0.1439   0.0286   0.0264  0.1261    0.1537
 
-sigma^2 estimated as 0.07033:  log likelihood=-8.94
-AIC=49.88   AICc=53.93   BIC=98.15
+sigma^2 estimated as 0.0697:  log likelihood=-9.36
+AIC=46.71   AICc=49.8   BIC=88.96
 
 Training set error measures:
-                      ME      RMSE       MAE        MPE     MAPE
-Training set 0.001730856 0.2568879 0.1923871 -0.6470737 6.111207
-                  MASE        ACF1
-Training set 0.6981094 0.009690811</code></pre>
+                  ME      RMSE       MAE        MPE     MAPE
+Training set 0.00164 0.2576007 0.1933526 -0.6522673 6.154422
+                  MASE       ACF1
+Training set 0.7016128 0.01526249</code></pre>
 </div>
 <h3 id="stazioni-rural">Stazioni Rural</h3>
 <div class="layout-chunk" data-layout="l-body">
@@ -3233,7 +3172,7 @@ Training set 0.6981094 0.009690811</code></pre>
       <span class='va'>dati2</span><span class='op'>[</span><span class='va'>dati2</span><span class='op'>$</span><span class='va'>station_eu_code</span><span class='op'>==</span><span class='va'>cc</span>,<span class='op'>]</span><span class='op'>-&gt;</span><span class='va'>subdati</span>
       <span class='fu'>imputeTS</span><span class='fu'>::</span><span class='fu'><a href='https://SteffenMoritz.github.io/imputeTS/reference/na_ma.html'>na_ma</a></span><span class='op'>(</span><span class='va'>subdati</span><span class='op'>$</span><span class='va'>value</span><span class='op'>)</span><span class='op'>-&gt;</span><span class='va'>subdati</span><span class='op'>$</span><span class='va'>value</span>
     
-      <span class='fu'>auto.arima</span><span class='op'>(</span>y<span class='op'>=</span><span class='va'>subdati</span><span class='op'>$</span><span class='va'>value</span>,xreg <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span><span class='op'>(</span><span class='va'>subdati</span><span class='op'>[</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"banda"</span>,<span class='st'>"t2m"</span>,<span class='st'>"sp"</span>,<span class='st'>"pblmax"</span>,<span class='st'>"pblmin"</span>,<span class='st'>"wdir"</span>,<span class='st'>"wspeed"</span>,<span class='st'>"tp"</span>,<span class='st'>"ptp"</span>,<span class='st'>"pvalue"</span>,<span class='st'>"seno"</span>,<span class='st'>"coseno"</span>,<span class='st'>"lockdown"</span><span class='op'>)</span><span class='op'>]</span><span class='op'>)</span>,
+      <span class='fu'>auto.arima</span><span class='op'>(</span>y<span class='op'>=</span><span class='va'>subdati</span><span class='op'>$</span><span class='va'>value</span>,xreg <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span><span class='op'>(</span><span class='va'>subdati</span><span class='op'>[</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"banda"</span>,<span class='st'>"t2m"</span>,<span class='st'>"sp"</span>,<span class='st'>"pblmax"</span>,<span class='st'>"pblmin"</span>,<span class='st'>"wdir"</span>,<span class='st'>"wspeed"</span>,<span class='st'>"tp"</span>,<span class='st'>"ptp"</span>,<span class='st'>"pvalue"</span>,<span class='st'>"lockdown"</span><span class='op'>)</span><span class='op'>]</span><span class='op'>)</span>,
                  stepwise <span class='op'>=</span> <span class='cn'>TRUE</span>,max.p<span class='op'>=</span><span class='fl'>1</span>,max.q<span class='op'>=</span><span class='fl'>0</span><span class='op'>)</span><span class='op'>-&gt;</span><span class='va'>ris</span>
       <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='st'>"###########################################\n"</span><span class='op'>)</span>
       <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"Codice stazione (station_eu_code):"</span>,<span class='va'>cc</span><span class='op'>)</span><span class='op'>)</span>
@@ -3253,21 +3192,21 @@ Series: subdati$value
 Regression with ARIMA(0,0,0) errors 
 
 Coefficients:
-      intercept    banda      t2m      sp  pblmax   pblmin     wdir
-         1.3998  -0.0008  -0.0607  0.0581  -0.127  -0.2848  -0.1033
-s.e.     0.3798   0.0027   0.1031  0.1779   0.032   0.1492   0.0344
-       wspeed       tp      ptp  pvalue    seno   coseno  lockdown
-      -0.1961  -0.1787  -0.0704  0.5086  0.0324  -0.0179    0.1105
-s.e.   0.0434   0.0577   0.0514  0.0588  0.0360   0.0364    0.1102
+      intercept    banda      t2m      sp   pblmax   pblmin     wdir
+         1.3634  -0.0003  -0.0773  0.0530  -0.1292  -0.3079  -0.0994
+s.e.     0.3796   0.0027   0.1016  0.1784   0.0319   0.1481   0.0343
+       wspeed       tp      ptp  pvalue  lockdown
+      -0.1972  -0.1864  -0.0745  0.5063    0.0984
+s.e.   0.0429   0.0574   0.0513  0.0587    0.1098
 
-sigma^2 estimated as 0.08596:  log likelihood=-25.24
-AIC=80.48   AICc=84.09   BIC=125.54
+sigma^2 estimated as 0.08537:  log likelihood=-25.77
+AIC=77.54   AICc=80.23   BIC=116.59
 
 Training set error measures:
-                        ME      RMSE       MAE        MPE     MAPE
-Training set -3.734727e-14 0.2890364 0.2338539 -0.8575415 7.415874
-                  MASE        ACF1
-Training set 0.7200346 -0.03977699
+                       ME      RMSE       MAE        MPE     MAPE
+Training set 9.519772e-15 0.2901168 0.2335029 -0.8658967 7.411653
+                 MASE        ACF1
+Training set 0.718954 -0.03257295
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT1392A&quot;
 [1] &quot;###########################################\n&quot;
@@ -3276,23 +3215,20 @@ Regression with ARIMA(1,0,0) errors
 
 Coefficients:
          ar1  intercept    banda     t2m       sp   pblmax   pblmin
-      0.4472     5.3307  -0.0192  0.4939  -0.8335  -0.1979  -0.0487
-s.e.  0.1364     1.1039   0.0063  0.2295   0.3823   0.0395   0.0652
-         wdir   wspeed       tp      ptp  pvalue    seno   coseno
-      -0.0203  -0.1389  -0.1483  -0.2930  0.0137  0.0495  -0.0541
-s.e.   0.0420   0.0452   0.0871   0.0745  0.1338  0.0591   0.0580
-      lockdown
-        0.6760
-s.e.    0.2457
+      0.4514     5.2925  -0.0186  0.4751  -0.8316  -0.2033  -0.0471
+s.e.  0.1310     1.0794   0.0062  0.2264   0.3775   0.0391   0.0654
+         wdir   wspeed       tp      ptp  pvalue  lockdown
+      -0.0125  -0.1453  -0.1547  -0.2993  0.0122    0.6578
+s.e.   0.0412   0.0450   0.0874   0.0747  0.1291    0.2445
 
-sigma^2 estimated as 0.1515:  log likelihood=-65.15
-AIC=162.29   AICc=166.38   BIC=210.46
+sigma^2 estimated as 0.151:  log likelihood=-65.96
+AIC=159.92   AICc=163.03   BIC=202.07
 
 Training set error measures:
                         ME      RMSE       MAE       MPE     MAPE
-Training set -3.990558e-05 0.3783943 0.2953888 -1.706239 9.983741
-                  MASE        ACF1
-Training set 0.7113246 -0.02533451
+Training set -0.0004795821 0.3805051 0.2960247 -1.736232 10.03852
+                 MASE        ACF1
+Training set 0.712856 -0.02172321
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT1812A&quot;
 [1] &quot;###########################################\n&quot;
@@ -3301,20 +3237,20 @@ Regression with ARIMA(0,0,0) errors
 
 Coefficients:
        banda      t2m      sp   pblmax   pblmin    wdir   wspeed
-      0.0067  -0.2827  0.3026  -0.1434  -0.0937  0.1002  -1.2556
-s.e.  0.0040   0.1723  0.2640   0.0639   0.2588  0.0556   0.2518
-           tp      ptp  pvalue     seno   coseno  lockdown
-      -0.1981  -0.0702  0.4369  -0.0742  -0.0603    0.0706
-s.e.   0.0606   0.0587  0.0619   0.0732   0.0726    0.2082
+      0.0061  -0.2407  0.2696  -0.1450  -0.0774  0.0850  -1.2853
+s.e.  0.0040   0.1701  0.2638   0.0643   0.2577  0.0547   0.2519
+           tp      ptp  pvalue  lockdown
+      -0.1974  -0.0716  0.4441    0.0755
+s.e.   0.0608   0.0585  0.0611    0.2093
 
-sigma^2 estimated as 0.3552:  log likelihood=-127.25
-AIC=282.5   AICc=285.59   BIC=324.75
+sigma^2 estimated as 0.3543:  log likelihood=-128.1
+AIC=280.21   AICc=282.47   BIC=316.42
 
 Training set error measures:
-                      ME      RMSE       MAE      MPE     MAPE
-Training set 0.003041707 0.5855247 0.4323625 7.094918 29.86987
+                      ME      RMSE       MAE     MPE     MAPE
+Training set 0.002650826 0.5890024 0.4340821 7.52221 29.89466
                   MASE       ACF1
-Training set 0.7358798 0.07527265
+Training set 0.7388065 0.07249149
 [1] &quot;###########################################\n&quot;
 [1] &quot;Codice stazione (station_eu_code):IT1464A&quot;
 [1] &quot;###########################################\n&quot;
@@ -3322,24 +3258,21 @@ Series: subdati$value
 Regression with ARIMA(1,0,0) errors 
 
 Coefficients:
-          ar1  intercept    banda     t2m       sp   pblmax   pblmin
-      -0.2453     1.5009  -0.0033  0.0011  -0.2221  -0.1094  -0.4039
-s.e.   0.1008     0.4855   0.0031  0.1141   0.1806   0.0367   0.2265
-         wdir   wspeed       tp      ptp  pvalue    seno   coseno
-      -0.0127  -0.2651  -0.0829  -0.1226  0.5335  0.0424  -0.0120
-s.e.   0.0341   0.0721   0.0553   0.0483  0.0744  0.0351   0.0351
-      lockdown
-        0.1444
-s.e.    0.1004
+          ar1  intercept    banda      t2m       sp   pblmax   pblmin
+      -0.2372     1.4714  -0.0028  -0.0182  -0.2177  -0.1098  -0.4389
+s.e.   0.1017     0.4878   0.0031   0.1142   0.1823   0.0366   0.2251
+         wdir   wspeed       tp      ptp  pvalue  lockdown
+      -0.0042  -0.2689  -0.0858  -0.1235  0.5245    0.1341
+s.e.   0.0337   0.0725   0.0555   0.0486  0.0746    0.1012
 
-sigma^2 estimated as 0.1138:  log likelihood=-44.45
-AIC=120.89   AICc=124.95   BIC=169.17
+sigma^2 estimated as 0.1134:  log likelihood=-45.22
+AIC=118.43   AICc=121.52   BIC=160.68
 
 Training set error measures:
-                        ME     RMSE       MAE       MPE     MAPE
-Training set -0.0006723083 0.329053 0.2527639 -1.072093 7.874841
+                       ME      RMSE       MAE       MPE     MAPE
+Training set -0.000565885 0.3308448 0.2557174 -1.082928 7.983238
                   MASE         ACF1
-Training set 0.6992595 -0.007997209</code></pre>
+Training set 0.7074303 -0.006642983</code></pre>
 </div>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->

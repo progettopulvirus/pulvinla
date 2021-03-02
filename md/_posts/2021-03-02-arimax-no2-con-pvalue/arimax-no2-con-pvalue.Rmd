@@ -20,8 +20,6 @@ Le variabili prese in esame sono:
 
 - le variabili meteoclimatiche
 
-- seno e coseno (introdotte per catturare eventuali ciclicita' settimanali non colte da **wday**)
-
 - la variabile **banda** (variabile che assume valori da 1 al numero dei giorni)
 
 - la variabile **wday** (variabile che assume valori da 1 a 7, per cogliere un eventuale ciclo settimanale)
@@ -118,7 +116,7 @@ purrr::walk(c("U"),.f=function(tipo){
       dati2[dati2$station_eu_code==cc,]->subdati
       imputeTS::na_ma(subdati$value)->subdati$value
     
-      auto.arima(y=subdati$value,xreg = as.matrix(subdati[,c("banda","t2m","sp","pblmax","pblmin","wdir","wspeed","tp","ptp","pvalue","seno","coseno","lockdown")]),
+      auto.arima(y=subdati$value,xreg = as.matrix(subdati[,c("banda","t2m","sp","pblmax","pblmin","wdir","wspeed","tp","ptp","pvalue","lockdown")]),
                  stepwise = TRUE,max.p=1,max.q=0)->ris
       
       print("###########################################\n")
@@ -147,7 +145,7 @@ purrr::walk(c("S"),.f=function(tipo){
       dati2[dati2$station_eu_code==cc,]->subdati
       imputeTS::na_ma(subdati$value)->subdati$value
     
-      auto.arima(y=subdati$value,xreg = as.matrix(subdati[,c("banda","t2m","sp","pblmax","pblmin","wdir","wspeed","tp","ptp","pvalue","seno","coseno","lockdown")]),
+      auto.arima(y=subdati$value,xreg = as.matrix(subdati[,c("banda","t2m","sp","pblmax","pblmin","wdir","wspeed","tp","ptp","pvalue","lockdown")]),
                  stepwise = TRUE,max.p=1,max.q=0)->ris
       print("###########################################\n")
       print(paste0("Codice stazione (station_eu_code):",cc))
@@ -174,7 +172,7 @@ purrr::walk(c("R"),.f=function(tipo){
       dati2[dati2$station_eu_code==cc,]->subdati
       imputeTS::na_ma(subdati$value)->subdati$value
     
-      auto.arima(y=subdati$value,xreg = as.matrix(subdati[,c("banda","t2m","sp","pblmax","pblmin","wdir","wspeed","tp","ptp","pvalue","seno","coseno","lockdown")]),
+      auto.arima(y=subdati$value,xreg = as.matrix(subdati[,c("banda","t2m","sp","pblmax","pblmin","wdir","wspeed","tp","ptp","pvalue","lockdown")]),
                  stepwise = TRUE,max.p=1,max.q=0)->ris
       print("###########################################\n")
       print(paste0("Codice stazione (station_eu_code):",cc))
