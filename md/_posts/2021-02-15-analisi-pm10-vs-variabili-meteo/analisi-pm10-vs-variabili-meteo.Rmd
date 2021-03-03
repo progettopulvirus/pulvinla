@@ -1,7 +1,7 @@
 ---
 title: "Analisi PM10 vs variabili meteo"
 description: |
-  Studio di correlazioni e scatterplots tra PM10 e le variabili meteo derivate da ERA5.
+  Studio di correlazioni e scatterplots tra NO2 e le variabili meteo derivate da ERA5.
   Per i parametri metereologici fare riferimento a https://progettopulvirus.github.io/pulviruS/parametri.html
 author: Maria Gabriella Villani
 date: 02-15-2021
@@ -9,11 +9,10 @@ params:
   parametro: pm10
   regione: Lombardia
 output:
-  distill::distill_article:    
+  distill::distill_article:
     self_contained: false
 ---
 ```{r setup, include=FALSE,message=FALSE,warning=FALSE,echo=FALSE}
-library("distill")
 library("tidyverse")
 library("lombardia")
 library("datiMeteo")
@@ -25,6 +24,7 @@ library("janitor")
 library("GGally")
 library("gridExtra")
 library("patchwork")
+#library("extrafont")
 #library("ggspatial")
 #library("data.tree") da sviluppare
 #library("raster")
@@ -33,7 +33,7 @@ knitr::opts_chunk$set(echo = FALSE,warning = FALSE,message=FALSE,include = TRUE,
 
 theme_set(theme(text=element_text(family="Lato",size=6)))
 
-# PM10
+
 PARAMETRO<-params$parametro
 assign("inquinante",eval(parse(text=PARAMETRO)))
 
@@ -51,10 +51,18 @@ left_join(inquinante,meteo,by=c("station_eu_code"="station_eu_code","date"="date
 
 #selezioniamo serie nel periodo gennaio-giugno
 dati %>%
-  filter(mm %in% 1:6)->subDati
+  mutate(dtr=tmax2m-tmin2m) %>%
+  filter(mm %in% 1:5) %>%
+  mutate(wday=as.factor(lubridate::wday(date)))->subDati
 
 left_join(subDati,stazioniMonitoraggio::stazioni[,c("station_eu_code","nome_stazione","tipo_zona")]) %>%
   mutate(tipo_zona=as.factor(tipo_zona))->subDati
+```
+
+
+```{r wday,eval=F}
+ggplot(data=subDati,aes(x=wday,y=value))+
+  geom_boxplot(aes(fill=wday))
 ```
 
 Numero stazioni: `r length(unique(dati$station_eu_code))`
@@ -63,7 +71,7 @@ Numero stazioni: `r length(unique(dati$station_eu_code))`
 
 ```{r}
 subMeteoNames <- c("value" , "t2m" , "tmin2m" ,"tmax2m","tp", "ptp", "rh" , "sp",
-                   "nirradiance", "pbl00","pbl12", "pblmin","pblmax","wdir", "wspeed","pwspeed" )
+                   "nirradiance", "pbl00","pbl12", "pblmin","pblmax","wdir", "wspeed","pwspeed","dtr" )
 ```
 
 ### Correlazioni complessive
@@ -120,13 +128,13 @@ purrr::reduce(plots[1:3],.f=`+`)+patchwork::plot_layout(ncol=3,guides = "collect
 
 ```{r,eval=F}
 subMeteoNames <- c("yy" ,"tipo_zona","value" , "t2m" , "tmin2m" ,"tmax2m","tp", "ptp", "rh" , "sp",
-                   "nirradiance", "pbl00","pbl12", "pblmin","pblmax","wdir", "wspeed","pwspeed" )
+                   "nirradiance", "pbl00","pbl12", "pblmin","pblmax","wdir", "wspeed","pwspeed","dtr")
 ```
 
 ### Scatterplots temperature-radiazione
 
 ```{r,eval=TRUE}
-nomecolns <- c("value" , "t2m" , "tmin2m" ,"tmax2m","nirradiance")
+nomecolns <- c("value" , "t2m" , "tmin2m" ,"tmax2m","nirradiance","dtr")
 
 #print(skimr::skim(subDati[,c("tipo_zona",nomecolns)] %>% group_by(tipo_zona) ))
 gg <- ggpairs(subDati[,c("tipo_zona",subMeteoNames)], columns = nomecolns, 

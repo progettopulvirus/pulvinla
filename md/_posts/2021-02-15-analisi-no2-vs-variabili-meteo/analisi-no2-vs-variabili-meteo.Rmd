@@ -33,7 +33,7 @@ knitr::opts_chunk$set(echo = FALSE,warning = FALSE,message=FALSE,include = TRUE,
 
 theme_set(theme(text=element_text(family="Lato",size=6)))
 
-# PM10
+
 PARAMETRO<-params$parametro
 assign("inquinante",eval(parse(text=PARAMETRO)))
 
@@ -51,8 +51,8 @@ left_join(inquinante,meteo,by=c("station_eu_code"="station_eu_code","date"="date
 
 #selezioniamo serie nel periodo gennaio-giugno
 dati %>%
+  mutate(dtr=tmax2m-tmin2m) %>%
   filter(mm %in% 1:5) %>%
-  filter(yy==2020) %>%
   mutate(wday=as.factor(lubridate::wday(date)))->subDati
 
 left_join(subDati,stazioniMonitoraggio::stazioni[,c("station_eu_code","nome_stazione","tipo_zona")]) %>%
@@ -71,7 +71,7 @@ Numero stazioni: `r length(unique(dati$station_eu_code))`
 
 ```{r}
 subMeteoNames <- c("value" , "t2m" , "tmin2m" ,"tmax2m","tp", "ptp", "rh" , "sp",
-                   "nirradiance", "pbl00","pbl12", "pblmin","pblmax","wdir", "wspeed","pwspeed" )
+                   "nirradiance", "pbl00","pbl12", "pblmin","pblmax","wdir", "wspeed","pwspeed","dtr" )
 ```
 
 ### Correlazioni complessive
@@ -128,13 +128,13 @@ purrr::reduce(plots[1:3],.f=`+`)+patchwork::plot_layout(ncol=3,guides = "collect
 
 ```{r,eval=F}
 subMeteoNames <- c("yy" ,"tipo_zona","value" , "t2m" , "tmin2m" ,"tmax2m","tp", "ptp", "rh" , "sp",
-                   "nirradiance", "pbl00","pbl12", "pblmin","pblmax","wdir", "wspeed","pwspeed" )
+                   "nirradiance", "pbl00","pbl12", "pblmin","pblmax","wdir", "wspeed","pwspeed","dtr")
 ```
 
 ### Scatterplots temperature-radiazione
 
 ```{r,eval=TRUE}
-nomecolns <- c("value" , "t2m" , "tmin2m" ,"tmax2m","nirradiance")
+nomecolns <- c("value" , "t2m" , "tmin2m" ,"tmax2m","nirradiance","dtr")
 
 #print(skimr::skim(subDati[,c("tipo_zona",nomecolns)] %>% group_by(tipo_zona) ))
 gg <- ggpairs(subDati[,c("tipo_zona",subMeteoNames)], columns = nomecolns, 
