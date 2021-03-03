@@ -1,5 +1,39 @@
 [
   {
+    "path": "posts/2021-03-03-confronto-meteto-2020-vs-anni-precedenti/",
+    "title": "Confronto meteto 2020 vs anni precedenti",
+    "description": "A short description of the post.",
+    "author": [
+      {
+        "name": "guidofioravanti",
+        "url": {}
+      }
+    ],
+    "date": "2021-03-03",
+    "categories": [],
+    "contents": "\n\n\n\nTemperatura\n\n\n\n\n\n\nPBL\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+    "preview": "posts/2021-03-03-confronto-meteto-2020-vs-anni-precedenti/confronto-meteto-2020-vs-anni-precedenti_files/figure-html5/unnamed-chunk-2-1.png",
+    "last_modified": "2021-03-03T15:19:55+01:00",
+    "input_file": {}
+  },
+  {
+    "path": "posts/2021-03-03-modello-pm10-lombardia-ar1-su-spde-serie-gennaio-maggio-2020/",
+    "title": "Modello PM10 Lombardia, ar1 su spde serie gennaio-maggio 2020",
+    "description": "Primo modello testato per progetto PULVIRUS (2020 vs 2019/2018).",
+    "author": [
+      {
+        "name": "guidofioravanti",
+        "url": {}
+      }
+    ],
+    "date": "2021-03-03",
+    "categories": [],
+    "contents": "\nPer il progetto PULVIRUS, il primo modello che si e’ testato e’ un modello analogo a quello descritto in Cameletti (2020), aggiungendo la componente spaziale (spde con ar1).\nIl modello prevede:\nvariabili meteoclimatiche come effetti fissi\nil campo spde con ar1 sul giorno\nun random effect (iid) sulle centraline\nun effetto lineare sul giorno (variabile day).\nQuesto modello sull’intero periodo gennaio-maggio 2020 e’ caratterizzato da:\nun range molto grande (213 km)\nun rho su spde pari a 0.94\nEntrambi i valori sono decisamente troppo alti, soprattutto se confrontati con i risultati dello stesso modello per gli anni 2019 e 2018 .\nSe per l’anno 2020 viene inserito un effetto non lineare sul giorno (rw1 su say) mantenendo un ar1 su spde si ottiene un campo spde con range e rho piu’ bassi (si veda ad esempio questo modello che include anche la variabile pvalue ovveroo il valore del PM10 nel giorno precedente). Il problema del rho molto alto su spde riguarda anche l’NO2 ma ne’ l’uso dell’rw1 su day ne’ l’uso del valore dell’inquinante nel giorno precedente risolve il problema.\nPer il PM10 il problema sembra essere il periodo aprile-maggio:\nrisultati 2020: rho 0.52 e range 204 km\nrisultati 2019\nrisultati 2018\nPer il periodo gennaio-marzo:\nrisultati 2020\nrisultati 2019\nrisultati 2018\n\n\n\n",
+    "preview": {},
+    "last_modified": "2021-03-03T15:19:26+01:00",
+    "input_file": {}
+  },
+  {
     "path": "posts/2021-03-03-no2-lombardia-modello-con-rw1-su-day-iid-su-spde-e-stationeucode/",
     "title": "NO2 Lombardia, modello con rw1 su day, iid su spde e station_eu_code",
     "description": "Serie Lombardia, gennaio-maggio 2020.",
@@ -113,9 +147,9 @@
     ],
     "date": "2021-03-02",
     "categories": [],
-    "contents": "\nTenendo conto dei risultati ottenuti sulle singole serie mediante l’applicazione di auto.arima del pacchetto forecast, e’ stato fittato un modello con iid su SPDE.\nIl modello inoltre presenta:\nl’effetto (lineare) della concentrazione dell’inquinante nel giorno precedente (variabile pvalue ovvero previous value)\nl’effetto lineare del giorno (variabile day)\nl’effetto non lineare (rw1) del giorno della settimana (variabile wday)\nun random effect sulle centraline (iid sulla variabile station_eu_code).\nRisultati del modello:\nstima effetti fissi ed effetti random\ncampo spde\nvariogramma spazio temporale, serie osservate vs residui\nanalisi dei residui del modello\nesempio di serie ricostruite dal modello: serie di training non di validazione!\ncodice del modello\n\n\n\n",
+    "contents": "\nTenendo conto dei risultati ottenuti sulle singole serie mediante l’applicazione di auto.arima del pacchetto forecast, e’ stato fittato un modello con iid su SPDE.\nIl modello inoltre presenta:\nl’effetto (lineare) della concentrazione dell’inquinante nel giorno precedente (variabile pvalue ovvero previous value)\nl’effetto lineare del giorno (variabile day)\nl’effetto non lineare (rw1) del giorno della settimana (variabile wday)\nun random effect sulle centraline (iid sulla variabile station_eu_code). Si e’ provato lo stesso modello anche senza iid su station_eu_code e i risultati (il range dell’spde) sono pressoche’ analoghi.\nRisultati del modello:\nstima effetti fissi ed effetti random\ncampo spde\nvariogramma spazio temporale, serie osservate vs residui\nanalisi dei residui del modello\nesempio di serie ricostruite dal modello: serie di training non di validazione!\ncodice del modello\n\n\n\n",
     "preview": {},
-    "last_modified": "2021-03-02T15:55:00+01:00",
+    "last_modified": "2021-03-03T13:19:13+01:00",
     "input_file": {}
   },
   {

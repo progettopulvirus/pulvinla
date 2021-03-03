@@ -117,7 +117,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["analisi-covariate.html","analisi-residui-modello.html","codice-modello-prima-versione.html","dati_lombardia.RDS","disegnaVariogramma.html","risultati-spde.html","serieFittate.html"]}
+  {"type":"character","attributes":{},"value":["analisi-covariate.html","analisi-residui-modello.html","codice-modello-prima-versione.html","disegnaVariogramma.html","no2-lombardia-modello-con-iid-su-spde-e-stationeucode_files/anchor-4.2.2/anchor.min.js","no2-lombardia-modello-con-iid-su-spde-e-stationeucode_files/bowser-1.9.3/bowser.min.js","no2-lombardia-modello-con-iid-su-spde-e-stationeucode_files/distill-2.2.21/template.v2.js","no2-lombardia-modello-con-iid-su-spde-e-stationeucode_files/header-attrs-2.6/header-attrs.js","no2-lombardia-modello-con-iid-su-spde-e-stationeucode_files/jquery-1.11.3/jquery.min.js","no2-lombardia-modello-con-iid-su-spde-e-stationeucode_files/popper-2.6.0/popper.min.js","no2-lombardia-modello-con-iid-su-spde-e-stationeucode_files/tippy-6.2.7/tippy-bundle.umd.min.js","no2-lombardia-modello-con-iid-su-spde-e-stationeucode_files/tippy-6.2.7/tippy-light-border.css","no2-lombardia-modello-con-iid-su-spde-e-stationeucode_files/tippy-6.2.7/tippy.css","no2-lombardia-modello-con-iid-su-spde-e-stationeucode_files/tippy-6.2.7/tippy.umd.min.js","no2-lombardia-modello-con-iid-su-spde-e-stationeucode_files/webcomponents-2.0.0/webcomponents.js","risultati-spde.html","serieFittate.html"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
 <meta name="distill:offset" content="../.."/>
@@ -2104,7 +2104,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <li><p>l’effetto (lineare) della concentrazione dell’inquinante nel giorno precedente (variabile <code>pvalue</code> ovvero previous value)</p></li>
 <li><p>l’effetto lineare del giorno (variabile <code>day</code>)</p></li>
 <li><p>l’effetto non lineare (rw1) del giorno della settimana (variabile <code>wday</code>)</p></li>
-<li><p>un random effect sulle centraline (iid sulla variabile <code>station_eu_code</code>).</p></li>
+<li><p>un random effect sulle centraline (iid sulla variabile <code>station_eu_code</code>). Si e’ provato lo stesso modello anche senza iid su <code>station_eu_code</code> e i risultati (il range dell’spde) sono pressoche’ analoghi.</p></li>
 </ul>
 <p>Risultati del modello:</p>
 <ul>
