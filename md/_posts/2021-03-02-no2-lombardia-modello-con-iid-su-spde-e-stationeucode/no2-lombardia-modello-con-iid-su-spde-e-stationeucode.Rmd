@@ -23,7 +23,7 @@ Il modello inoltre presenta:
 
 - l'effetto non lineare (rw1) del giorno della settimana (variabile `wday`)
 
-- un random effect sulle centraline (iid sulla variabile `station_eu_code`).
+- un random effect sulle centraline (iid sulla variabile `station_eu_code`). Si e' provato lo stesso modello anche senza iid su `station_eu_code` e i risultati (il range dell'spde) sono pressoche' analoghi.  
 
 Risultati del modello:
 
