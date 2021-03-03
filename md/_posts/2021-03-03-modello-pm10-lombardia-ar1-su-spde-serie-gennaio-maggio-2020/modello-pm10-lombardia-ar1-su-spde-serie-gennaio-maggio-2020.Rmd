@@ -31,24 +31,26 @@ Questo modello sull'intero periodo [gennaio-maggio 2020](./2020/analisi-covariat
 
 Entrambi i valori sono decisamente troppo alti, soprattutto se confrontati con i risultati dello stesso modello per gli anni [2019](./2019/analisi-covariate.html) e [2018](./2018/analisi-covariate.html) .
 
-Se per l'anno 2020 viene inserito un effetto non lineare sul giorno (rw1 su `say`) mantenendo un ar1 su spde si ottiene un campo spde con range e rho piu' bassi (si veda ad esempio [questo modello](https://progettopulvirus.github.io/pulvinla/posts/2021-03-03-pm10-lombardia-modello-con-pvalue-ar1-su-spde-rw1-su-day-e-stationeucode/)  che include anche la variabile `pvalue` ovveroo il valore del PM10 nel giorno precedente). **Il problema del rho molto alto su spde riguarda anche l'NO2 ma ne' l'uso dell'rw1 su `day` ne' l'uso del valore dell'inquinante nel giorno precedente risolve il problema.**   
+Se per l'anno 2020 viene inserito un effetto non lineare sul giorno (rw1 su `say`) mantenendo un ar1 su spde si ottiene un campo spde con range e rho piu' bassi (si veda ad esempio [questo modello](https://progettopulvirus.github.io/pulvinla/posts/2021-03-03-pm10-lombardia-modello-con-pvalue-ar1-su-spde-rw1-su-day-e-stationeucode/)  che include anche la variabile `pvalue` ovveroo il valore del PM10 nel giorno precedente). 
+
+**Il problema del rho molto alto su spde riguarda anche l'NO2 ma ne' l'uso dell'rw1 su `day` ne' l'uso del valore dell'inquinante nel giorno precedente risolve il problema.**   
 
 Per il PM10 il problema sembra essere il periodo aprile-maggio:
 
 - [risultati 2020](./aprile_maggio_2020/analisi-covariate.html): rho 0.52 e range 204 km 
 
-- [risultati 2019](./aprile_maggio_2019)
+- [risultati 2019](./aprile_maggio_2019/analisi-covariate.html): rho 0.41 e range 167 km
 
-- [risultati 2018](./aprile_maggio_2018) 
+- [risultati 2018](./aprile_maggio_2018/analisi-covariate.html): rho 0.54 e range 155 km
 
 
 Per il periodo gennaio-marzo:
 
-- [risultati 2020](gennaio_marzo_2020)
+- [risultati 2020](./gennaio_marzo_2020/analisi-covariate.html): rho 0.70 e range 124 km
 
-- [risultati 2019](gennaio_marzo_2019)
+- [risultati 2019](./gennaio_marzo_2019/analisi-covariate.html): rho 0.56 e range 131 km
 
-- [risultati 2018](gennaio_marzo_2018)
+- [risultati 2018](./gennaio_marzo_2018/analisi-covariate.html): rho 0.61 e range 151 km
 
 
 

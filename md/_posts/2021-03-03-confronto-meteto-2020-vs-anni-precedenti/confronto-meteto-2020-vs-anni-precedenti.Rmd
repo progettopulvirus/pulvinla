@@ -1,7 +1,7 @@
 ---
 title: "Confronto meteto 2020 vs anni precedenti"
 description: |
-  A short description of the post.
+  Serie marzo-maggio.
 author:
   - name: guidofioravanti
 date: 03-03-2021
@@ -24,6 +24,7 @@ theme_set(theme_bw())
 left_join(pm10,meteo, by = c("station_eu_code", "date"))->dati
 
 dati %>% 
+  mutate(dtr=tmax2m-tmin2m) %>%
   mutate(yy=as.character(yy)) %>%
   filter(mm %in% 1:5)->dati
 
@@ -68,14 +69,14 @@ boxplot_marzo_maggio<-function(.x){
 ```{r}
 c("t2m","tmax2m","tmin2m")->VARIABILI
 
-boxplot_gennaio_maggio(.x=VARIABILI)->listaGrafici
+#boxplot_gennaio_maggio(.x=VARIABILI)->listaGrafici
 boxplot_marzo_maggio(.x=VARIABILI)->listaGraficiMensili
 
 ```
 
 ### Temperatura 
 
-```{r,include=TRUE}
+```{r,include=TRUE,eval=FALSE}
 listaGrafici[[1]]+listaGrafici[[2]]+listaGrafici[[3]]
 ```
 
@@ -89,12 +90,12 @@ listaGraficiMensili[[1]]+listaGraficiMensili[[2]]+listaGraficiMensili[[3]]
 ```{r}
 c("pblmax","pblmin","pbl00","pbl12")->VARIABILI
 
-boxplot_gennaio_maggio(.x=VARIABILI)->listaGrafici
+#boxplot_gennaio_maggio(.x=VARIABILI)->listaGrafici
 boxplot_marzo_maggio(.x=VARIABILI)->listaGraficiMensili
 ```
 
 
-```{r,include=TRUE}
+```{r,include=TRUE,eval=FALSE}
 listaGrafici[[1]]+listaGrafici[[2]]+listaGrafici[[3]]+listaGrafici[[4]]
 ```
 
@@ -103,21 +104,26 @@ listaGrafici[[1]]+listaGrafici[[2]]+listaGrafici[[3]]+listaGrafici[[4]]
 listaGraficiMensili[[1]]+listaGraficiMensili[[2]]+listaGraficiMensili[[3]]+listaGraficiMensili[[4]]
 ```
 
-### 
+### Net Irradiance e DiurnalTemperature Range (DTR)
 
 ```{r}
-c("pblmax","pblmin","pbl00","pbl12")->VARIABILI
+c("nirradiance","dtr")->VARIABILI
 
-boxplot_gennaio_maggio(.x=VARIABILI)->listaGrafici
 boxplot_marzo_maggio(.x=VARIABILI)->listaGraficiMensili
 ```
 
-
 ```{r,include=TRUE}
-listaGrafici[[1]]+listaGrafici[[2]]+listaGrafici[[3]]+listaGrafici[[4]]
+listaGraficiMensili[[1]]+listaGraficiMensili[[2]]
 ```
 
+### Relative Humidity e Total precipitation
+
+```{r}
+c("rh","tp")->VARIABILI
+
+boxplot_marzo_maggio(.x=VARIABILI)->listaGraficiMensili
+```
 
 ```{r,include=TRUE}
-listaGraficiMensili[[1]]+listaGraficiMensili[[2]]+listaGraficiMensili[[3]]+listaGraficiMensili[[4]]
+listaGraficiMensili[[1]]+listaGraficiMensili[[2]]
 ```
