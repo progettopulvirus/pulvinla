@@ -17,6 +17,23 @@
     "input_file": {}
   },
   {
+    "path": "posts/2021-03-03-pm10-lombardia-modello-con-pvalue-ar1-su-spde-rw1-su-day-e-stationeucode/",
+    "title": "PM10 Lombardia, modello con pvalue, ar1 su spde, rw1 su day e station_eu_code",
+    "description": "Serie Lombardia, gennaio-maggio 2020.",
+    "author": [
+      {
+        "name": "guidofioravanti",
+        "url": {}
+      }
+    ],
+    "date": "2021-03-03",
+    "categories": [],
+    "contents": "\nTenendo conto dei risultati ottenuti sulle singole serie mediante l’applicazione di auto.arima del pacchetto forecast, e’ stato fittato un modello con ar1 su SPDE.\nIl modello inoltre presenta:\nl’effetto (lineare) della concentrazione dell’inquinante nel giorno precedente (variabile pvalue ovvero previous value)\nl’effetto non lineare (rw1) del giorno (variabile day)\nl’effetto non lineare (rw1) del giorno della settimana (variabile wday)\nun random effect sulle centraline (iid sulla variabile station_eu_code).\nRisultati del modello:\nstima effetti fissi ed effetti random\ncampo spde\nvariogramma spazio temporale, serie osservate vs residui\nanalisi dei residui del modello\nesempio di serie ricostruite dal modello: serie di training non di validazione!\ncodice del modello\n\n\n\n",
+    "preview": {},
+    "last_modified": "2021-03-03T10:35:26+01:00",
+    "input_file": {}
+  },
+  {
     "path": "posts/2021-03-02-arimax-no2-con-pvalue/",
     "title": "ARIMAX serie NO2, gennaio-maggio 2020 ",
     "description": "Stima modello arimax utilizzando il valore dell'inquinante del giorno precedente.",
