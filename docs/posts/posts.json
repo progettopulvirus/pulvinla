@@ -1,5 +1,22 @@
 [
   {
+    "path": "posts/2021-03-05-no2-lombardia-modello-con-spde-fisso/",
+    "title": "NO2 Lombardia, modello con spde fisso",
+    "description": "Sintesti risultati preliminari.",
+    "author": [
+      {
+        "name": "guidofioravanti",
+        "url": {}
+      }
+    ],
+    "date": "2021-03-05",
+    "categories": [],
+    "contents": "\n\n\n\nQuesto modello include due componenti spde fisse:\nuna componente che rappresenta l’effetto medio spaziale\nuna componente che rappresenta l’effetto medio spaziale durante il lockdown\nIl trend decrescente viene rappresentato mediante una componente lineare o mediante una componente rw1 (variabile day).\nAl momento il modello non include l’interazione effetto lockdown/trend lineare.\nRisultati generali\nResidui modello\nVariogramma spazio-temporale\nspde senza lockdown\nspde con lockdown\nserie fittate\n\n\n\n",
+    "preview": "posts/2021-03-05-no2-lombardia-modello-con-spde-fisso/distill-preview.png",
+    "last_modified": "2021-03-05T13:10:27+01:00",
+    "input_file": {}
+  },
+  {
     "path": "posts/2021-03-03-confronto-meteo-2020-vs-anni-precedenti/",
     "title": "Confronto meteo 2020 vs anni precedenti",
     "description": "Serie marzo-maggio.",
