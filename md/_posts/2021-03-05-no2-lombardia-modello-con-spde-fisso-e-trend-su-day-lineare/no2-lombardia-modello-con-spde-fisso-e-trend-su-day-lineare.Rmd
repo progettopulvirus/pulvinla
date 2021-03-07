@@ -1,7 +1,7 @@
 ---
 title: "NO2 Lombardia, modello con spde fisso e trend su day lineare"
 description: |
-  Sintesti risultati preliminari.
+  Sintesi risultati preliminari.
 author:
   - name: guidofioravanti
 date: 03-05-2021

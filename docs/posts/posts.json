@@ -11,15 +11,15 @@
     ],
     "date": "2021-03-07",
     "categories": [],
-    "contents": "\n\n\n\nQuesto modello include due componenti spde fisse:\nuna componente che rappresenta l’effetto medio spaziale\nuna componente che rappresenta l’effetto medio spaziale durante il lockdown\nIl trend decrescente viene rappresentato mediante una componente lineare (variabile day). L’obiettivo e’ capire quanta della variabilita’ temporale viene spiegata da wday (rw1) e dal valore dell’inquinante nel giorno prima.\nAl momento il modello non include l’interazione effetto lockdown/trend lineare.\nRisultati generali\nResidui modello\nVariogramma spazio-temporale\nspde senza lockdown\nspde con lockdown\nserie fittate\n\n\n\n",
-    "preview": "posts/2021-03-07-pm10-lombardia-modello-con-spde-fisso-e-trend-su-day-lineare-seno-e-coseno/../../_assets/sara.png",
-    "last_modified": "2021-03-07T11:41:17+01:00",
+    "contents": "\n\n\n\nQuesto modello include due componenti spde fisse:\nuna componente che rappresenta l’effetto medio spaziale\nuna componente che rappresenta l’effetto medio spaziale durante il lockdown\nIl trend decrescente viene rappresentato mediante una componente lineare (variabile day). Seno e coseno descrivono i cicli settimanali.\nAl momento il modello non include l’interazione effetto lockdown/trend lineare.\nRisultati generali\nResidui modello\nVariogramma spazio-temporale\nspde senza lockdown\nspde con lockdown\nserie fittate\n\n\n\n",
+    "preview": "posts/2021-03-07-pm10-lombardia-modello-con-spde-fisso-e-trend-su-day-lineare-seno-e-coseno/distill-preview.png",
+    "last_modified": "2021-03-07T12:42:42+01:00",
     "input_file": {}
   },
   {
     "path": "posts/2021-03-05-no2-lombardia-modello-con-spde-fisso-e-trend-su-day-lineare/",
     "title": "NO2 Lombardia, modello con spde fisso e trend su day lineare",
-    "description": "Sintesti risultati preliminari.",
+    "description": "Sintesi risultati preliminari.",
     "author": [
       {
         "name": "guidofioravanti",
@@ -30,13 +30,13 @@
     "categories": [],
     "contents": "\n\n\n\nQuesto modello include due componenti spde fisse:\nuna componente che rappresenta l’effetto medio spaziale\nuna componente che rappresenta l’effetto medio spaziale durante il lockdown\nIl trend decrescente viene rappresentato mediante una componente lineare (variabile day). L’obiettivo e’ capire quanta della variabilita’ temporale viene spiegata da rw1 su wday e dal valore dell’inquinante nel giorno prima.\nAl momento il modello non include l’interazione effetto lockdown/trend lineare.\nRisultati generali\nResidui modello\nVariogramma spazio-temporale\nspde senza lockdown\nspde con lockdown\nserie fittate\n\n\n\n",
     "preview": "posts/2021-03-05-no2-lombardia-modello-con-spde-fisso-e-trend-su-day-lineare/distill-preview.png",
-    "last_modified": "2021-03-05T16:07:50+01:00",
+    "last_modified": "2021-03-07T13:08:26+01:00",
     "input_file": {}
   },
   {
     "path": "posts/2021-03-05-no2-lombardia-modello-con-spde-fisso/",
     "title": "NO2 Lombardia, modello con spde fisso",
-    "description": "Sintesti risultati preliminari.",
+    "description": "Sintesi risultati preliminari.",
     "author": [
       {
         "name": "guidofioravanti",
@@ -47,13 +47,13 @@
     "categories": [],
     "contents": "\n\n\n\nQuesto modello include due componenti spde fisse:\nuna componente che rappresenta l’effetto medio spaziale\nuna componente che rappresenta l’effetto medio spaziale durante il lockdown\nIl trend decrescente viene rappresentato mediante una componente lineare o mediante una componente rw1 (variabile day).\nAl momento il modello non include l’interazione effetto lockdown/trend lineare.\nRisultati generali\nResidui modello\nVariogramma spazio-temporale\nspde senza lockdown\nspde con lockdown\nserie fittate\n\n\n\n",
     "preview": "posts/2021-03-05-no2-lombardia-modello-con-spde-fisso/distill-preview.png",
-    "last_modified": "2021-03-05T13:10:27+01:00",
+    "last_modified": "2021-03-07T13:10:11+01:00",
     "input_file": {}
   },
   {
     "path": "posts/2021-03-05-pm10-lombardia-modello-con-spde-fisso-e-trend-su-day-lineare-rw1-su-wday/",
     "title": "PM10 Lombardia, modello con spde fisso e trend su day lineare, rw1 su wday",
-    "description": "Sintesti risultati preliminari.",
+    "description": "Sintesi risultati preliminari.",
     "author": [
       {
         "name": "guidofioravanti",
@@ -64,13 +64,13 @@
     "categories": [],
     "contents": "\n\n\n\nQuesto modello include due componenti spde fisse:\nuna componente che rappresenta l’effetto medio spaziale\nuna componente che rappresenta l’effetto medio spaziale durante il lockdown\nIl trend decrescente viene rappresentato mediante una componente lineare (variabile day). L’obiettivo e’ capire quanta della variabilita’ temporale viene spiegata da wday (rw1) e dal valore dell’inquinante nel giorno prima.\nAl momento il modello non include l’interazione effetto lockdown/trend lineare.\nRisultati generali\nResidui modello\nVariogramma spazio-temporale\nspde senza lockdown\nspde con lockdown\nserie fittate\n\n\n\n",
     "preview": "posts/2021-03-05-pm10-lombardia-modello-con-spde-fisso-e-trend-su-day-lineare-rw1-su-wday/distill-preview.png",
-    "last_modified": "2021-03-05T16:14:36+01:00",
+    "last_modified": "2021-03-07T13:04:17+01:00",
     "input_file": {}
   },
   {
     "path": "posts/2021-03-05-pm10-lombardia-modello-con-spde-fisso-e-trend-su-day-lineare/",
     "title": "PM10 Lombardia, modello con spde fisso e trend su day lineare",
-    "description": "Sintesti risultati preliminari.",
+    "description": "Sintesi risultati preliminari.",
     "author": [
       {
         "name": "guidofioravanti",
@@ -81,13 +81,13 @@
     "categories": [],
     "contents": "\n\n\n\nQuesto modello include due componenti spde fisse:\nuna componente che rappresenta l’effetto medio spaziale\nuna componente che rappresenta l’effetto medio spaziale durante il lockdown\nIl trend decrescente viene rappresentato mediante una componente lineare (variabile day). L’obiettivo e’ capire quanta della variabilita’ temporale viene spiegata da wday (effetto lineare) e dal valore dell’inquinante nel giorno prima.\nAl momento il modello non include l’interazione effetto lockdown/trend lineare.\nRisultati generali\nResidui modello\nVariogramma spazio-temporale\nspde senza lockdown\nspde con lockdown\nserie fittate\n\n\n\n",
     "preview": "posts/2021-03-05-pm10-lombardia-modello-con-spde-fisso-e-trend-su-day-lineare/distill-preview.png",
-    "last_modified": "2021-03-05T16:11:25+01:00",
+    "last_modified": "2021-03-07T13:04:04+01:00",
     "input_file": {}
   },
   {
     "path": "posts/2021-03-05-pm10-lombardia-modello-con-spde-fisso/",
     "title": "PM10 Lombardia, modello con spde fisso",
-    "description": "Sintesti risultati preliminari.",
+    "description": "Sintesi risultati preliminari.",
     "author": [
       {
         "name": "guidofioravanti",
@@ -98,7 +98,7 @@
     "categories": [],
     "contents": "\n\n\n\nQuesto modello include due componenti spde fisse:\nuna componente che rappresenta l’effetto medio spaziale\nuna componente che rappresenta l’effetto medio spaziale durante il lockdown\nIl trend decrescente viene rappresentato mediante una componente lineare o mediante una componente rw1 (variabile day).\nAl momento il modello non include l’interazione effetto lockdown/trend lineare.\nRisultati generali\nResidui modello\nVariogramma spazio-temporale\nspde senza lockdown\nspde con lockdown\nserie fittate\n\n\n\n",
     "preview": "posts/2021-03-05-pm10-lombardia-modello-con-spde-fisso/distill-preview.png",
-    "last_modified": "2021-03-05T13:34:29+01:00",
+    "last_modified": "2021-03-07T13:06:10+01:00",
     "input_file": {}
   },
   {

@@ -7,7 +7,7 @@ author:
 date: 03-07-2021
 output:
   distill::distill_article:
-    self_contained: false
+    self_contained: true
 ---
 
 ```{r,fig.width=6,include=TRUE,echo=FALSE,message=FALSE,warning=FALSE}
@@ -20,7 +20,8 @@ Questo modello include due componenti spde fisse:
 
 - una componente che rappresenta l'effetto medio spaziale durante il lockdown
 
-Il trend decrescente viene rappresentato mediante una componente lineare (variabile `day`). L'obiettivo e' capire quanta della variabilita' temporale viene spiegata da `wday` (rw1) e dal valore dell'inquinante nel giorno prima.
+Il trend decrescente viene rappresentato mediante una componente lineare (variabile `day`).
+Seno e coseno descrivono i cicli settimanali.
 
 **Al momento il modello non include l'interazione effetto lockdown/trend lineare**.
 
