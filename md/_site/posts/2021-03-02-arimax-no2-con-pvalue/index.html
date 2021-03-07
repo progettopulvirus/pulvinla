@@ -1,0 +1,3252 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
+  <meta name="generator" content="distill" />
+
+  <style type="text/css">
+  /* Hide doc at startup (prevent jankiness while JS renders/transforms) */
+  body {
+    visibility: hidden;
+  }
+  </style>
+
+ <!--radix_placeholder_import_source-->
+ <!--/radix_placeholder_import_source-->
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ad0000; } /* Alert */
+code span.an { color: #5e5e5e; } /* Annotation */
+code span.at { color: #20794d; } /* Attribute */
+code span.bn { color: #ad0000; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007ba5; } /* ControlFlow */
+code span.ch { color: #20794d; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #5e5e5e; } /* Comment */
+code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+code span.dt { color: #ad0000; } /* DataType */
+code span.dv { color: #ad0000; } /* DecVal */
+code span.er { color: #ad0000; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #ad0000; } /* Float */
+code span.fu { color: #4758ab; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #5e5e5e; } /* Information */
+code span.kw { color: #007ba5; } /* Keyword */
+code span.op { color: #5e5e5e; } /* Operator */
+code span.ot { color: #007ba5; } /* Other */
+code span.pp { color: #ad0000; } /* Preprocessor */
+code span.sc { color: #20794d; } /* SpecialChar */
+code span.ss { color: #20794d; } /* SpecialString */
+code span.st { color: #20794d; } /* String */
+code span.va { color: #111111; } /* Variable */
+code span.vs { color: #20794d; } /* VerbatimString */
+code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+</style>
+
+  <!--radix_placeholder_meta_tags-->
+<title>pulvinla: ARIMAX serie NO2, gennaio-maggio 2020 </title>
+
+<meta property="description" itemprop="description" content="Stima modello arimax utilizzando il valore dell&#39;inquinante del giorno precedente."/>
+
+
+<!--  https://schema.org/Article -->
+<meta property="article:published" itemprop="datePublished" content="2021-03-02"/>
+<meta property="article:created" itemprop="dateCreated" content="2021-03-02"/>
+<meta name="article:author" content="guidofioravanti"/>
+
+<!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
+<meta property="og:title" content="pulvinla: ARIMAX serie NO2, gennaio-maggio 2020 "/>
+<meta property="og:type" content="article"/>
+<meta property="og:description" content="Stima modello arimax utilizzando il valore dell&#39;inquinante del giorno precedente."/>
+<meta property="og:locale" content="en_US"/>
+<meta property="og:site_name" content="pulvinla"/>
+
+<!--  https://dev.twitter.com/cards/types/summary -->
+<meta property="twitter:card" content="summary"/>
+<meta property="twitter:title" content="pulvinla: ARIMAX serie NO2, gennaio-maggio 2020 "/>
+<meta property="twitter:description" content="Stima modello arimax utilizzando il valore dell&#39;inquinante del giorno precedente."/>
+
+<!--/radix_placeholder_meta_tags-->
+  <!--radix_placeholder_rmarkdown_metadata-->
+
+<script type="text/json" id="radix-rmarkdown-metadata">
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","params","output"]}},"value":[{"type":"character","attributes":{},"value":["ARIMAX serie NO2, gennaio-maggio 2020 "]},{"type":"character","attributes":{},"value":["Stima modello arimax utilizzando il valore dell'inquinante del giorno precedente."]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name"]}},"value":[{"type":"character","attributes":{},"value":["guidofioravanti"]}]}]},{"type":"character","attributes":{},"value":["03-02-2021"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["inquinante"]}},"value":[{"type":"character","attributes":{},"value":["no2"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[false]}]}]}]}
+</script>
+<!--/radix_placeholder_rmarkdown_metadata-->
+  
+  <script type="text/json" id="radix-resource-manifest">
+  {"type":"character","attributes":{},"value":["arimax-no2-con-pvalue_files/anchor-4.2.2/anchor.min.js","arimax-no2-con-pvalue_files/bowser-1.9.3/bowser.min.js","arimax-no2-con-pvalue_files/distill-2.2.21/template.v2.js","arimax-no2-con-pvalue_files/header-attrs-2.6/header-attrs.js","arimax-no2-con-pvalue_files/jquery-1.11.3/jquery.min.js","arimax-no2-con-pvalue_files/popper-2.6.0/popper.min.js","arimax-no2-con-pvalue_files/tippy-6.2.7/tippy-bundle.umd.min.js","arimax-no2-con-pvalue_files/tippy-6.2.7/tippy-light-border.css","arimax-no2-con-pvalue_files/tippy-6.2.7/tippy.css","arimax-no2-con-pvalue_files/tippy-6.2.7/tippy.umd.min.js","arimax-no2-con-pvalue_files/webcomponents-2.0.0/webcomponents.js"]}
+  </script>
+  <!--radix_placeholder_navigation_in_header-->
+<meta name="distill:offset" content="../.."/>
+
+<script type="application/javascript">
+
+  window.headroom_prevent_pin = false;
+
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+
+    // initialize headroom for banner
+    var header = $('header').get(0);
+    var headerHeight = header.offsetHeight;
+    var headroom = new Headroom(header, {
+      tolerance: 5,
+      onPin : function() {
+        if (window.headroom_prevent_pin) {
+          window.headroom_prevent_pin = false;
+          headroom.unpin();
+        }
+      }
+    });
+    headroom.init();
+    if(window.location.hash)
+      headroom.unpin();
+    $(header).addClass('headroom--transition');
+
+    // offset scroll location for banner on hash change
+    // (see: https://github.com/WickyNilliams/headroom.js/issues/38)
+    window.addEventListener("hashchange", function(event) {
+      window.scrollTo(0, window.pageYOffset - (headerHeight + 25));
+    });
+
+    // responsive menu
+    $('.distill-site-header').each(function(i, val) {
+      var topnav = $(this);
+      var toggle = topnav.find('.nav-toggle');
+      toggle.on('click', function() {
+        topnav.toggleClass('responsive');
+      });
+    });
+
+    // nav dropdowns
+    $('.nav-dropbtn').click(function(e) {
+      $(this).next('.nav-dropdown-content').toggleClass('nav-dropdown-active');
+      $(this).parent().siblings('.nav-dropdown')
+         .children('.nav-dropdown-content').removeClass('nav-dropdown-active');
+    });
+    $("body").click(function(e){
+      $('.nav-dropdown-content').removeClass('nav-dropdown-active');
+    });
+    $(".nav-dropdown").click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+
+<style type="text/css">
+
+/* Theme (user-documented overrideables for nav appearance) */
+
+.distill-site-nav {
+  color: rgba(255, 255, 255, 0.8);
+  background-color: #0F2E3D;
+  font-size: 15px;
+  font-weight: 300;
+}
+
+.distill-site-nav a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.distill-site-nav a:hover {
+  color: white;
+}
+
+@media print {
+  .distill-site-nav {
+    display: none;
+  }
+}
+
+.distill-site-header {
+
+}
+
+.distill-site-footer {
+
+}
+
+
+/* Site Header */
+
+.distill-site-header {
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 3;
+}
+
+.distill-site-header .nav-left {
+  display: inline-block;
+  margin-left: 8px;
+}
+
+@media screen and (max-width: 768px) {
+  .distill-site-header .nav-left {
+    margin-left: 0;
+  }
+}
+
+
+.distill-site-header .nav-right {
+  float: right;
+  margin-right: 8px;
+}
+
+.distill-site-header a,
+.distill-site-header .title {
+  display: inline-block;
+  text-align: center;
+  padding: 14px 10px 14px 10px;
+}
+
+.distill-site-header .title {
+  font-size: 18px;
+  min-width: 150px;
+}
+
+.distill-site-header .logo {
+  padding: 0;
+}
+
+.distill-site-header .logo img {
+  display: none;
+  max-height: 20px;
+  width: auto;
+  margin-bottom: -4px;
+}
+
+.distill-site-header .nav-image img {
+  max-height: 18px;
+  width: auto;
+  display: inline-block;
+  margin-bottom: -3px;
+}
+
+
+
+@media screen and (min-width: 1000px) {
+  .distill-site-header .logo img {
+    display: inline-block;
+  }
+  .distill-site-header .nav-left {
+    margin-left: 20px;
+  }
+  .distill-site-header .nav-right {
+    margin-right: 20px;
+  }
+  .distill-site-header .title {
+    padding-left: 12px;
+  }
+}
+
+
+.distill-site-header .nav-toggle {
+  display: none;
+}
+
+.nav-dropdown {
+  display: inline-block;
+  position: relative;
+}
+
+.nav-dropdown .nav-dropbtn {
+  border: none;
+  outline: none;
+  color: rgba(255, 255, 255, 0.8);
+  padding: 16px 10px;
+  background-color: transparent;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  margin: 0;
+  margin-top: 1px;
+  z-index: 2;
+}
+
+.nav-dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: white;
+  min-width: 200px;
+  border: 1px solid rgba(0,0,0,0.15);
+  border-radius: 4px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1);
+  z-index: 1;
+  margin-top: 2px;
+  white-space: nowrap;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.nav-dropdown-content hr {
+  margin-top: 4px;
+  margin-bottom: 4px;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.nav-dropdown-active {
+  display: block;
+}
+
+.nav-dropdown-content a, .nav-dropdown-content .nav-dropdown-header {
+  color: black;
+  padding: 6px 24px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.nav-dropdown-content .nav-dropdown-header {
+  display: block;
+  padding: 5px 24px;
+  padding-bottom: 0;
+  text-transform: uppercase;
+  font-size: 14px;
+  color: #999999;
+  white-space: nowrap;
+}
+
+.nav-dropdown:hover .nav-dropbtn {
+  color: white;
+}
+
+.nav-dropdown-content a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.nav-right .nav-dropdown-content {
+  margin-left: -45%;
+  right: 0;
+}
+
+@media screen and (max-width: 768px) {
+  .distill-site-header a, .distill-site-header .nav-dropdown  {display: none;}
+  .distill-site-header a.nav-toggle {
+    float: right;
+    display: block;
+  }
+  .distill-site-header .title {
+    margin-left: 0;
+  }
+  .distill-site-header .nav-right {
+    margin-right: 0;
+  }
+  .distill-site-header {
+    overflow: hidden;
+  }
+  .nav-right .nav-dropdown-content {
+    margin-left: 0;
+  }
+}
+
+
+@media screen and (max-width: 768px) {
+  .distill-site-header.responsive {position: relative; min-height: 500px; }
+  .distill-site-header.responsive a.nav-toggle {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .distill-site-header.responsive a,
+  .distill-site-header.responsive .nav-dropdown {
+    display: block;
+    text-align: left;
+  }
+  .distill-site-header.responsive .nav-left,
+  .distill-site-header.responsive .nav-right {
+    width: 100%;
+  }
+  .distill-site-header.responsive .nav-dropdown {float: none;}
+  .distill-site-header.responsive .nav-dropdown-content {position: relative;}
+  .distill-site-header.responsive .nav-dropdown .nav-dropbtn {
+    display: block;
+    width: 100%;
+    text-align: left;
+  }
+}
+
+/* Site Footer */
+
+.distill-site-footer {
+  width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+  z-index: 3;
+  margin-top: 30px;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  text-align: center;
+}
+
+/* Headroom */
+
+d-title {
+  padding-top: 6rem;
+}
+
+@media print {
+  d-title {
+    padding-top: 4rem;
+  }
+}
+
+.headroom {
+  z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.headroom--transition {
+  transition: all .4s ease-in-out;
+}
+
+.headroom--unpinned {
+  top: -100px;
+}
+
+.headroom--pinned {
+  top: 0;
+}
+
+/* adjust viewport for navbar height */
+/* helps vertically center bootstrap (non-distill) content */
+.min-vh-100 {
+  min-height: calc(100vh - 100px) !important;
+}
+
+</style>
+
+<script src="../../site_libs/jquery-1.11.3/jquery.min.js"></script>
+<link href="../../site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet"/>
+<link href="../../site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet"/>
+<script src="../../site_libs/headroom-0.9.4/headroom.min.js"></script>
+<script src="../../site_libs/autocomplete-0.37.1/autocomplete.min.js"></script>
+<script src="../../site_libs/fuse-6.4.1/fuse.min.js"></script>
+
+<script type="application/javascript">
+
+function getMeta(metaName) {
+  var metas = document.getElementsByTagName('meta');
+  for (let i = 0; i < metas.length; i++) {
+    if (metas[i].getAttribute('name') === metaName) {
+      return metas[i].getAttribute('content');
+    }
+  }
+  return '';
+}
+
+function offsetURL(url) {
+  var offset = getMeta('distill:offset');
+  return offset ? offset + '/' + url : url;
+}
+
+function createFuseIndex() {
+
+  // create fuse index
+  var options = {
+    keys: [
+      { name: 'title', weight: 20 },
+      { name: 'categories', weight: 15 },
+      { name: 'description', weight: 10 },
+      { name: 'contents', weight: 5 },
+    ],
+    ignoreLocation: true,
+    threshold: 0
+  };
+  var fuse = new window.Fuse([], options);
+
+  // fetch the main search.json
+  return fetch(offsetURL('search.json'))
+    .then(function(response) {
+      if (response.status == 200) {
+        return response.json().then(function(json) {
+          // index main articles
+          json.articles.forEach(function(article) {
+            fuse.add(article);
+          });
+          // download collections and index their articles
+          return Promise.all(json.collections.map(function(collection) {
+            return fetch(offsetURL(collection)).then(function(response) {
+              if (response.status === 200) {
+                return response.json().then(function(articles) {
+                  articles.forEach(function(article) {
+                    fuse.add(article);
+                  });
+                })
+              } else {
+                return Promise.reject(
+                  new Error('Unexpected status from search index request: ' +
+                            response.status)
+                );
+              }
+            });
+          })).then(function() {
+            return fuse;
+          });
+        });
+
+      } else {
+        return Promise.reject(
+          new Error('Unexpected status from search index request: ' +
+                      response.status)
+        );
+      }
+    });
+}
+
+window.document.addEventListener("DOMContentLoaded", function (event) {
+
+  // get search element (bail if we don't have one)
+  var searchEl = window.document.getElementById('distill-search');
+  if (!searchEl)
+    return;
+
+  createFuseIndex()
+    .then(function(fuse) {
+
+      // make search box visible
+      searchEl.classList.remove('hidden');
+
+      // initialize autocomplete
+      var options = {
+        autoselect: true,
+        hint: false,
+        minLength: 2,
+      };
+      window.autocomplete(searchEl, options, [{
+        source: function(query, callback) {
+          const searchOptions = {
+            isCaseSensitive: false,
+            shouldSort: true,
+            minMatchCharLength: 2,
+            limit: 10,
+          };
+          var results = fuse.search(query, searchOptions);
+          callback(results
+            .map(function(result) { return result.item; })
+          );
+        },
+        templates: {
+          suggestion: function(suggestion) {
+            var img = suggestion.preview && Object.keys(suggestion.preview).length > 0
+              ? `<img src="${offsetURL(suggestion.preview)}"</img>`
+              : '';
+            var html = `
+              <div class="search-item">
+                <h3>${suggestion.title}</h3>
+                <div class="search-item-description">
+                  ${suggestion.description || ''}
+                </div>
+                <div class="search-item-preview">
+                  ${img}
+                </div>
+              </div>
+            `;
+            return html;
+          }
+        }
+      }]).on('autocomplete:selected', function(event, suggestion) {
+        window.location.href = offsetURL(suggestion.path);
+      });
+      // remove inline display style on autocompleter (we want to
+      // manage responsive display via css)
+      $('.algolia-autocomplete').css("display", "");
+    })
+    .catch(function(error) {
+      console.log(error);
+    });
+
+});
+
+</script>
+
+<style type="text/css">
+
+.nav-search {
+  font-size: x-small;
+}
+
+/* Algolioa Autocomplete */
+
+.algolia-autocomplete {
+  display: inline-block;
+  margin-left: 10px;
+  vertical-align: sub;
+  background-color: white;
+  color: black;
+  padding: 6px;
+  padding-top: 8px;
+  padding-bottom: 0;
+  border-radius: 6px;
+  border: 1px #0F2E3D solid;
+  width: 180px;
+}
+
+
+@media screen and (max-width: 768px) {
+  .distill-site-nav .algolia-autocomplete {
+    display: none;
+    visibility: hidden;
+  }
+  .distill-site-nav.responsive .algolia-autocomplete {
+    display: inline-block;
+    visibility: visible;
+  }
+  .distill-site-nav.responsive .algolia-autocomplete .aa-dropdown-menu {
+    margin-left: 0;
+    width: 400px;
+    max-height: 400px;
+  }
+}
+
+.algolia-autocomplete .aa-input, .algolia-autocomplete .aa-hint {
+  width: 90%;
+  outline: none;
+  border: none;
+}
+
+.algolia-autocomplete .aa-hint {
+  color: #999;
+}
+.algolia-autocomplete .aa-dropdown-menu {
+  width: 550px;
+  max-height: 70vh;
+  overflow-x: visible;
+  overflow-y: scroll;
+  padding: 5px;
+  margin-top: 3px;
+  margin-left: -150px;
+  background-color: #fff;
+  border-radius: 5px;
+  border: 1px solid #999;
+  border-top: none;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion {
+  cursor: pointer;
+  padding: 5px 4px;
+  border-bottom: 1px solid #eee;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion:last-of-type {
+  border-bottom: none;
+  margin-bottom: 2px;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item {
+  overflow: hidden;
+  font-size: 0.8em;
+  line-height: 1.4em;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item h3 {
+  font-size: 1rem;
+  margin-block-start: 0;
+  margin-block-end: 5px;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-description {
+  display: inline-block;
+  overflow: hidden;
+  height: 2.8em;
+  width: 80%;
+  margin-right: 4%;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-preview {
+  display: inline-block;
+  width: 15%;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-preview img {
+  height: 3em;
+  width: auto;
+  display: none;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-preview img[src] {
+  display: initial;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion.aa-cursor {
+  background-color: #eee;
+}
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion em {
+  font-weight: bold;
+  font-style: normal;
+}
+
+</style>
+
+
+<!--/radix_placeholder_navigation_in_header-->
+  <!--radix_placeholder_distill-->
+
+<style type="text/css">
+
+body {
+  background-color: white;
+}
+
+.pandoc-table {
+  width: 100%;
+}
+
+.pandoc-table>caption {
+  margin-bottom: 10px;
+}
+
+.pandoc-table th:not([align]) {
+  text-align: left;
+}
+
+.pagedtable-footer {
+  font-size: 15px;
+}
+
+d-byline .byline {
+  grid-template-columns: 2fr 2fr;
+}
+
+d-byline .byline h3 {
+  margin-block-start: 1.5em;
+}
+
+d-byline .byline .authors-affiliations h3 {
+  margin-block-start: 0.5em;
+}
+
+.authors-affiliations .orcid-id {
+  width: 16px;
+  height:16px;
+  margin-left: 4px;
+  margin-right: 4px;
+  vertical-align: middle;
+  padding-bottom: 2px;
+}
+
+d-title .dt-tags {
+  margin-top: 1em;
+  grid-column: text;
+}
+
+.dt-tags .dt-tag {
+  text-decoration: none;
+  display: inline-block;
+  color: rgba(0,0,0,0.6);
+  padding: 0em 0.4em;
+  margin-right: 0.5em;
+  margin-bottom: 0.4em;
+  font-size: 70%;
+  border: 1px solid rgba(0,0,0,0.2);
+  border-radius: 3px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+d-article table.gt_table td,
+d-article table.gt_table th {
+  border-bottom: none;
+}
+
+.html-widget {
+  margin-bottom: 2.0em;
+}
+
+.l-screen-inset {
+  padding-right: 16px;
+}
+
+.l-screen .caption {
+  margin-left: 10px;
+}
+
+.shaded {
+  background: rgb(247, 247, 247);
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.shaded .html-widget {
+  margin-bottom: 0;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.shaded .shaded-content {
+  background: white;
+}
+
+.text-output {
+  margin-top: 0;
+  line-height: 1.5em;
+}
+
+.hidden {
+  display: none !important;
+}
+
+d-article {
+  padding-top: 2.5rem;
+  padding-bottom: 30px;
+}
+
+d-appendix {
+  padding-top: 30px;
+}
+
+d-article>p>img {
+  width: 100%;
+}
+
+d-article h2 {
+  margin: 1rem 0 1.5rem 0;
+}
+
+d-article h3 {
+  margin-top: 1.5rem;
+}
+
+d-article iframe {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  margin-bottom: 2.0em;
+  width: 100%;
+}
+
+/* Tweak code blocks */
+
+d-article div.sourceCode code,
+d-article pre code {
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+}
+
+d-article pre,
+d-article div.sourceCode,
+d-article div.sourceCode pre {
+  overflow: auto;
+}
+
+d-article div.sourceCode {
+  background-color: white;
+}
+
+d-article div.sourceCode pre {
+  padding-left: 10px;
+  font-size: 12px;
+  border-left: 2px solid rgba(0,0,0,0.1);
+}
+
+d-article pre {
+  font-size: 12px;
+  color: black;
+  background: none;
+  margin-top: 0;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.5;
+
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+d-article pre a {
+  border-bottom: none;
+}
+
+d-article pre a:hover {
+  border-bottom: none;
+  text-decoration: underline;
+}
+
+d-article details {
+  grid-column: text;
+  margin-bottom: 0.8em;
+}
+
+@media(min-width: 768px) {
+
+d-article pre,
+d-article div.sourceCode,
+d-article div.sourceCode pre {
+  overflow: visible !important;
+}
+
+d-article div.sourceCode pre {
+  padding-left: 18px;
+  font-size: 14px;
+}
+
+d-article pre {
+  font-size: 14px;
+}
+
+}
+
+figure img.external {
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+  padding: 18px;
+  box-sizing: border-box;
+}
+
+/* CSS for d-contents */
+
+.d-contents {
+  grid-column: text;
+  color: rgba(0,0,0,0.8);
+  font-size: 0.9em;
+  padding-bottom: 1em;
+  margin-bottom: 1em;
+  padding-bottom: 0.5em;
+  margin-bottom: 1em;
+  padding-left: 0.25em;
+  justify-self: start;
+}
+
+@media(min-width: 1000px) {
+  .d-contents.d-contents-float {
+    height: 0;
+    grid-column-start: 1;
+    grid-column-end: 4;
+    justify-self: center;
+    padding-right: 3em;
+    padding-left: 2em;
+  }
+}
+
+.d-contents nav h3 {
+  font-size: 18px;
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+
+.d-contents li {
+  list-style-type: none
+}
+
+.d-contents nav > ul {
+  padding-left: 0;
+}
+
+.d-contents ul {
+  padding-left: 1em
+}
+
+.d-contents nav ul li {
+  margin-top: 0.6em;
+  margin-bottom: 0.2em;
+}
+
+.d-contents nav a {
+  font-size: 13px;
+  border-bottom: none;
+  text-decoration: none
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.d-contents nav a:hover {
+  text-decoration: underline solid rgba(0, 0, 0, 0.6)
+}
+
+.d-contents nav > ul > li > a {
+  font-weight: 600;
+}
+
+.d-contents nav > ul > li > ul {
+  font-weight: inherit;
+}
+
+.d-contents nav > ul > li > ul > li {
+  margin-top: 0.2em;
+}
+
+
+.d-contents nav ul {
+  margin-top: 0;
+  margin-bottom: 0.25em;
+}
+
+.d-article-with-toc h2:nth-child(2) {
+  margin-top: 0;
+}
+
+
+/* Figure */
+
+.figure {
+  position: relative;
+  margin-bottom: 2.5em;
+  margin-top: 1.5em;
+}
+
+.figure img {
+  width: 100%;
+}
+
+.figure .caption {
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 12px;
+  line-height: 1.5em;
+}
+
+.figure img.external {
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+  padding: 18px;
+  box-sizing: border-box;
+}
+
+.figure .caption a {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.figure .caption b,
+.figure .caption strong, {
+  font-weight: 600;
+  color: rgba(0, 0, 0, 1.0);
+}
+
+/* Citations */
+
+d-article .citation {
+  color: inherit;
+  cursor: inherit;
+}
+
+div.hanging-indent{
+  margin-left: 1em; text-indent: -1em;
+}
+
+/* Citation hover box */
+
+.tippy-box[data-theme~=light-border] {
+  background-color: rgba(250, 250, 250, 0.95);
+}
+
+.tippy-content > p {
+  margin-bottom: 0;
+  padding: 2px;
+}
+
+
+/* Tweak 1000px media break to show more text */
+
+@media(min-width: 1000px) {
+  .base-grid,
+  distill-header,
+  d-title,
+  d-abstract,
+  d-article,
+  d-appendix,
+  distill-appendix,
+  d-byline,
+  d-footnote-list,
+  d-citation-list,
+  distill-footer {
+    grid-template-columns: [screen-start] 1fr [page-start kicker-start] 80px [middle-start] 50px [text-start kicker-end] 65px 65px 65px 65px 65px 65px 65px 65px [text-end gutter-start] 65px [middle-end] 65px [page-end gutter-end] 1fr [screen-end];
+    grid-column-gap: 16px;
+  }
+
+  .grid {
+    grid-column-gap: 16px;
+  }
+
+  d-article {
+    font-size: 1.06rem;
+    line-height: 1.7em;
+  }
+  figure .caption, .figure .caption, figure figcaption {
+    font-size: 13px;
+  }
+}
+
+@media(min-width: 1180px) {
+  .base-grid,
+  distill-header,
+  d-title,
+  d-abstract,
+  d-article,
+  d-appendix,
+  distill-appendix,
+  d-byline,
+  d-footnote-list,
+  d-citation-list,
+  distill-footer {
+    grid-template-columns: [screen-start] 1fr [page-start kicker-start] 60px [middle-start] 60px [text-start kicker-end] 60px 60px 60px 60px 60px 60px 60px 60px [text-end gutter-start] 60px [middle-end] 60px [page-end gutter-end] 1fr [screen-end];
+    grid-column-gap: 32px;
+  }
+
+  .grid {
+    grid-column-gap: 32px;
+  }
+}
+
+
+/* Get the citation styles for the appendix (not auto-injected on render since
+   we do our own rendering of the citation appendix) */
+
+d-appendix .citation-appendix,
+.d-appendix .citation-appendix {
+  font-size: 11px;
+  line-height: 15px;
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+  padding-left: 18px;
+  border: 1px solid rgba(0,0,0,0.1);
+  background: rgba(0, 0, 0, 0.02);
+  padding: 10px 18px;
+  border-radius: 3px;
+  color: rgba(150, 150, 150, 1);
+  overflow: hidden;
+  margin-top: -12px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Include appendix styles here so they can be overridden */
+
+d-appendix {
+  contain: layout style;
+  font-size: 0.8em;
+  line-height: 1.7em;
+  margin-top: 60px;
+  margin-bottom: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  color: rgba(0,0,0,0.5);
+  padding-top: 60px;
+  padding-bottom: 48px;
+}
+
+d-appendix h3 {
+  grid-column: page-start / text-start;
+  font-size: 15px;
+  font-weight: 500;
+  margin-top: 1em;
+  margin-bottom: 0;
+  color: rgba(0,0,0,0.65);
+}
+
+d-appendix h3 + * {
+  margin-top: 1em;
+}
+
+d-appendix ol {
+  padding: 0 0 0 15px;
+}
+
+@media (min-width: 768px) {
+  d-appendix ol {
+    padding: 0 0 0 30px;
+    margin-left: -30px;
+  }
+}
+
+d-appendix li {
+  margin-bottom: 1em;
+}
+
+d-appendix a {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+d-appendix > * {
+  grid-column: text;
+}
+
+d-appendix > d-footnote-list,
+d-appendix > d-citation-list,
+d-appendix > distill-appendix {
+  grid-column: screen;
+}
+
+/* Include footnote styles here so they can be overridden */
+
+d-footnote-list {
+  contain: layout style;
+}
+
+d-footnote-list > * {
+  grid-column: text;
+}
+
+d-footnote-list a.footnote-backlink {
+  color: rgba(0,0,0,0.3);
+  padding-left: 0.5em;
+}
+
+
+
+/* Anchor.js */
+
+.anchorjs-link {
+  /*transition: all .25s linear; */
+  text-decoration: none;
+  border-bottom: none;
+}
+*:hover > .anchorjs-link {
+  margin-left: -1.125em !important;
+  text-decoration: none;
+  border-bottom: none;
+}
+
+/* Social footer */
+
+.social_footer {
+  margin-top: 30px;
+  margin-bottom: 0;
+  color: rgba(0,0,0,0.67);
+}
+
+.disqus-comments {
+  margin-right: 30px;
+}
+
+.disqus-comment-count {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+}
+
+#disqus_thread {
+  margin-top: 30px;
+}
+
+.article-sharing a {
+  border-bottom: none;
+  margin-right: 8px;
+}
+
+.article-sharing a:hover {
+  border-bottom: none;
+}
+
+.sidebar-section.subscribe {
+  font-size: 12px;
+  line-height: 1.6em;
+}
+
+.subscribe p {
+  margin-bottom: 0.5em;
+}
+
+
+.article-footer .subscribe {
+  font-size: 15px;
+  margin-top: 45px;
+}
+
+
+.sidebar-section.custom {
+  font-size: 12px;
+  line-height: 1.6em;
+}
+
+.custom p {
+  margin-bottom: 0.5em;
+}
+
+/* Styles for listing layout (hide title) */
+.layout-listing d-title, .layout-listing .d-title {
+  display: none;
+}
+
+/* Styles for posts lists (not auto-injected) */
+
+
+.posts-with-sidebar {
+  padding-left: 45px;
+  padding-right: 45px;
+}
+
+.posts-list .description h2,
+.posts-list .description p {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+}
+
+.posts-list .description h2 {
+  font-weight: 700;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.posts-list h2.post-tag {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  padding-bottom: 12px;
+}
+.posts-list {
+  margin-top: 60px;
+  margin-bottom: 24px;
+}
+
+.posts-list .post-preview {
+  text-decoration: none;
+  overflow: hidden;
+  display: block;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 24px 0;
+}
+
+.post-preview-last {
+  border-bottom: none !important;
+}
+
+.posts-list .posts-list-caption {
+  grid-column: screen;
+  font-weight: 400;
+}
+
+.posts-list .post-preview h2 {
+  margin: 0 0 6px 0;
+  line-height: 1.2em;
+  font-style: normal;
+  font-size: 24px;
+}
+
+.posts-list .post-preview p {
+  margin: 0 0 12px 0;
+  line-height: 1.4em;
+  font-size: 16px;
+}
+
+.posts-list .post-preview .thumbnail {
+  box-sizing: border-box;
+  margin-bottom: 24px;
+  position: relative;
+  max-width: 500px;
+}
+.posts-list .post-preview img {
+  width: 100%;
+  display: block;
+}
+
+.posts-list .metadata {
+  font-size: 12px;
+  line-height: 1.4em;
+  margin-bottom: 18px;
+}
+
+.posts-list .metadata > * {
+  display: inline-block;
+}
+
+.posts-list .metadata .publishedDate {
+  margin-right: 2em;
+}
+
+.posts-list .metadata .dt-authors {
+  display: block;
+  margin-top: 0.3em;
+  margin-right: 2em;
+}
+
+.posts-list .dt-tags {
+  display: block;
+  line-height: 1em;
+}
+
+.posts-list .dt-tags .dt-tag {
+  display: inline-block;
+  color: rgba(0,0,0,0.6);
+  padding: 0.3em 0.4em;
+  margin-right: 0.2em;
+  margin-bottom: 0.4em;
+  font-size: 60%;
+  border: 1px solid rgba(0,0,0,0.2);
+  border-radius: 3px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.posts-list img {
+  opacity: 1;
+}
+
+.posts-list img[data-src] {
+  opacity: 0;
+}
+
+.posts-more {
+  clear: both;
+}
+
+
+.posts-sidebar {
+  font-size: 16px;
+}
+
+.posts-sidebar h3 {
+  font-size: 16px;
+  margin-top: 0;
+  margin-bottom: 0.5em;
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+.sidebar-section {
+  margin-bottom: 30px;
+}
+
+.categories ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.categories li {
+  color: rgba(0, 0, 0, 0.8);
+  margin-bottom: 0;
+}
+
+.categories li>a {
+  border-bottom: none;
+}
+
+.categories li>a:hover {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+}
+
+.categories .active {
+  font-weight: 600;
+}
+
+.categories .category-count {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+
+@media(min-width: 768px) {
+  .posts-list .post-preview h2 {
+    font-size: 26px;
+  }
+  .posts-list .post-preview .thumbnail {
+    float: right;
+    width: 30%;
+    margin-bottom: 0;
+  }
+  .posts-list .post-preview .description {
+    float: left;
+    width: 45%;
+  }
+  .posts-list .post-preview .metadata {
+    float: left;
+    width: 20%;
+    margin-top: 8px;
+  }
+  .posts-list .post-preview p {
+    margin: 0 0 12px 0;
+    line-height: 1.5em;
+    font-size: 16px;
+  }
+  .posts-with-sidebar .posts-list {
+    float: left;
+    width: 75%;
+  }
+  .posts-with-sidebar .posts-sidebar {
+    float: right;
+    width: 20%;
+    margin-top: 60px;
+    padding-top: 24px;
+    padding-bottom: 24px;
+  }
+}
+
+
+/* Improve display for browsers without grid (IE/Edge <= 15) */
+
+.downlevel {
+  line-height: 1.6em;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+  margin: 0;
+}
+
+.downlevel .d-title {
+  padding-top: 6rem;
+  padding-bottom: 1.5rem;
+}
+
+.downlevel .d-title h1 {
+  font-size: 50px;
+  font-weight: 700;
+  line-height: 1.1em;
+  margin: 0 0 0.5rem;
+}
+
+.downlevel .d-title p {
+  font-weight: 300;
+  font-size: 1.2rem;
+  line-height: 1.55em;
+  margin-top: 0;
+}
+
+.downlevel .d-byline {
+  padding-top: 0.8em;
+  padding-bottom: 0.8em;
+  font-size: 0.8rem;
+  line-height: 1.8em;
+}
+
+.downlevel .section-separator {
+  border: none;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.downlevel .d-article {
+  font-size: 1.06rem;
+  line-height: 1.7em;
+  padding-top: 1rem;
+  padding-bottom: 2rem;
+}
+
+
+.downlevel .d-appendix {
+  padding-left: 0;
+  padding-right: 0;
+  max-width: none;
+  font-size: 0.8em;
+  line-height: 1.7em;
+  margin-bottom: 0;
+  color: rgba(0,0,0,0.5);
+  padding-top: 40px;
+  padding-bottom: 48px;
+}
+
+.downlevel .footnotes ol {
+  padding-left: 13px;
+}
+
+.downlevel .base-grid,
+.downlevel .distill-header,
+.downlevel .d-title,
+.downlevel .d-abstract,
+.downlevel .d-article,
+.downlevel .d-appendix,
+.downlevel .distill-appendix,
+.downlevel .d-byline,
+.downlevel .d-footnote-list,
+.downlevel .d-citation-list,
+.downlevel .distill-footer,
+.downlevel .appendix-bottom,
+.downlevel .posts-container {
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+@media(min-width: 768px) {
+  .downlevel .base-grid,
+  .downlevel .distill-header,
+  .downlevel .d-title,
+  .downlevel .d-abstract,
+  .downlevel .d-article,
+  .downlevel .d-appendix,
+  .downlevel .distill-appendix,
+  .downlevel .d-byline,
+  .downlevel .d-footnote-list,
+  .downlevel .d-citation-list,
+  .downlevel .distill-footer,
+  .downlevel .appendix-bottom,
+  .downlevel .posts-container {
+  padding-left: 150px;
+  padding-right: 150px;
+  max-width: 900px;
+}
+}
+
+.downlevel pre code {
+  display: block;
+  border-left: 2px solid rgba(0, 0, 0, .1);
+  padding: 0 0 0 20px;
+  font-size: 14px;
+}
+
+.downlevel code, .downlevel pre {
+  color: black;
+  background: none;
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.5;
+
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+.downlevel .posts-list .post-preview {
+  color: inherit;
+}
+
+
+
+</style>
+
+<script type="application/javascript">
+
+function is_downlevel_browser() {
+  if (bowser.isUnsupportedBrowser({ msie: "12", msedge: "16"},
+                                 window.navigator.userAgent)) {
+    return true;
+  } else {
+    return window.load_distill_framework === undefined;
+  }
+}
+
+// show body when load is complete
+function on_load_complete() {
+
+  // add anchors
+  if (window.anchors) {
+    window.anchors.options.placement = 'left';
+    window.anchors.add('d-article > h2, d-article > h3, d-article > h4, d-article > h5');
+  }
+
+
+  // set body to visible
+  document.body.style.visibility = 'visible';
+
+  // force redraw for leaflet widgets
+  if (window.HTMLWidgets) {
+    var maps = window.HTMLWidgets.findAll(".leaflet");
+    $.each(maps, function(i, el) {
+      var map = this.getMap();
+      map.invalidateSize();
+      map.eachLayer(function(layer) {
+        if (layer instanceof L.TileLayer)
+          layer.redraw();
+      });
+    });
+  }
+
+  // trigger 'shown' so htmlwidgets resize
+  $('d-article').trigger('shown');
+}
+
+function init_distill() {
+
+  init_common();
+
+  // create front matter
+  var front_matter = $('<d-front-matter></d-front-matter>');
+  $('#distill-front-matter').wrap(front_matter);
+
+  // create d-title
+  $('.d-title').changeElementType('d-title');
+
+  // create d-byline
+  var byline = $('<d-byline></d-byline>');
+  $('.d-byline').replaceWith(byline);
+
+  // create d-article
+  var article = $('<d-article></d-article>');
+  $('.d-article').wrap(article).children().unwrap();
+
+  // move posts container into article
+  $('.posts-container').appendTo($('d-article'));
+
+  // create d-appendix
+  $('.d-appendix').changeElementType('d-appendix');
+
+  // flag indicating that we have appendix items
+  var appendix = $('.appendix-bottom').children('h3').length > 0;
+
+  // replace footnotes with <d-footnote>
+  $('.footnote-ref').each(function(i, val) {
+    appendix = true;
+    var href = $(this).attr('href');
+    var id = href.replace('#', '');
+    var fn = $('#' + id);
+    var fn_p = $('#' + id + '>p');
+    fn_p.find('.footnote-back').remove();
+    var text = fn_p.html();
+    var dtfn = $('<d-footnote></d-footnote>');
+    dtfn.html(text);
+    $(this).replaceWith(dtfn);
+  });
+  // remove footnotes
+  $('.footnotes').remove();
+
+  // move refs into #references-listing
+  $('#references-listing').replaceWith($('#refs'));
+
+  $('h1.appendix, h2.appendix').each(function(i, val) {
+    $(this).changeElementType('h3');
+  });
+  $('h3.appendix').each(function(i, val) {
+    var id = $(this).attr('id');
+    $('.d-contents a[href="#' + id + '"]').parent().remove();
+    appendix = true;
+    $(this).nextUntil($('h1, h2, h3')).addBack().appendTo($('d-appendix'));
+  });
+
+  // show d-appendix if we have appendix content
+  $("d-appendix").css('display', appendix ? 'grid' : 'none');
+
+  // localize layout chunks to just output
+  $('.layout-chunk').each(function(i, val) {
+
+    // capture layout
+    var layout = $(this).attr('data-layout');
+
+    // apply layout to markdown level block elements
+    var elements = $(this).children().not('details, div.sourceCode, pre, script');
+    elements.each(function(i, el) {
+      var layout_div = $('<div class="' + layout + '"></div>');
+      if (layout_div.hasClass('shaded')) {
+        var shaded_content = $('<div class="shaded-content"></div>');
+        $(this).wrap(shaded_content);
+        $(this).parent().wrap(layout_div);
+      } else {
+        $(this).wrap(layout_div);
+      }
+    });
+
+
+    // unwrap the layout-chunk div
+    $(this).children().unwrap();
+  });
+
+  // remove code block used to force  highlighting css
+  $('.distill-force-highlighting-css').parent().remove();
+
+  // remove empty line numbers inserted by pandoc when using a
+  // custom syntax highlighting theme
+  $('code.sourceCode a:empty').remove();
+
+  // load distill framework
+  load_distill_framework();
+
+  // wait for window.distillRunlevel == 4 to do post processing
+  function distill_post_process() {
+
+    if (!window.distillRunlevel || window.distillRunlevel < 4)
+      return;
+
+    // hide author/affiliations entirely if we have no authors
+    var front_matter = JSON.parse($("#distill-front-matter").html());
+    var have_authors = front_matter.authors && front_matter.authors.length > 0;
+    if (!have_authors)
+      $('d-byline').addClass('hidden');
+
+    // article with toc class
+    $('.d-contents').parent().addClass('d-article-with-toc');
+
+    // strip links that point to #
+    $('.authors-affiliations').find('a[href="#"]').removeAttr('href');
+
+    // add orcid ids
+    $('.authors-affiliations').find('.author').each(function(i, el) {
+      var orcid_id = front_matter.authors[i].orcidID;
+      if (orcid_id) {
+        var a = $('<a></a>');
+        a.attr('href', 'https://orcid.org/' + orcid_id);
+        var img = $('<img></img>');
+        img.addClass('orcid-id');
+        img.attr('alt', 'ORCID ID');
+        img.attr('src','data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg==');
+        a.append(img);
+        $(this).append(a);
+      }
+    });
+
+    // hide elements of author/affiliations grid that have no value
+    function hide_byline_column(caption) {
+      $('d-byline').find('h3:contains("' + caption + '")').parent().css('visibility', 'hidden');
+    }
+
+    // affiliations
+    var have_affiliations = false;
+    for (var i = 0; i<front_matter.authors.length; ++i) {
+      var author = front_matter.authors[i];
+      if (author.affiliation !== "&nbsp;") {
+        have_affiliations = true;
+        break;
+      }
+    }
+    if (!have_affiliations)
+      $('d-byline').find('h3:contains("Affiliations")').css('visibility', 'hidden');
+
+    // published date
+    if (!front_matter.publishedDate)
+      hide_byline_column("Published");
+
+    // document object identifier
+    var doi = $('d-byline').find('h3:contains("DOI")');
+    var doi_p = doi.next().empty();
+    if (!front_matter.doi) {
+      // if we have a citation and valid citationText then link to that
+      if ($('#citation').length > 0 && front_matter.citationText) {
+        doi.html('Citation');
+        $('<a href="#citation"></a>')
+          .text(front_matter.citationText)
+          .appendTo(doi_p);
+      } else {
+        hide_byline_column("DOI");
+      }
+    } else {
+      $('<a></a>')
+         .attr('href', "https://doi.org/" + front_matter.doi)
+         .html(front_matter.doi)
+         .appendTo(doi_p);
+    }
+
+     // change plural form of authors/affiliations
+    if (front_matter.authors.length === 1) {
+      var grid = $('.authors-affiliations');
+      grid.children('h3:contains("Authors")').text('Author');
+      grid.children('h3:contains("Affiliations")').text('Affiliation');
+    }
+
+    // remove d-appendix and d-footnote-list local styles
+    $('d-appendix > style:first-child').remove();
+    $('d-footnote-list > style:first-child').remove();
+
+    // move appendix-bottom entries to the bottom
+    $('.appendix-bottom').appendTo('d-appendix').children().unwrap();
+    $('.appendix-bottom').remove();
+
+    // hoverable references
+    $('span.citation[data-cites]').each(function() {
+      var refHtml = $('#ref-' + $(this).attr('data-cites')).html();
+      window.tippy(this, {
+        allowHTML: true,
+        content: refHtml,
+        maxWidth: 500,
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'light-border',
+        placement: 'bottom-start'
+      });
+    });
+
+    // clear polling timer
+    clearInterval(tid);
+
+    // show body now that everything is ready
+    on_load_complete();
+  }
+
+  var tid = setInterval(distill_post_process, 50);
+  distill_post_process();
+
+}
+
+function init_downlevel() {
+
+  init_common();
+
+   // insert hr after d-title
+  $('.d-title').after($('<hr class="section-separator"/>'));
+
+  // check if we have authors
+  var front_matter = JSON.parse($("#distill-front-matter").html());
+  var have_authors = front_matter.authors && front_matter.authors.length > 0;
+
+  // manage byline/border
+  if (!have_authors)
+    $('.d-byline').remove();
+  $('.d-byline').after($('<hr class="section-separator"/>'));
+  $('.d-byline a').remove();
+
+  // remove toc
+  $('.d-contents').remove();
+
+  // move appendix elements
+  $('h1.appendix, h2.appendix').each(function(i, val) {
+    $(this).changeElementType('h3');
+  });
+  $('h3.appendix').each(function(i, val) {
+    $(this).nextUntil($('h1, h2, h3')).addBack().appendTo($('.d-appendix'));
+  });
+
+
+  // inject headers into references and footnotes
+  var refs_header = $('<h3></h3>');
+  refs_header.text('References');
+  $('#refs').prepend(refs_header);
+
+  var footnotes_header = $('<h3></h3');
+  footnotes_header.text('Footnotes');
+  $('.footnotes').children('hr').first().replaceWith(footnotes_header);
+
+  // move appendix-bottom entries to the bottom
+  $('.appendix-bottom').appendTo('.d-appendix').children().unwrap();
+  $('.appendix-bottom').remove();
+
+  // remove appendix if it's empty
+  if ($('.d-appendix').children().length === 0)
+    $('.d-appendix').remove();
+
+  // prepend separator above appendix
+  $('.d-appendix').before($('<hr class="section-separator" style="clear: both"/>'));
+
+  // trim code
+  $('pre>code').each(function(i, val) {
+    $(this).html($.trim($(this).html()));
+  });
+
+  // move posts-container right before article
+  $('.posts-container').insertBefore($('.d-article'));
+
+  $('body').addClass('downlevel');
+
+  on_load_complete();
+}
+
+
+function init_common() {
+
+  // jquery plugin to change element types
+  (function($) {
+    $.fn.changeElementType = function(newType) {
+      var attrs = {};
+
+      $.each(this[0].attributes, function(idx, attr) {
+        attrs[attr.nodeName] = attr.nodeValue;
+      });
+
+      this.replaceWith(function() {
+        return $("<" + newType + "/>", attrs).append($(this).contents());
+      });
+    };
+  })(jQuery);
+
+  // prevent underline for linked images
+  $('a > img').parent().css({'border-bottom' : 'none'});
+
+  // mark non-body figures created by knitr chunks as 100% width
+  $('.layout-chunk').each(function(i, val) {
+    var figures = $(this).find('img, .html-widget');
+    if ($(this).attr('data-layout') !== "l-body") {
+      figures.css('width', '100%');
+    } else {
+      figures.css('max-width', '100%');
+      figures.filter("[width]").each(function(i, val) {
+        var fig = $(this);
+        fig.css('width', fig.attr('width') + 'px');
+      });
+
+    }
+  });
+
+  // auto-append index.html to post-preview links in file: protocol
+  // and in rstudio ide preview
+  $('.post-preview').each(function(i, val) {
+    if (window.location.protocol === "file:")
+      $(this).attr('href', $(this).attr('href') + "index.html");
+  });
+
+  // get rid of index.html references in header
+  if (window.location.protocol !== "file:") {
+    $('.distill-site-header a[href]').each(function(i,val) {
+      $(this).attr('href', $(this).attr('href').replace("index.html", "./"));
+    });
+  }
+
+  // add class to pandoc style tables
+  $('tr.header').parent('thead').parent('table').addClass('pandoc-table');
+  $('.kable-table').children('table').addClass('pandoc-table');
+
+  // add figcaption style to table captions
+  $('caption').parent('table').addClass("figcaption");
+
+  // initialize posts list
+  if (window.init_posts_list)
+    window.init_posts_list();
+
+  // implmement disqus comment link
+  $('.disqus-comment-count').click(function() {
+    window.headroom_prevent_pin = true;
+    $('#disqus_thread').toggleClass('hidden');
+    if (!$('#disqus_thread').hasClass('hidden')) {
+      var offset = $(this).offset();
+      $(window).resize();
+      $('html, body').animate({
+        scrollTop: offset.top - 35
+      });
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  if (is_downlevel_browser())
+    init_downlevel();
+  else
+    window.addEventListener('WebComponentsReady', init_distill);
+});
+
+</script>
+
+<!--/radix_placeholder_distill-->
+  <script src="../../site_libs/header-attrs-2.6/header-attrs.js"></script>
+  <script src="../../site_libs/jquery-1.11.3/jquery.min.js"></script>
+  <script src="../../site_libs/popper-2.6.0/popper.min.js"></script>
+  <link href="../../site_libs/tippy-6.2.7/tippy.css" rel="stylesheet" />
+  <link href="../../site_libs/tippy-6.2.7/tippy-light-border.css" rel="stylesheet" />
+  <script src="../../site_libs/tippy-6.2.7/tippy.umd.min.js"></script>
+  <script src="../../site_libs/anchor-4.2.2/anchor.min.js"></script>
+  <script src="../../site_libs/bowser-1.9.3/bowser.min.js"></script>
+  <script src="../../site_libs/webcomponents-2.0.0/webcomponents.js"></script>
+  <script src="../../site_libs/distill-2.2.21/template.v2.js"></script>
+  <!--radix_placeholder_site_in_header-->
+<!--/radix_placeholder_site_in_header-->
+
+
+</head>
+
+<body>
+
+<!--radix_placeholder_front_matter-->
+
+<script id="distill-front-matter" type="text/json">
+{"title":"ARIMAX serie NO2, gennaio-maggio 2020 ","description":"Stima modello arimax utilizzando il valore dell'inquinante del giorno precedente.","authors":[{"author":"guidofioravanti","authorURL":"#","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2021-03-02T00:00:00.000+01:00","citationText":"guidofioravanti, 2021"}
+</script>
+
+<!--/radix_placeholder_front_matter-->
+<!--radix_placeholder_navigation_before_body-->
+<header class="header header--fixed" role="banner">
+<nav class="distill-site-nav distill-site-header">
+<div class="nav-left">
+<a href="../../index.html" class="title">pulvinla</a>
+<input id="distill-search" class="nav-search hidden" type="text" placeholder="Search..."/>
+</div>
+<div class="nav-right">
+<a href="../../index.html">Home</a>
+<a href="../../about.html">About</a>
+<a href="javascript:void(0);" class="nav-toggle">&#9776;</a>
+</div>
+</nav>
+</header>
+<!--/radix_placeholder_navigation_before_body-->
+<!--radix_placeholder_site_before_body-->
+<!--/radix_placeholder_site_before_body-->
+
+<div class="d-title">
+<h1>ARIMAX serie NO2, gennaio-maggio 2020</h1>
+<!--radix_placeholder_categories-->
+<!--/radix_placeholder_categories-->
+<p><p>Stima modello arimax utilizzando il valore dell’inquinante del giorno precedente.</p></p>
+</div>
+
+<div class="d-byline">
+  guidofioravanti  
+  
+<br/>03-02-2021
+</div>
+
+<div class="d-article">
+<p>Per ciascuna serie di no2 e’ stato stimato (in modo completamente automatico) un modello ARIMAX utilizzando la funzione auto.arima del pacchetto <code>forecast</code>, imponendo come massimo ordine della componente AR p=1 e 0 come massimo ordine della componente MA (il modello INLA prevede una componente AR1 su spde e nessuna componente MA).</p>
+<p>La variabile target (value) e’ il logaritmo del dato osservato.</p>
+<p>Le variabili prese in esame sono:</p>
+<ul>
+<li><p>le variabili meteoclimatiche</p></li>
+<li><p>la variabile <strong>banda</strong> (variabile che assume valori da 1 al numero dei giorni)</p></li>
+<li><p>la variabile <strong>wday</strong> (variabile che assume valori da 1 a 7, per cogliere un eventuale ciclo settimanale)</p></li>
+<li><p>la variabile <strong>pvalue</strong> (previous value, ovvero il valore dell’inquinante, in scala logaritmica, nel giorno precedente.)</p></li>
+<li><p>la variabile <strong>lockdown</strong> (variabile che assume valore 0 dal 1 gennaio 2020 al 7 marzo, per poi assumere valore 1 fino a fine serie)</p></li>
+</ul>
+<div class="layout-chunk" data-layout="l-body">
+
+</div>
+<h3 id="stazioni-urban">Stazioni Urban</h3>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>purrr</span><span class='fu'>::</span><span class='fu'><a href='https://purrr.tidyverse.org/reference/map.html'>walk</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"U"</span><span class='op'>)</span>,.f<span class='op'>=</span><span class='kw'>function</span><span class='op'>(</span><span class='va'>tipo</span><span class='op'>)</span><span class='op'>{</span>
+  
+    <span class='va'>dati</span><span class='op'>[</span><span class='va'>dati</span><span class='op'>$</span><span class='va'>tipo_zona</span><span class='op'>==</span><span class='va'>tipo</span>,<span class='op'>]</span><span class='op'>-&gt;</span><span class='va'>dati2</span>  
+    
+    <span class='co'>#Altre info</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span><span class='op'>(</span><span class='va'>dati2</span><span class='op'>$</span><span class='va'>station_eu_code</span><span class='op'>)</span><span class='op'>-&gt;</span><span class='va'>CODICI</span>
+    
+    <span class='fu'>purrr</span><span class='fu'>::</span><span class='fu'><a href='https://purrr.tidyverse.org/reference/map.html'>walk</a></span><span class='op'>(</span><span class='va'>CODICI</span>,.f<span class='op'>=</span><span class='kw'>function</span><span class='op'>(</span><span class='va'>cc</span><span class='op'>)</span><span class='op'>{</span>
+      <span class='va'>dati2</span><span class='op'>[</span><span class='va'>dati2</span><span class='op'>$</span><span class='va'>station_eu_code</span><span class='op'>==</span><span class='va'>cc</span>,<span class='op'>]</span><span class='op'>-&gt;</span><span class='va'>subdati</span>
+      <span class='fu'>imputeTS</span><span class='fu'>::</span><span class='fu'><a href='https://SteffenMoritz.github.io/imputeTS/reference/na_ma.html'>na_ma</a></span><span class='op'>(</span><span class='va'>subdati</span><span class='op'>$</span><span class='va'>value</span><span class='op'>)</span><span class='op'>-&gt;</span><span class='va'>subdati</span><span class='op'>$</span><span class='va'>value</span>
+    
+      <span class='fu'>auto.arima</span><span class='op'>(</span>y<span class='op'>=</span><span class='va'>subdati</span><span class='op'>$</span><span class='va'>value</span>,xreg <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span><span class='op'>(</span><span class='va'>subdati</span><span class='op'>[</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"banda"</span>,<span class='st'>"t2m"</span>,<span class='st'>"sp"</span>,<span class='st'>"pblmax"</span>,<span class='st'>"pblmin"</span>,<span class='st'>"wdir"</span>,<span class='st'>"wspeed"</span>,<span class='st'>"tp"</span>,<span class='st'>"ptp"</span>,<span class='st'>"pvalue"</span>,<span class='st'>"lockdown"</span><span class='op'>)</span><span class='op'>]</span><span class='op'>)</span>,
+                 stepwise <span class='op'>=</span> <span class='cn'>TRUE</span>,max.p<span class='op'>=</span><span class='fl'>1</span>,max.q<span class='op'>=</span><span class='fl'>0</span><span class='op'>)</span><span class='op'>-&gt;</span><span class='va'>ris</span>
+      
+      <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='st'>"###########################################\n"</span><span class='op'>)</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"Codice stazione (station_eu_code):"</span>,<span class='va'>cc</span><span class='op'>)</span><span class='op'>)</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='st'>"###########################################\n"</span><span class='op'>)</span>      
+      <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>ris</span><span class='op'>)</span>
+      
+    <span class='op'>}</span><span class='op'>)</span>
+
+
+<span class='op'>}</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT1650A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(0,0,0) errors 
+
+Coefficients:
+      intercept   banda      t2m      sp   pblmax   pblmin     wdir
+         1.1645  0.0013  -0.3427  0.3038  -0.0349  -0.1573  -0.0176
+s.e.     0.3019  0.0020   0.0829  0.1542   0.0275   0.1225   0.0200
+       wspeed       tp      ptp  pvalue  lockdown
+      -0.1044  -0.0467  -0.0274  0.5104   -0.3056
+s.e.   0.0562   0.0282   0.0247  0.0594    0.0903
+
+sigma^2 estimated as 0.07194:  log likelihood=-10.28
+AIC=46.55   AICc=49.21   BIC=85.78
+
+Training set error measures:
+                        ME      RMSE       MAE       MPE     MAPE
+Training set -3.610595e-14 0.2591288 0.2017595 -1.307363 8.072857
+                  MASE       ACF1
+Training set 0.7840816 0.01352383
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT2232A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(1,0,0) errors 
+
+Coefficients:
+         ar1  intercept    banda      t2m      sp   pblmax   pblmin
+      0.3231      2.660  -0.0034  -0.1545  0.2076  -0.0228  -0.4647
+s.e.  0.1437      0.617   0.0030   0.0995  0.1784   0.0285   0.1386
+         wdir   wspeed      tp      ptp  pvalue  lockdown
+      -0.0162  -0.2237  0.0295  -0.0403  0.2399    -0.384
+s.e.   0.0235   0.0435  0.0327   0.0277  0.1197     0.118
+
+sigma^2 estimated as 0.05952:  log likelihood=2.17
+AIC=23.66   AICc=26.75   BIC=65.9
+
+Training set error measures:
+                       ME      RMSE       MAE        MPE    MAPE
+Training set 0.0002623522 0.2380566 0.1862606 -0.6738835 6.09961
+                  MASE         ACF1
+Training set 0.7202121 -0.004754159
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT1739A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(1,0,0) errors 
+
+Coefficients:
+         ar1  intercept   banda      t2m      sp   pblmax   pblmin
+      0.1512     1.9376  0.0001  -0.1001  0.4042  -0.0304  -0.5371
+s.e.  0.1169     0.3827  0.0019   0.0751  0.1389   0.0221   0.1070
+         wdir   wspeed      tp      ptp  pvalue  lockdown
+      -0.0295  -0.1113  0.0024  -0.0265  0.2810   -0.3116
+s.e.   0.0227   0.0287  0.0477   0.0401  0.0846    0.0843
+
+sigma^2 estimated as 0.0409:  log likelihood=31.15
+AIC=-34.3   AICc=-31.21   BIC=7.94
+
+Training set error measures:
+                        ME      RMSE       MAE        MPE     MAPE
+Training set -0.0002350673 0.1959828 0.1530783 -0.4532666 4.959608
+                  MASE         ACF1
+Training set 0.6624758 0.0002476687
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT0761A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(0,0,0) errors 
+
+Coefficients:
+      intercept   banda      t2m      sp   pblmax   pblmin     wdir
+         2.0653  0.0001  -0.1203  0.2109  -0.0261  -0.3866  -0.0489
+s.e.     0.3616  0.0021   0.0844  0.1613   0.0277   0.1603   0.0297
+       wspeed      tp      ptp  pvalue  lockdown
+      -0.1165  0.0158  -0.0399  0.3904   -0.2901
+s.e.   0.0417  0.0371   0.0320  0.0679    0.0906
+
+sigma^2 estimated as 0.0703:  log likelihood=-8.09
+AIC=42.19   AICc=44.84   BIC=81.41
+
+Training set error measures:
+                       ME      RMSE       MAE        MPE    MAPE
+Training set 2.646964e-16 0.2552937 0.1916504 -0.6183037 5.58366
+                  MASE       ACF1
+Training set 0.7375038 0.06586105
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT0771A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(0,0,0) errors 
+
+Coefficients:
+      intercept   banda      t2m      sp   pblmax   pblmin     wdir
+         1.9550  0.0019  -0.1361  0.5518  -0.0822  -0.4233  -0.0094
+s.e.     0.3438  0.0020   0.0827  0.1573   0.0284   0.1196   0.0188
+      wspeed      tp      ptp  pvalue  lockdown
+      0.1273  0.0020  -0.0436  0.4390   -0.5233
+s.e.  0.0710  0.0263   0.0222  0.0652    0.0995
+
+sigma^2 estimated as 0.06401:  log likelihood=-4.39
+AIC=34.77   AICc=37.43   BIC=74
+
+Training set error measures:
+                       ME      RMSE       MAE        MPE     MAPE
+Training set 4.569801e-14 0.2494552 0.1910198 -0.9164474 6.773547
+                  MASE      ACF1
+Training set 0.7966836 0.1209405
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT0776A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(0,0,0) errors 
+
+Coefficients:
+      intercept   banda      t2m      sp   pblmax   pblmin    wdir
+         2.1233  0.0034  -0.1816  0.5329  -0.1090  -0.2512  0.0164
+s.e.     0.3396  0.0019   0.0840  0.1613   0.0295   0.1409  0.0205
+       wspeed       tp      ptp  pvalue  lockdown
+      -0.0361  -0.0186  -0.0663  0.3602   -0.4343
+s.e.   0.0846   0.0316   0.0260  0.0655    0.0918
+
+sigma^2 estimated as 0.0676:  log likelihood=-5.6
+AIC=37.21   AICc=39.86   BIC=76.43
+
+Training set error measures:
+                        ME      RMSE       MAE        MPE     MAPE
+Training set -5.361636e-14 0.2511795 0.1975983 -0.6953952 6.263685
+                  MASE       ACF1
+Training set 0.7520413 0.04550044
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT0777A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(1,0,0) errors 
+
+Coefficients:
+         ar1  intercept   banda      t2m      sp   pblmax   pblmin
+      0.0258     1.8700  0.0006  -0.2036  0.3536  -0.0587  -0.1756
+s.e.  0.1451     0.5182  0.0024   0.0970  0.1903   0.0336   0.1700
+        wdir   wspeed      tp      ptp  pvalue  lockdown
+      0.0054  -0.0551  0.0051  -0.0030   0.413   -0.4496
+s.e.  0.0226   0.0778  0.0477   0.0395   0.115    0.1151
+
+sigma^2 estimated as 0.08874:  log likelihood=-26.13
+AIC=80.26   AICc=83.35   BIC=122.5
+
+Training set error measures:
+                       ME      RMSE      MAE       MPE     MAPE
+Training set 0.0002133791 0.2886916 0.223132 -1.218932 8.049559
+                  MASE        ACF1
+Training set 0.8259679 0.001741806
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT0778A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(0,0,0) errors 
+
+Coefficients:
+      intercept   banda      t2m      sp   pblmax   pblmin    wdir
+         1.4668  0.0021  -0.2024  0.2409  -0.0418  -0.2929  0.0115
+s.e.     0.3006  0.0017   0.0712  0.1296   0.0245   0.1461  0.0205
+       wspeed      tp      ptp  pvalue  lockdown
+      -0.1538  0.0163  -0.0416  0.4666   -0.3305
+s.e.   0.0454  0.0354   0.0302  0.0619    0.0767
+
+sigma^2 estimated as 0.04584:  log likelihood=22.88
+AIC=-19.75   AICc=-17.1   BIC=19.47
+
+Training set error measures:
+                       ME      RMSE      MAE        MPE    MAPE
+Training set 4.053399e-16 0.2075311 0.158699 -0.4829212 5.07951
+                  MASE       ACF1
+Training set 0.7470881 0.02478508
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT0732A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(0,0,0) errors 
+
+Coefficients:
+      intercept    banda      t2m      sp   pblmax   pblmin     wdir
+         2.2992  -0.0001  -0.0275  0.2973  -0.1208  -0.3482  -0.0405
+s.e.     0.2885   0.0017   0.0741  0.1354   0.0252   0.1153   0.0165
+       wspeed      tp      ptp  pvalue  lockdown
+      -0.1273  -0.015  -0.0359  0.2809   -0.6243
+s.e.   0.0679   0.024   0.0197  0.0584    0.0839
+
+sigma^2 estimated as 0.05254:  log likelihood=13.29
+AIC=-0.58   AICc=2.07   BIC=38.64
+
+Training set error measures:
+                       ME     RMSE       MAE        MPE   MAPE
+Training set 3.862689e-14 0.221451 0.1764068 -0.6937544 6.5095
+                  MASE       ACF1
+Training set 0.6833408 0.02393075
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT0837A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(0,0,0) errors 
+
+Coefficients:
+      intercept  banda      t2m      sp   pblmax   pblmin    wdir
+         1.5219  5e-04  -0.1740  0.2018  -0.0901  -0.1782  0.0289
+s.e.     0.3369  2e-03   0.0889  0.1552   0.0289   0.1455  0.0208
+       wspeed      tp      ptp  pvalue  lockdown
+      -0.2079  0.0119  -0.0279  0.4260   -0.3743
+s.e.   0.0667  0.0401   0.0339  0.0675    0.0909
+
+sigma^2 estimated as 0.06754:  log likelihood=-6.46
+AIC=38.92   AICc=41.58   BIC=78.15
+
+Training set error measures:
+                       ME      RMSE       MAE        MPE     MAPE
+Training set 4.090572e-14 0.2527681 0.1902667 -0.9524947 7.203403
+                  MASE       ACF1
+Training set 0.7324013 0.06166791
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT1965A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(0,0,0) errors 
+
+Coefficients:
+      intercept   banda      t2m      sp   pblmax   pblmin    wdir
+         1.8678  -1e-04  -0.1071  0.1273  -0.0600  -0.5787  0.0003
+s.e.     0.3306   2e-03   0.0792  0.1436   0.0265   0.1253  0.0297
+       wspeed       tp      ptp  pvalue  lockdown
+      -0.1397  -0.0450  -0.0358  0.3325   -0.2558
+s.e.   0.0382   0.0425   0.0365  0.0631    0.0831
+
+sigma^2 estimated as 0.05653:  log likelihood=7.25
+AIC=11.49   AICc=14.15   BIC=50.72
+
+Training set error measures:
+                       ME      RMSE       MAE        MPE     MAPE
+Training set 1.742076e-15 0.2304723 0.1791525 -0.6682173 6.113058
+                  MASE       ACF1
+Training set 0.7027925 0.03354667
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT1588A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(0,0,0) errors 
+
+Coefficients:
+      intercept   banda      t2m      sp   pblmax   pblmin     wdir
+         0.7460  0.0041  -0.2489  0.5637  -0.0698  -0.2955  -0.0248
+s.e.     0.3314  0.0027   0.1217  0.2242   0.0411   0.1965   0.0269
+      wspeed      tp      ptp  pvalue  lockdown
+      0.1250  0.0527  -0.0455  0.6903   -0.3164
+s.e.  0.1129  0.0391   0.0355  0.0533    0.1324
+
+sigma^2 estimated as 0.135:  log likelihood=-57.91
+AIC=141.81   AICc=144.47   BIC=181.04
+
+Training set error measures:
+                        ME      RMSE       MAE       MPE     MAPE
+Training set -1.954295e-15 0.3597607 0.2322138 -18.87226 26.82903
+                  MASE       ACF1
+Training set 0.8827571 -0.0664794
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT1826A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(0,0,0) errors 
+
+Coefficients:
+      intercept   banda      t2m       sp   pblmax   pblmin     wdir
+         1.5707  0.0001  -0.1218  -0.0201  -0.1762  -0.2109  -0.0320
+s.e.     0.2838  0.0018   0.0725   0.1448   0.0254   0.1196   0.0178
+       wspeed       tp      ptp  pvalue  lockdown
+      -0.1779  -0.0325  -0.0607  0.4064   -0.3615
+s.e.   0.0748   0.0267   0.0222  0.0546    0.0778
+
+sigma^2 estimated as 0.0459:  log likelihood=18.28
+AIC=-10.56   AICc=-7.91   BIC=28.66
+
+Training set error measures:
+                       ME      RMSE      MAE        MPE     MAPE
+Training set 3.632775e-14 0.2127395 0.160196 -0.7723199 6.178431
+                  MASE        ACF1
+Training set 0.6755781 0.006215196
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT1735A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(1,0,0) errors 
+
+Coefficients:
+         ar1  intercept    banda     t2m      sp   pblmax   pblmin
+      0.1356     2.8198  -0.0068  0.0034  0.1346  -0.0056  -0.0662
+s.e.  0.2025     0.6461   0.0025  0.0731  0.1396   0.0195   0.0665
+         wdir   wspeed      tp      ptp  pvalue  lockdown
+      -0.0632  -0.1718  0.0227  -0.0228  0.2251   -0.2720
+s.e.   0.0269   0.0312  0.0344   0.0295  0.1543    0.0845
+
+sigma^2 estimated as 0.03503:  log likelihood=43.42
+AIC=-58.83   AICc=-55.75   BIC=-16.59
+
+Training set error measures:
+                       ME      RMSE       MAE       MPE     MAPE
+Training set 0.0003881732 0.1807727 0.1407641 -0.514432 5.235047
+                  MASE         ACF1
+Training set 0.6953455 -0.006336101
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT0906A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(0,0,0) errors 
+
+Coefficients:
+      intercept    banda     t2m      sp   pblmax  pblmin     wdir
+         4.3107  -0.0043  0.0641  0.4114  -0.0751  0.0322  -0.0201
+s.e.     0.6784   0.0022  0.0762  0.1792   0.0253  0.1575   0.0200
+      wspeed      tp      ptp  pvalue  lockdown
+      0.1876  0.0182  -0.0545  0.2630   -0.5680
+s.e.  0.1337  0.0341   0.0301  0.0788    0.1014
+
+sigma^2 estimated as 0.06298:  log likelihood=-4.18
+AIC=34.35   AICc=37.01   BIC=73.58
+
+Training set error measures:
+                       ME      RMSE       MAE       MPE     MAPE
+Training set 1.171677e-14 0.2491922 0.1749768 -1.417866 7.825058
+                  MASE       ACF1
+Training set 0.7731443 0.03251724
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT1873A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(0,0,0) errors 
+
+Coefficients:
+      intercept  banda      t2m      sp   pblmax   pblmin     wdir
+         1.3528  7e-04  -0.2120  0.1323  -0.0782  -0.2249  -0.0448
+s.e.     0.3058  2e-03   0.0804  0.1492   0.0280   0.1241   0.0187
+       wspeed       tp      ptp  pvalue  lockdown
+      -0.0328  -0.0170  -0.0447  0.4912   -0.3120
+s.e.   0.0687   0.0307   0.0250  0.0625    0.0904
+
+sigma^2 estimated as 0.06955:  log likelihood=-7.29
+AIC=40.58   AICc=43.24   BIC=79.81
+
+Training set error measures:
+                       ME     RMSE       MAE      MPE     MAPE
+Training set 9.859672e-15 0.253941 0.1962388 -1.21498 7.835511
+                  MASE        ACF1
+Training set 0.7639615 0.008017092
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT0908A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(1,0,0) errors 
+
+Coefficients:
+         ar1  intercept    banda     t2m       sp   pblmax   pblmin
+      0.4056     2.1458  -0.0061  0.2720  -0.3267  -0.1184  -0.0730
+s.e.  0.1309     1.3081   0.0033  0.1035   0.2746   0.0295   0.1271
+         wdir   wspeed      tp      ptp   pvalue  lockdown
+      -0.0364  -0.2108  0.0381  -0.0914  -0.0623   -0.7629
+s.e.   0.0249   0.1197  0.0521   0.0525   0.1255    0.1492
+
+sigma^2 estimated as 0.07941:  log likelihood=-19
+AIC=65.99   AICc=69.08   BIC=108.23
+
+Training set error measures:
+                       ME     RMSE       MAE       MPE    MAPE
+Training set -0.001257529 0.274968 0.2243891 -1.547494 10.4646
+                  MASE        ACF1
+Training set 0.7243668 -0.05731605
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT0912A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(0,0,0) errors 
+
+Coefficients:
+      intercept    banda      t2m      sp   pblmax   pblmin     wdir
+         1.9477  -0.0002  -0.0761  0.3163  -0.0289  -0.3761  -0.0135
+s.e.     0.3059   0.0017   0.0701  0.1235   0.0216   0.1090   0.0252
+       wspeed      tp      ptp  pvalue  lockdown
+      -0.1486  0.0240  -0.0229  0.3107   -0.3183
+s.e.   0.0311  0.0361   0.0305  0.0636    0.0709
+
+sigma^2 estimated as 0.03651:  log likelihood=38.31
+AIC=-50.62   AICc=-47.96   BIC=-11.39
+
+Training set error measures:
+                       ME      RMSE       MAE        MPE     MAPE
+Training set 9.576553e-16 0.1864584 0.1419212 -0.3924134 4.659565
+                  MASE         ACF1
+Training set 0.7003827 0.0009581669
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT0997A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(0,0,0) errors 
+
+Coefficients:
+      intercept   banda      t2m      sp   pblmax   pblmin    wdir
+         1.6780  0.0007  -0.1397  0.2500  -0.0493  -0.2570  0.0183
+s.e.     0.3442  0.0018   0.0805  0.1261   0.0232   0.1875  0.0158
+      wspeed      tp      ptp  pvalue  lockdown
+      0.0259  0.0071  -0.0044  0.4747   -0.3655
+s.e.  0.0686  0.0303   0.0257  0.0710    0.0834
+
+sigma^2 estimated as 0.04532:  log likelihood=20.46
+AIC=-14.92   AICc=-12.27   BIC=24.3
+
+Training set error measures:
+                       ME      RMSE       MAE        MPE     MAPE
+Training set 2.035477e-16 0.2099178 0.1610328 -0.5228474 5.323816
+                  MASE        ACF1
+Training set 0.8228739 0.006401328
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT1869A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(1,0,0) errors 
+
+Coefficients:
+          ar1  intercept   banda      t2m      sp   pblmax   pblmin
+      -0.0788     1.4494  0.0019  -0.1695  0.3553  -0.0266  -0.2376
+s.e.   0.1461     0.4099  0.0018   0.0663  0.1039   0.0178   0.0861
+        wdir   wspeed      tp      ptp  pvalue  lockdown
+      0.0001  -0.0644  0.0021  -0.0102  0.4341   -0.2403
+s.e.  0.0205   0.0295  0.0418   0.0400  0.0910    0.0652
+
+sigma^2 estimated as 0.03163:  log likelihood=41.15
+AIC=-54.3   AICc=-51.22   BIC=-12.06
+
+Training set error measures:
+                       ME      RMSE       MAE        MPE     MAPE
+Training set 0.0002789081 0.1791277 0.1428728 -0.3342125 4.534993
+                  MASE       ACF1
+Training set 0.7603053 0.01110162
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT1016A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(0,0,0) errors 
+
+Coefficients:
+      intercept   banda      t2m      sp   pblmax   pblmin    wdir
+         1.7612  0.0013  -0.1318  0.2224  -0.0284  -0.3081  0.0064
+s.e.     0.3302  0.0016   0.0653  0.1186   0.0223   0.1281  0.0195
+       wspeed      tp      ptp  pvalue  lockdown
+      -0.1113  0.0158  -0.0200  0.4422   -0.3212
+s.e.   0.0385  0.0261   0.0227  0.0687    0.0744
+
+sigma^2 estimated as 0.04054:  log likelihood=30.6
+AIC=-35.21   AICc=-32.55   BIC=4.02
+
+Training set error measures:
+                       ME      RMSE       MAE        MPE     MAPE
+Training set 1.900221e-15 0.1964936 0.1541461 -0.3616659 4.545582
+                 MASE       ACF1
+Training set 0.806561 0.08587421
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT2007A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(1,0,0) errors 
+
+Coefficients:
+          ar1  intercept    banda      t2m       sp   pblmax   pblmin
+      -0.1383     1.7767  -0.0021  -0.1704  -0.1679  -0.1973  -0.3363
+s.e.   0.1273     0.3668   0.0024   0.0879   0.1649   0.0307   0.1363
+         wdir   wspeed       tp      ptp  pvalue  lockdown
+      -0.0108  -0.2859  -0.0751  -0.0744  0.2909   -0.3813
+s.e.   0.0210   0.0825   0.0295   0.0257  0.0755    0.0877
+
+sigma^2 estimated as 0.0766:  log likelihood=-18.4
+AIC=64.81   AICc=67.9   BIC=107.05
+
+Training set error measures:
+                        ME      RMSE       MAE       MPE     MAPE
+Training set -0.0003863519 0.2757778 0.2135736 -1.637591 9.467681
+                  MASE       ACF1
+Training set 0.6409869 0.01224681
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT1692A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(0,0,0) errors 
+
+Coefficients:
+      intercept    banda      t2m      sp  pblmax   pblmin     wdir
+         1.5372  -0.0004  -0.2381  0.2908  0.0100  -0.6099  -0.0110
+s.e.     0.3408   0.0023   0.0931  0.1737  0.0335   0.1729   0.0277
+       wspeed      tp      ptp  pvalue  lockdown
+      -0.2287  0.0499  -0.0043  0.4066   -0.2936
+s.e.   0.0564  0.0376   0.0325  0.0631    0.1015
+
+sigma^2 estimated as 0.08042:  log likelihood=-20.83
+AIC=67.65   AICc=70.31   BIC=106.88
+
+Training set error measures:
+                       ME     RMSE       MAE       MPE    MAPE
+Training set 3.921091e-14 0.279623 0.2133075 -1.204529 7.74246
+                 MASE       ACF1
+Training set 0.782426 0.02236773
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT0594A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(0,0,0) errors 
+
+Coefficients:
+      intercept   banda      t2m       sp   pblmax   pblmin    wdir
+         1.6202  0.0014  -0.0621  -0.0035  -0.0438  -0.0257  0.0849
+s.e.     0.3749  0.0023   0.1033   0.1837   0.0299   0.2187  0.0264
+       wspeed       tp     ptp  pvalue  lockdown
+      -0.2020  -0.0839  0.0523  0.4904   -0.4702
+s.e.   0.0696   0.0518  0.0440  0.0669    0.1121
+
+sigma^2 estimated as 0.08716:  log likelihood=-25.98
+AIC=77.97   AICc=80.63   BIC=117.19
+
+Training set error measures:
+                       ME      RMSE       MAE       MPE     MAPE
+Training set 3.990568e-14 0.2891064 0.2265503 -1.182298 8.098394
+                  MASE       ACF1
+Training set 0.7925078 0.01891749
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT1104A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(0,0,0) errors 
+
+Coefficients:
+      intercept    banda      t2m      sp  pblmax   pblmin     wdir
+         2.0587  -0.0015  -0.0629  0.2702  0.0011  -0.2181  -0.0066
+s.e.     0.3294   0.0017   0.0678  0.1180  0.0206   0.0935   0.0226
+       wspeed      tp     ptp  pvalue  lockdown
+      -0.1197  0.0382  0.0008  0.3744   -0.2325
+s.e.   0.0297  0.0334  0.0283  0.0673    0.0674
+
+sigma^2 estimated as 0.03545:  log likelihood=43.59
+AIC=-61.17   AICc=-58.52   BIC=-21.95
+
+Training set error measures:
+                        ME      RMSE       MAE        MPE     MAPE
+Training set -2.291032e-15 0.1813015 0.1414018 -0.3193452 4.306159
+                  MASE        ACF1
+Training set 0.7640279 -0.04756262
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT1868A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(1,0,0) errors 
+
+Coefficients:
+          ar1  intercept   banda      t2m      sp   pblmax   pblmin
+      -0.0975     1.5357  0.0013  -0.2113  0.2364  -0.0453  -0.4642
+s.e.   0.1157     0.3327  0.0017   0.0648  0.1027   0.0197   0.0867
+        wdir   wspeed       tp      ptp  pvalue  lockdown
+      0.0039  -0.1005  -0.0711  -0.0197  0.3592   -0.2207
+s.e.  0.0207   0.0307   0.0420   0.0377  0.0720    0.0645
+
+sigma^2 estimated as 0.03486:  log likelihood=38.3
+AIC=-48.6   AICc=-45.51   BIC=-6.36
+
+Training set error measures:
+                        ME      RMSE       MAE        MPE    MAPE
+Training set -0.0005809459 0.1847248 0.1472563 -0.4707097 5.16424
+                  MASE       ACF1
+Training set 0.6346613 0.01107918
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT1190A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(0,0,0) errors 
+
+Coefficients:
+      intercept   banda      t2m      sp   pblmax   pblmin     wdir
+         3.0287  0.0027  -0.0070  0.6952  -0.1136  -0.0103  -0.0156
+s.e.     0.6900  0.0023   0.0959  0.2320   0.0332   0.1520   0.0269
+       wspeed      tp     ptp  pvalue  lockdown
+      -0.2112  0.0558  -0.068  0.5212   -0.6933
+s.e.   0.1557  0.0403   0.038  0.0610    0.1293
+
+sigma^2 estimated as 0.108:  log likelihood=-41.66
+AIC=109.32   AICc=111.97   BIC=148.54
+
+Training set error measures:
+                       ME    RMSE       MAE      MPE     MAPE
+Training set 1.458539e-14 0.32187 0.2470158 1.337435 18.58583
+                  MASE        ACF1
+Training set 0.7482972 -0.03222446
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT2230A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(0,0,0) errors 
+
+Coefficients:
+      intercept    banda      t2m      sp   pblmax   pblmin     wdir
+         1.5556  -0.0002  -0.1365  0.1793  -0.0168  -0.1919  -0.0171
+s.e.     0.2776   0.0014   0.0570  0.0956   0.0165   0.0627   0.0208
+       wspeed       tp     ptp  pvalue  lockdown
+      -0.0817  -0.0388  0.0116  0.4511   -0.1964
+s.e.   0.0288   0.0428  0.0350  0.0644    0.0620
+
+sigma^2 estimated as 0.02821:  log likelihood=58.15
+AIC=-90.3   AICc=-87.64   BIC=-51.07
+
+Training set error measures:
+                       ME     RMSE       MAE        MPE     MAPE
+Training set 1.524318e-15 0.163355 0.1294013 -0.3090166 4.278889
+                  MASE       ACF1
+Training set 0.7415769 0.07680941
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT1251A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(0,0,0) errors 
+
+Coefficients:
+      intercept  banda      t2m      sp  pblmax   pblmin    wdir
+         1.8967  0.003  -0.1256  0.3719  0.0149  -0.0432  0.0539
+s.e.     0.3589  0.002   0.0894  0.1589  0.0246   0.1946  0.0233
+       wspeed      tp      ptp  pvalue  lockdown
+      -0.2381  0.0261  -0.0007  0.4085   -0.5706
+s.e.   0.0617  0.0451   0.0383  0.0696    0.1043
+
+sigma^2 estimated as 0.0691:  log likelihood=-8.59
+AIC=43.18   AICc=45.83   BIC=82.4
+
+Training set error measures:
+                        ME      RMSE       MAE        MPE     MAPE
+Training set -2.009277e-14 0.2565275 0.1950048 -0.6819657 5.947319
+                  MASE         ACF1
+Training set 0.8276952 -0.007630492
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT1286A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(0,0,0) errors 
+
+Coefficients:
+      intercept    banda      t2m      sp   pblmax   pblmin     wdir
+         2.0174  -0.0006  -0.1040  0.2873  -0.0464  -0.5485  -0.0512
+s.e.     0.3178   0.0019   0.0774  0.1453   0.0266   0.1263   0.0297
+       wspeed       tp      ptp  pvalue  lockdown
+      -0.1044  -0.0141  -0.0333  0.2872    -0.265
+s.e.   0.0387   0.0433   0.0365  0.0662     0.084
+
+sigma^2 estimated as 0.05668:  log likelihood=6.51
+AIC=12.98   AICc=15.64   BIC=52.21
+
+Training set error measures:
+                       ME      RMSE       MAE        MPE     MAPE
+Training set 9.691958e-15 0.2315596 0.1750478 -0.6811395 5.915761
+                  MASE       ACF1
+Training set 0.6768888 0.03857878
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT1287A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(1,0,0) errors 
+
+Coefficients:
+         ar1  intercept    banda     t2m      sp   pblmax   pblmin
+      0.2633     2.5527  -0.0035  0.0650  0.5385  -0.0501  -0.3089
+s.e.  0.1323     0.4344   0.0020  0.0795  0.1502   0.0224   0.0945
+         wdir   wspeed      tp      ptp  pvalue  lockdown
+      -0.0620  -0.1083  0.0615  -0.0460  0.1634   -0.2445
+s.e.   0.0219   0.0262  0.0403   0.0328  0.1042    0.0888
+
+sigma^2 estimated as 0.03766:  log likelihood=37.97
+AIC=-47.94   AICc=-44.86   BIC=-5.7
+
+Training set error measures:
+                       ME      RMSE     MAE        MPE     MAPE
+Training set 0.0002323225 0.1874455 0.14589 -0.4082739 4.819326
+                  MASE         ACF1
+Training set 0.6707601 -0.000332783</code></pre>
+</div>
+<h3 id="stazioni-suburban">Stazioni Suburban</h3>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>purrr</span><span class='fu'>::</span><span class='fu'><a href='https://purrr.tidyverse.org/reference/map.html'>walk</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"S"</span><span class='op'>)</span>,.f<span class='op'>=</span><span class='kw'>function</span><span class='op'>(</span><span class='va'>tipo</span><span class='op'>)</span><span class='op'>{</span>
+  
+    <span class='va'>dati</span><span class='op'>[</span><span class='va'>dati</span><span class='op'>$</span><span class='va'>tipo_zona</span><span class='op'>==</span><span class='va'>tipo</span>,<span class='op'>]</span><span class='op'>-&gt;</span><span class='va'>dati2</span>  
+    
+    <span class='co'>#Altre info</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span><span class='op'>(</span><span class='va'>dati2</span><span class='op'>$</span><span class='va'>station_eu_code</span><span class='op'>)</span><span class='op'>-&gt;</span><span class='va'>CODICI</span>
+    
+    <span class='fu'>purrr</span><span class='fu'>::</span><span class='fu'><a href='https://purrr.tidyverse.org/reference/map.html'>walk</a></span><span class='op'>(</span><span class='va'>CODICI</span>,.f<span class='op'>=</span><span class='kw'>function</span><span class='op'>(</span><span class='va'>cc</span><span class='op'>)</span><span class='op'>{</span>
+      <span class='va'>dati2</span><span class='op'>[</span><span class='va'>dati2</span><span class='op'>$</span><span class='va'>station_eu_code</span><span class='op'>==</span><span class='va'>cc</span>,<span class='op'>]</span><span class='op'>-&gt;</span><span class='va'>subdati</span>
+      <span class='fu'>imputeTS</span><span class='fu'>::</span><span class='fu'><a href='https://SteffenMoritz.github.io/imputeTS/reference/na_ma.html'>na_ma</a></span><span class='op'>(</span><span class='va'>subdati</span><span class='op'>$</span><span class='va'>value</span><span class='op'>)</span><span class='op'>-&gt;</span><span class='va'>subdati</span><span class='op'>$</span><span class='va'>value</span>
+    
+      <span class='fu'>auto.arima</span><span class='op'>(</span>y<span class='op'>=</span><span class='va'>subdati</span><span class='op'>$</span><span class='va'>value</span>,xreg <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span><span class='op'>(</span><span class='va'>subdati</span><span class='op'>[</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"banda"</span>,<span class='st'>"t2m"</span>,<span class='st'>"sp"</span>,<span class='st'>"pblmax"</span>,<span class='st'>"pblmin"</span>,<span class='st'>"wdir"</span>,<span class='st'>"wspeed"</span>,<span class='st'>"tp"</span>,<span class='st'>"ptp"</span>,<span class='st'>"pvalue"</span>,<span class='st'>"lockdown"</span><span class='op'>)</span><span class='op'>]</span><span class='op'>)</span>,
+                 stepwise <span class='op'>=</span> <span class='cn'>TRUE</span>,max.p<span class='op'>=</span><span class='fl'>1</span>,max.q<span class='op'>=</span><span class='fl'>0</span><span class='op'>)</span><span class='op'>-&gt;</span><span class='va'>ris</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='st'>"###########################################\n"</span><span class='op'>)</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"Codice stazione (station_eu_code):"</span>,<span class='va'>cc</span><span class='op'>)</span><span class='op'>)</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='st'>"###########################################\n"</span><span class='op'>)</span>  
+      <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>ris</span><span class='op'>)</span>
+      
+    <span class='op'>}</span><span class='op'>)</span>
+
+
+<span class='op'>}</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT0742A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(1,0,0) errors 
+
+Coefficients:
+          ar1  intercept  banda      t2m      sp   pblmax   pblmin
+      -0.1486     1.0351  6e-04  -0.1106  0.1843  -0.0313  -0.1546
+s.e.   0.1412     0.4245  2e-03   0.0890  0.1355   0.0235   0.1277
+        wdir   wspeed      tp      ptp  pvalue  lockdown
+      0.0417  -0.1866  0.0028  -0.0293  0.5866   -0.3210
+s.e.  0.0210   0.0807  0.0365   0.0363  0.0945    0.0895
+
+sigma^2 estimated as 0.04734:  log likelihood=10.52
+AIC=6.97   AICc=10.18   BIC=48.74
+
+Training set error measures:
+                      ME      RMSE       MAE        MPE     MAPE
+Training set 0.001793057 0.2232748 0.1686404 -0.8945598 6.941279
+                  MASE       ACF1
+Training set 0.8324684 0.01302337
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT1734A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(0,0,0) errors 
+
+Coefficients:
+      intercept   banda      t2m       sp   pblmax   pblmin    wdir
+         1.6806  -0.001  -0.2337  -0.0385  -0.1482  -0.4224  0.0147
+s.e.     0.3097   0.002   0.0831   0.1610   0.0293   0.1245  0.0194
+       wspeed      tp      ptp  pvalue  lockdown
+      -0.2881  0.0220  -0.0872  0.3281   -0.3369
+s.e.   0.0788  0.0289   0.0243  0.0597    0.0875
+
+sigma^2 estimated as 0.06745:  log likelihood=-6.36
+AIC=38.72   AICc=41.37   BIC=77.94
+
+Training set error measures:
+                        ME      RMSE       MAE       MPE     MAPE
+Training set -3.195613e-16 0.2525923 0.1907346 -1.279926 7.701542
+                  MASE       ACF1
+Training set 0.6269396 0.03338321
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT0775A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(1,0,0) errors 
+
+Coefficients:
+         ar1  intercept    banda     t2m      sp   pblmax   pblmin
+      0.3333     3.5433  -0.0091  0.2181  0.2316  -0.0755  -0.3551
+s.e.  0.1000     0.5374   0.0026  0.1025  0.2121   0.0274   0.1097
+         wdir   wspeed      tp      ptp  pvalue  lockdown
+      -0.0033  -0.5022  0.0106  -0.0508  0.1185   -0.3232
+s.e.   0.0225   0.1160  0.0321   0.0281  0.0814    0.1185
+
+sigma^2 estimated as 0.06493:  log likelihood=-2.69
+AIC=33.39   AICc=36.48   BIC=75.63
+
+Training set error measures:
+                       ME      RMSE       MAE       MPE    MAPE
+Training set 0.0007018566 0.2461134 0.1828096 -0.938918 7.20007
+                  MASE       ACF1
+Training set 0.6385529 0.03658921
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT0839A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(1,0,0) errors 
+
+Coefficients:
+          ar1  intercept   banda      t2m      sp   pblmax   pblmin
+      -0.1038     1.1513  0.0038  -0.2677  0.1427  -0.0777  -0.5027
+s.e.   0.1281     0.3823  0.0021   0.0820  0.1445   0.0269   0.1289
+        wdir   wspeed       tp      ptp  pvalue  lockdown
+      0.0029  -0.1429  -0.0759  -0.0402  0.4317   -0.3175
+s.e.  0.0274   0.0466   0.0445   0.0427  0.0836    0.0862
+
+sigma^2 estimated as 0.06717:  log likelihood=-6.01
+AIC=40.01   AICc=43.1   BIC=82.25
+
+Training set error measures:
+                        ME      RMSE       MAE        MPE     MAPE
+Training set -0.0007677191 0.2520146 0.1914257 -0.9902557 7.019621
+                  MASE        ACF1
+Training set 0.6872077 0.008714024
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT0846A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(0,0,0) errors 
+
+Coefficients:
+      intercept   banda      t2m       sp  pblmax   pblmin    wdir
+         1.6142  0.0001  -0.0416  -0.0569  -0.074  -0.3319  0.0279
+s.e.     0.3029  0.0014   0.0630   0.1030   0.016   0.1232  0.0155
+       wspeed       tp     ptp  pvalue  lockdown
+      -0.2146  -0.0405  0.0079  0.4907   -0.2942
+s.e.   0.0395   0.0288  0.0245  0.0567    0.0618
+
+sigma^2 estimated as 0.02765:  log likelihood=57.83
+AIC=-89.67   AICc=-87.01   BIC=-50.44
+
+Training set error measures:
+                       ME     RMSE       MAE        MPE     MAPE
+Training set 3.954182e-17 0.162827 0.1308288 -0.2685962 4.052617
+                  MASE        ACF1
+Training set 0.6834368 -0.02205387
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT0267A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(0,0,0) errors 
+
+Coefficients:
+      intercept    banda      t2m      sp   pblmax   pblmin     wdir
+         1.8966  -0.0012  -0.0815  0.1238  -0.0418  -0.6351  -0.0236
+s.e.     0.3447   0.0022   0.0866  0.1652   0.0302   0.1418   0.0351
+       wspeed       tp      ptp  pvalue  lockdown
+      -0.1122  -0.0409  -0.0373  0.3125   -0.1871
+s.e.   0.0437   0.0470   0.0399  0.0686    0.0936
+
+sigma^2 estimated as 0.06799:  log likelihood=-8.29
+AIC=42.59   AICc=45.24   BIC=81.81
+
+Training set error measures:
+                        ME      RMSE       MAE        MPE     MAPE
+Training set -3.996885e-16 0.2562135 0.1944496 -0.9184264 6.954042
+                  MASE       ACF1
+Training set 0.7100524 0.03137586
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT1463A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(1,0,0) errors 
+
+Coefficients:
+         ar1  intercept   banda      t2m      sp   pblmax   pblmin
+      0.0348     1.3083  0.0014  -0.1923  0.2027  -0.1071  -0.1788
+s.e.  0.1341     0.4771  0.0027   0.1028  0.1870   0.0368   0.1998
+         wdir   wspeed       tp      ptp  pvalue  lockdown
+      -0.0092  -0.1184  -0.0076  -0.0296  0.4766   -0.3843
+s.e.   0.0235   0.0796   0.0478   0.0386  0.0978    0.1103
+
+sigma^2 estimated as 0.08592:  log likelihood=-24.75
+AIC=77.49   AICc=80.58   BIC=119.73
+
+Training set error measures:
+                       ME      RMSE       MAE      MPE     MAPE
+Training set 0.0003280364 0.2869908 0.2118432 -1.65228 9.122766
+                  MASE         ACF1
+Training set 0.8028061 -0.002597309
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT1459A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(0,0,0) errors 
+
+Coefficients:
+      intercept   banda      t2m      sp   pblmax   pblmin     wdir
+         2.0241  -7e-04  -0.1361  0.3414  -0.0866  -0.2822  -0.0499
+s.e.     0.3360   2e-03   0.0812  0.1488   0.0277   0.1233   0.0186
+       wspeed       tp      ptp  pvalue  lockdown
+      -0.0746  -0.0089  -0.0538  0.3131   -0.3015
+s.e.   0.0640   0.0291   0.0241  0.0677    0.0903
+
+sigma^2 estimated as 0.06809:  log likelihood=-7.06
+AIC=40.12   AICc=42.78   BIC=79.35
+
+Training set error measures:
+                       ME      RMSE       MAE        MPE     MAPE
+Training set 2.414585e-14 0.2537964 0.1974986 -0.9853249 7.223203
+                  MASE       ACF1
+Training set 0.7006513 0.06949335
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT1876A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(0,0,0) errors 
+
+Coefficients:
+      intercept    banda      t2m       sp   pblmax   pblmin     wdir
+         1.5254  -0.0008  -0.2274  -0.0548  -0.1218  -0.2944  -0.0180
+s.e.     0.3253   0.0022   0.0957   0.1780   0.0332   0.1572   0.0213
+      wspeed       tp      ptp  pvalue  lockdown
+      -0.106  -0.0422  -0.0114  0.4265   -0.3395
+s.e.   0.082   0.0404   0.0332  0.0639    0.1020
+
+sigma^2 estimated as 0.08632:  log likelihood=-24.95
+AIC=75.89   AICc=78.55   BIC=115.12
+
+Training set error measures:
+                       ME      RMSE       MAE       MPE     MAPE
+Training set 4.545125e-15 0.2867248 0.2224269 -2.044272 10.02249
+                  MASE          ACF1
+Training set 0.7764602 -0.0005637236
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT1203A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(1,0,0) errors 
+
+Coefficients:
+          ar1  intercept    banda     t2m      sp   pblmax   pblmin
+      -0.2993     1.6393  -0.0006  -0.131  0.1031  -0.0933  -0.0317
+s.e.   0.0973     0.2708   0.0015   0.057  0.1121   0.0209   0.0996
+         wdir   wspeed       tp      ptp  pvalue  lockdown
+      -0.0678  -0.1955  -0.0032  -0.0563  0.4379   -0.2774
+s.e.   0.0162   0.0451   0.0294   0.0289  0.0607    0.0629
+
+sigma^2 estimated as 0.04522:  log likelihood=20.83
+AIC=-13.66   AICc=-10.57   BIC=28.58
+
+Training set error measures:
+                       ME     RMSE       MAE        MPE     MAPE
+Training set 0.0004564033 0.208937 0.1664415 -0.6048284 5.991446
+                  MASE       ACF1
+Training set 0.6557958 0.02411205
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT1385A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(0,0,0) errors 
+
+Coefficients:
+      intercept   banda      t2m      sp   pblmax   pblmin    wdir
+         2.1318  0.0000  -0.1308  0.1028  -0.1137  -0.1920  0.0270
+s.e.     0.4144  0.0016   0.0685  0.1492   0.0222   0.1218  0.0195
+      wspeed       tp      ptp  pvalue  lockdown
+      0.1646  -0.0140  -0.0680  0.4080   -0.4075
+s.e.  0.1051   0.0248   0.0218  0.0667    0.0892
+
+sigma^2 estimated as 0.04801:  log likelihood=13.89
+AIC=-1.77   AICc=0.88   BIC=37.45
+
+Training set error measures:
+                       ME     RMSE       MAE        MPE     MAPE
+Training set 3.092795e-16 0.219121 0.1675338 -0.7820457 6.340478
+                 MASE        ACF1
+Training set 0.762164 -0.01138843</code></pre>
+</div>
+<h3 id="stazioni-rural">Stazioni Rural</h3>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>purrr</span><span class='fu'>::</span><span class='fu'><a href='https://purrr.tidyverse.org/reference/map.html'>walk</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"R"</span><span class='op'>)</span>,.f<span class='op'>=</span><span class='kw'>function</span><span class='op'>(</span><span class='va'>tipo</span><span class='op'>)</span><span class='op'>{</span>
+  
+    <span class='va'>dati</span><span class='op'>[</span><span class='va'>dati</span><span class='op'>$</span><span class='va'>tipo_zona</span><span class='op'>==</span><span class='va'>tipo</span>,<span class='op'>]</span><span class='op'>-&gt;</span><span class='va'>dati2</span>  
+    
+    <span class='co'>#Altre info</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span><span class='op'>(</span><span class='va'>dati2</span><span class='op'>$</span><span class='va'>station_eu_code</span><span class='op'>)</span><span class='op'>-&gt;</span><span class='va'>CODICI</span>
+    
+    <span class='fu'>purrr</span><span class='fu'>::</span><span class='fu'><a href='https://purrr.tidyverse.org/reference/map.html'>walk</a></span><span class='op'>(</span><span class='va'>CODICI</span>,.f<span class='op'>=</span><span class='kw'>function</span><span class='op'>(</span><span class='va'>cc</span><span class='op'>)</span><span class='op'>{</span>
+      <span class='va'>dati2</span><span class='op'>[</span><span class='va'>dati2</span><span class='op'>$</span><span class='va'>station_eu_code</span><span class='op'>==</span><span class='va'>cc</span>,<span class='op'>]</span><span class='op'>-&gt;</span><span class='va'>subdati</span>
+      <span class='fu'>imputeTS</span><span class='fu'>::</span><span class='fu'><a href='https://SteffenMoritz.github.io/imputeTS/reference/na_ma.html'>na_ma</a></span><span class='op'>(</span><span class='va'>subdati</span><span class='op'>$</span><span class='va'>value</span><span class='op'>)</span><span class='op'>-&gt;</span><span class='va'>subdati</span><span class='op'>$</span><span class='va'>value</span>
+    
+      <span class='fu'>auto.arima</span><span class='op'>(</span>y<span class='op'>=</span><span class='va'>subdati</span><span class='op'>$</span><span class='va'>value</span>,xreg <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span><span class='op'>(</span><span class='va'>subdati</span><span class='op'>[</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"banda"</span>,<span class='st'>"t2m"</span>,<span class='st'>"sp"</span>,<span class='st'>"pblmax"</span>,<span class='st'>"pblmin"</span>,<span class='st'>"wdir"</span>,<span class='st'>"wspeed"</span>,<span class='st'>"tp"</span>,<span class='st'>"ptp"</span>,<span class='st'>"pvalue"</span>,<span class='st'>"lockdown"</span><span class='op'>)</span><span class='op'>]</span><span class='op'>)</span>,
+                 stepwise <span class='op'>=</span> <span class='cn'>TRUE</span>,max.p<span class='op'>=</span><span class='fl'>1</span>,max.q<span class='op'>=</span><span class='fl'>0</span><span class='op'>)</span><span class='op'>-&gt;</span><span class='va'>ris</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='st'>"###########################################\n"</span><span class='op'>)</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"Codice stazione (station_eu_code):"</span>,<span class='va'>cc</span><span class='op'>)</span><span class='op'>)</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='st'>"###########################################\n"</span><span class='op'>)</span>  
+     <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>ris</span><span class='op'>)</span>
+      
+    <span class='op'>}</span><span class='op'>)</span>
+
+
+<span class='op'>}</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT1964A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(0,0,0) errors 
+
+Coefficients:
+      intercept    banda     t2m      sp   pblmax   pblmin     wdir
+         1.9660  -0.0003  0.0210  0.2993  -0.0697  -0.4388  -0.0041
+s.e.     0.2994   0.0016  0.0689  0.1195   0.0223   0.0986   0.0229
+       wspeed       tp     ptp  pvalue  lockdown
+      -0.1349  -0.0476  0.0128  0.2633   -0.2310
+s.e.   0.0287   0.0396  0.0343  0.0645    0.0708
+
+sigma^2 estimated as 0.03991:  log likelihood=31.05
+AIC=-36.09   AICc=-33.44   BIC=3.13
+
+Training set error measures:
+                       ME      RMSE       MAE       MPE     MAPE
+Training set 3.055851e-14 0.1956197 0.1564396 -0.462976 5.356507
+                  MASE       ACF1
+Training set 0.6605038 -0.0795339
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT1746A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(1,0,0) errors 
+
+Coefficients:
+         ar1  intercept    banda     t2m      sp   pblmax   pblmin
+      0.5043     3.3272  -0.0089  0.3662  0.5822  -0.0452  -0.3278
+s.e.  0.1057     0.4662   0.0031  0.1248  0.2354   0.0266   0.0874
+         wdir  wspeed      tp      ptp   pvalue  lockdown
+      -0.0764  -0.220  0.0932  -0.0943  -0.0309   -0.4115
+s.e.   0.0251   0.039  0.0508   0.0436   0.0928    0.1684
+
+sigma^2 estimated as 0.07367:  log likelihood=-12.31
+AIC=52.62   AICc=55.7   BIC=94.86
+
+Training set error measures:
+                       ME      RMSE      MAE       MPE     MAPE
+Training set -0.000437448 0.2621494 0.207161 -1.636751 9.149505
+                  MASE        ACF1
+Training set 0.6964651 -0.07605357
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT0842A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(1,0,0) errors 
+
+Coefficients:
+          ar1  intercept   banda      t2m      sp   pblmax   pblmin
+      -0.1984     0.9030  0.0031  -0.0779  0.1741  -0.0777  -0.4426
+s.e.   0.1074     0.3498  0.0018   0.0773  0.1190   0.0208   0.1159
+         wdir   wspeed       tp     ptp  pvalue  lockdown
+      -0.0102  -0.1223  -0.1144  0.0083  0.5494   -0.1734
+s.e.   0.0221   0.0361   0.0405  0.0373  0.0725    0.0651
+
+sigma^2 estimated as 0.04884:  log likelihood=18
+AIC=-8   AICc=-4.91   BIC=34.24
+
+Training set error measures:
+                        ME      RMSE       MAE        MPE     MAPE
+Training set -0.0003337277 0.2141748 0.1732306 -0.5158935 5.702836
+                  MASE       ACF1
+Training set 0.6853113 0.01131739
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT1736A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(0,0,0) errors 
+
+Coefficients:
+      intercept    banda     t2m      sp   pblmax   pblmin     wdir
+         2.2317  -0.0051  0.0236  0.0482  -0.0665  -0.0502  -0.0678
+s.e.     0.3572   0.0023  0.0937  0.1770   0.0304   0.0988   0.0358
+       wspeed      tp      ptp  pvalue  lockdown
+      -0.2368  0.0216  -0.0055  0.3126   -0.2549
+s.e.   0.0489  0.0473   0.0422  0.0726    0.1013
+
+sigma^2 estimated as 0.07289:  log likelihood=-14.55
+AIC=55.1   AICc=57.76   BIC=94.33
+
+Training set error measures:
+                        ME      RMSE       MAE       MPE     MAPE
+Training set -3.407211e-14 0.2680826 0.2021508 -1.979506 9.727551
+                  MASE        ACF1
+Training set 0.7398614 -0.05361786
+[1] &quot;###########################################\n&quot;
+[1] &quot;Codice stazione (station_eu_code):IT1174A&quot;
+[1] &quot;###########################################\n&quot;
+Series: subdati$value 
+Regression with ARIMA(0,0,0) errors 
+
+Coefficients:
+      intercept    banda      t2m      sp   pblmax   pblmin     wdir
+         2.0699  -0.0012  -0.1126  0.3098  -0.0213  -0.1483  -0.0469
+s.e.     0.2783   0.0014   0.0587  0.1056   0.0173   0.0723   0.0188
+       wspeed      tp      ptp  pvalue  lockdown
+      -0.0991  0.0315  -0.0065  0.3046   -0.2200
+s.e.   0.0266  0.0238   0.0203  0.0661    0.0605
+
+sigma^2 estimated as 0.03012:  log likelihood=54.17
+AIC=-82.33   AICc=-79.68   BIC=-43.11
+
+Training set error measures:
+                       ME      RMSE       MAE        MPE     MAPE
+Training set 2.444044e-16 0.1682209 0.1330128 -0.2922102 4.285848
+                  MASE         ACF1
+Training set 0.7231923 -0.008330712</code></pre>
+</div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<!--radix_placeholder_article_footer-->
+<!--/radix_placeholder_article_footer-->
+</div>
+
+<div class="d-appendix">
+</div>
+
+
+<!--radix_placeholder_site_after_body-->
+<!--/radix_placeholder_site_after_body-->
+<!--radix_placeholder_appendices-->
+<div class="appendix-bottom"></div>
+<!--/radix_placeholder_appendices-->
+<!--radix_placeholder_navigation_after_body-->
+<!--/radix_placeholder_navigation_after_body-->
+
+</body>
+
+</html>
