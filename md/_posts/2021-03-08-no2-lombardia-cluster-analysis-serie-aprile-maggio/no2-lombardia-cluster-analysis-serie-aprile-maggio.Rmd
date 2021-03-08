@@ -1,5 +1,5 @@
 ---
-title: "NO2 Lombardia, cluster analysis"
+title: "NO2 Lombardia, cluster analysis serie aprile-maggio"
 description: |
   Serie gennaio-maggio 2020.
 author:
@@ -13,7 +13,7 @@ output:
     self_contained: false
 ---
 
-Cluster analysis (usando Dynamic Time Warping, DTW) delle serie di `r params$inquinante` per il periodo Gennaio-Maggio 2020, regione `r params$regione`. 
+Cluster analysis (usando Dynamic Time Warping, DTW) delle serie di `r params$inquinante` per il periodo Aprile-Maggio 2020, regione `r params$regione`. 
 
 <br><br>
 
@@ -35,7 +35,7 @@ knitr::opts_chunk$set(incude=FALSE,eval = TRUE,echo=FALSE,message = FALSE,warnin
 ```{r prepara_dati}
 no2 %>%
   filter(yy %in% 2020) %>%
-  filter(mm %in% 1:5)->dati0
+  filter(mm %in% 4:5)->dati0
 
 left_join(dati0,stazioni)->dati
 
@@ -167,6 +167,4 @@ ggplot(data=dati0,aes(x=date,y=value))+
   facet_wrap(~cluster)+
   theme_bw()
 ```
-
-
 
