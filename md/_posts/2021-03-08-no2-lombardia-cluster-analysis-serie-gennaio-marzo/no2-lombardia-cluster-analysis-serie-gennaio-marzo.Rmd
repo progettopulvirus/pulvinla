@@ -114,7 +114,7 @@ icon4 <- awesomeIcons(
   icon = 'ios-close',
   iconColor = 'black',
   library = 'ion',
-  markerColor = "yellow"
+  markerColor = "brown"
 )
 
 leaflet() %>%
@@ -144,9 +144,13 @@ table(prova[prova$cluster==1,c("zona_tipo")])
 table(prova[prova$cluster==2,c("zona_tipo")])
 ```
 
+#### Cluster3: tipo_stazione
+
 ```{r conta_cluster333}
 table(prova[prova$cluster==3,c("zona_tipo")])
 ```
+
+#### Cluster4: tipo_stazione
 
 ```{r conta_cluster444}
 table(prova[prova$cluster==4,c("zona_tipo")])
