@@ -1,7 +1,7 @@
 ---
 title: "NO2 Lombardia, cluster analysis serie gennaio-marzo"
 description: |
-  Serie aprile-maggio 2020.
+  Serie gennaio-marzo 2020.
 author:
   - name: guidofioravanti
 date: 03-08-2021
