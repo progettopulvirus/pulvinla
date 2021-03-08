@@ -1,0 +1,185 @@
+---
+title: "NO2 Lombardia, cluster analysis"
+description: |
+  Serie gennaio-maggio 2020.
+author:
+  - name: guidofioravanti
+date: 03-08-2021
+params:
+  inquinante: no2
+  regione: lombardia
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+Cluster analysis (usando Dynamic Time Warping, DTW) delle serie di `r params$inquinante` per il periodo Gennaio-Maggio 2020, regione `r params$regione`. 
+
+<br><br>
+
+
+```{r setup,incude=FALSE,eval = TRUE,echo=FALSE,message = FALSE,warning = FALSE,error=FALSE}
+library("lombardia")
+library("tidyverse")
+library("imputeTS")
+library("stazioniMonitoraggio")
+library("dtwclust")
+library("TSclust")
+library("leaflet")
+library("regioniItalia")
+library("sf")
+
+knitr::opts_chunk$set(incude=FALSE,eval = TRUE,echo=FALSE,message = FALSE,warning = FALSE,error=FALSE,layout="l-page",fig.width = 10,fig.height = 5)
+```
+
+```{r prepara_dati}
+no2 %>%
+  filter(yy %in% 2020) %>%
+  filter(mm %in% 1:5)->dati0
+
+left_join(dati0,stazioni)->dati
+
+dati %>%
+  mutate(codice=glue::glue("{station_eu_code}"))->dati
+
+#elimino 29 febbraio
+dati %>%
+  dplyr::select(yy,mm,dd,date,codice,value) %>%
+  spread(key=codice,value=value) %>%
+  filter(!(mm==2 & dd==29)) %>%
+  arrange(yy,mm,dd) %>%
+  dplyr::select(-yy,-mm,-dd,-date)->dati
+
+#impute time series
+purrr::map_dfc(dati,.f=~na_ma(.))->dati
+
+#definisce la misura di distanza con DTW
+purrr::partial(.f=dist,method="DTW")->dtw_dist
+```
+
+```{r heatmap2,include=TRUE}
+gplots::heatmap.2(x=as.matrix(dati),distfun = dtw_dist,
+                  dendrogram = "column",Rowv=F,labRow = FALSE,
+                  key=TRUE)->out
+```
+
+```{r elabora_clusters}
+as.hclust(out$colDendrogram)->hc
+stats::cutree(hc,k=2)->soluzione
+
+tibble(cluster=as.character(soluzione),station_eu_code=names(soluzione))->mydf
+left_join(mydf,stazioni)->prova
+```
+
+```{r prepara_sf}
+  st_as_sf(prova,coords=c("st_x","st_y"),crs=4326)->st_prova
+  st_transform(st_prova,crs=32632)->st_prova
+```  
+  
+```{r mappa_ggplot,eval=FALSE}  
+  ggplot()+
+    geom_sf(data=lombardia)+
+    geom_sf(data=st_prova,aes(fill=cluster),pch=21)->grafico
+    #facet_wrap(~cluster)->grafico
+  
+print(grafico)
+```
+
+### Mappa stazioni
+
+```{r mappa_leaflet,include=TRUE}
+icon1 <- awesomeIcons(
+  icon = 'ios-close',
+  iconColor = 'black',
+  library = 'ion',
+  markerColor = "red"
+)
+
+
+icon2 <- awesomeIcons(
+  icon = 'ios-close',
+  iconColor = 'black',
+  library = 'ion',
+  markerColor = "blue"
+)
+
+leaflet() %>%
+  addTiles() %>%
+  addAwesomeMarkers(data=prova %>% filter(cluster==1),lng=~st_x,lat=~st_y,group = "Cluster1",icon = icon1,popup = ~tipo_zona) %>%
+  addAwesomeMarkers(data=prova %>% filter(cluster==2),lng=~st_x,lat=~st_y,group = "Cluster2",icon = icon2,popup = ~tipo_zona) %>%
+  addLayersControl(overlayGroups=c("Cluster1","Cluster2"),layersControlOptions(options=list(collapse=FALSE)))
+```  
+
+### Descrizione clusters
+
+U: Urban; S: Suburban; R: Rural
+
+#### Cluster1: tipo_zona
+
+```{r conta_cluster1}
+table(prova[prova$cluster==1,c("tipo_zona")])
+```
+
+#### Cluster2: tipo_zona
+
+```{r conta_cluster2}
+table(prova[prova$cluster==2,c("tipo_zona")])
+```
+
+#### Cluster1: tipo_stazione
+
+F: Fondo; I: Industriale; T: Traffico
+
+```{r conta_cluster11}
+table(prova[prova$cluster==1,c("tipo_stazione")])
+```
+
+#### Cluster2: tipo_stazione
+
+```{r conta_cluster22}
+table(prova[prova$cluster==2,c("tipo_stazione")])
+```
+
+
+
+```{r descrizione}
+skimr::skim(prova %>% dplyr::select(tipo_zona,cluster,tipo_stazione,altitudine,popolazione)%>% group_by(cluster))
+```
+
+### Distanze tra stazioni
+
+```{r calcola_distanze,include=FALSE}
+st_distance(st_prova %>% filter(cluster==1))->matriceDistanze
+as.numeric(matriceDistanze[lower.tri(matriceDistanze)])->dist_clust1
+
+st_distance(st_prova %>% filter(cluster==2))->matriceDistanze
+as.numeric(matriceDistanze[lower.tri(matriceDistanze)])->dist_clust2
+```
+
+#### Cluster1
+
+```{r distanze1}
+skimr::skim(dist_clust1)
+```
+
+#### Cluster2
+
+```{r distanze2}
+skimr::skim(dist_clust2)
+```
+
+### Grafici serie
+
+```{r plot_serie_per_cluster,include=TRUE}
+left_join(dati0,prova[,c("station_eu_code","cluster")])->dati0
+
+ggplot(data=dati0,aes(x=date,y=value))+
+  geom_line(aes(group=station_eu_code))+
+  geom_smooth(aes(x=date,y=value,colour=cluster),se=FALSE)+
+  facet_wrap(~cluster)+
+  theme_bw()
+```
+
+```{r}
+
+
