@@ -1,5 +1,5 @@
 ---
-title: "NO2 Lombardia, cluster analysis serie aprile-maggio"
+title: "NO2 Lombardia, cluster analysis serie gennaio-marzo"
 description: |
   Serie aprile-maggio 2020.
 author:
@@ -13,7 +13,7 @@ output:
     self_contained: false
 ---
 
-Cluster analysis (usando Dynamic Time Warping, DTW) delle serie di `r params$inquinante` per il periodo Aprile-Maggio 2020, regione `r params$regione`. 
+Cluster analysis (usando Dynamic Time Warping, DTW) delle serie di `r params$inquinante` per il periodo Gennaio-Marzo 2020, regione `r params$regione`. 
 
 <br><br>
 
@@ -35,7 +35,7 @@ knitr::opts_chunk$set(incude=FALSE,eval = TRUE,echo=FALSE,message = FALSE,warnin
 ```{r prepara_dati}
 no2 %>%
   filter(yy %in% 2020) %>%
-  filter(mm %in% 4:5)->dati0
+  filter(mm %in% 1:3)->dati0
 
 left_join(dati0,stazioni)->dati
 
@@ -65,7 +65,7 @@ gplots::heatmap.2(x=as.matrix(dati),distfun = dtw_dist,
 
 ```{r elabora_clusters}
 as.hclust(out$colDendrogram)->hc
-stats::cutree(hc,k=2)->soluzione
+stats::cutree(hc,k=4)->soluzione
 
 tibble(cluster=as.character(soluzione),station_eu_code=names(soluzione))->mydf
 left_join(mydf,stazioni)->prova
@@ -103,11 +103,27 @@ icon2 <- awesomeIcons(
   markerColor = "blue"
 )
 
+icon3 <- awesomeIcons(
+  icon = 'ios-close',
+  iconColor = 'black',
+  library = 'ion',
+  markerColor = "orange"
+)
+
+icon4 <- awesomeIcons(
+  icon = 'ios-close',
+  iconColor = 'black',
+  library = 'ion',
+  markerColor = "yellow"
+)
+
 leaflet() %>%
   addTiles() %>%
-  addAwesomeMarkers(data=prova %>% filter(cluster==1),lng=~st_x,lat=~st_y,group = "Cluster1",icon = icon1,popup = ~tipo_zona) %>%
-  addAwesomeMarkers(data=prova %>% filter(cluster==2),lng=~st_x,lat=~st_y,group = "Cluster2",icon = icon2,popup = ~tipo_zona) %>%
-  addLayersControl(overlayGroups=c("Cluster1","Cluster2"),layersControlOptions(options=list(collapse=FALSE)))
+  addAwesomeMarkers(data=prova %>% filter(cluster==1),lng=~st_x,lat=~st_y,group = "Cluster1",icon = icon1,popup = ~zona_tipo) %>%
+  addAwesomeMarkers(data=prova %>% filter(cluster==2),lng=~st_x,lat=~st_y,group = "Cluster2",icon = icon2,popup = ~zona_tipo) %>%
+  addAwesomeMarkers(data=prova %>% filter(cluster==3),lng=~st_x,lat=~st_y,group = "Cluster3",icon = icon3,popup = ~zona_tipo) %>%  
+  addAwesomeMarkers(data=prova %>% filter(cluster==4),lng=~st_x,lat=~st_y,group = "Cluster4",icon = icon4,popup = ~zona_tipo) %>%  
+  addLayersControl(overlayGroups=c("Cluster1","Cluster2","Cluster3","Cluster4"),layersControlOptions(options=list(collapse=FALSE)))
 ```  
 
 ### Descrizione clusters
@@ -128,7 +144,13 @@ table(prova[prova$cluster==1,c("zona_tipo")])
 table(prova[prova$cluster==2,c("zona_tipo")])
 ```
 
+```{r conta_cluster333}
+table(prova[prova$cluster==3,c("zona_tipo")])
+```
 
+```{r conta_cluster444}
+table(prova[prova$cluster==4,c("zona_tipo")])
+```
 
 ```{r descrizione}
 skimr::skim(prova %>% dplyr::select(tipo_zona,cluster,tipo_stazione,altitudine,popolazione)%>% group_by(cluster))
@@ -142,6 +164,12 @@ as.numeric(matriceDistanze[lower.tri(matriceDistanze)])->dist_clust1
 
 st_distance(st_prova %>% filter(cluster==2))->matriceDistanze
 as.numeric(matriceDistanze[lower.tri(matriceDistanze)])->dist_clust2
+
+st_distance(st_prova %>% filter(cluster==3))->matriceDistanze
+as.numeric(matriceDistanze[lower.tri(matriceDistanze)])->dist_clust3
+
+st_distance(st_prova %>% filter(cluster==4))->matriceDistanze
+as.numeric(matriceDistanze[lower.tri(matriceDistanze)])->dist_clust4
 ```
 
 #### Cluster1
@@ -154,6 +182,18 @@ skimr::skim(dist_clust1)
 
 ```{r distanze2}
 skimr::skim(dist_clust2)
+```
+
+#### Cluster3
+
+```{r distanze3}
+skimr::skim(dist_clust3)
+```
+
+#### Cluster4
+
+```{r distanze4}
+skimr::skim(dist_clust4)
 ```
 
 ### Grafici serie
