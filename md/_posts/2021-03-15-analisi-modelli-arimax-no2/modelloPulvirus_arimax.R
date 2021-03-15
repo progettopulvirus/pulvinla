@@ -277,7 +277,7 @@ saveRDS(out_pvalues,glue::glue("_out_pvalues_{INQUINANTE}_{REGIONE}.RDS"))
 
 
 rmarkdown::render("analisi-modelli-arimax-no2.Rmd",
-                  output_format = "html_document",
+                  output_format = "distill_article",
                   params = list(regione=REGIONE,
                                 inquinante=INQUINANTE))
 

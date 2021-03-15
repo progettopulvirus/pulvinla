@@ -1,7 +1,7 @@
 ---
 title: "Analisi modelli ARIMAX, NO2"
-description: "Serie LOmbardia gennaio-maggio 2021"
-author: Michela
+description: "Serie Lombardia gennaio-maggio 2021"
+author: Michela Cameletti
 date: 03-15-2021
 params:
   regione: lombardia
