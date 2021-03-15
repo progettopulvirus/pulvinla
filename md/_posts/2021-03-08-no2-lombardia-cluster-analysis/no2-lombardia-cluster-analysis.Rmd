@@ -68,6 +68,7 @@ as.hclust(out$colDendrogram)->hc
 stats::cutree(hc,k=2)->soluzione
 
 tibble(cluster=as.character(soluzione),station_eu_code=names(soluzione))->mydf
+write_delim(mydf,file="cluster.csv",delim=";",col_names=TRUE)
 left_join(mydf,stazioni)->prova
 ```
 

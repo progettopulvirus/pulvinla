@@ -1,0 +1,160 @@
+---
+title: "Analisi modelli ARIMAX, NO2"
+description: "Serie LOmbardia gennaio-maggio 2021"
+author: Michela
+date: 03-15-2021
+params:
+  regione: lombardia
+  inquinante: no2
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r intro,include=FALSE,echo=FALSE,warning=FALSE,message=FALSE}
+library("tidyverse")
+library("janitor")
+library("INLA")
+library("brinla")
+library("sf")
+library("cowplot")
+library("knitr")
+library("skimr")
+library("raster")
+library("sp")
+library("rpulvinla")
+library("downloadthis")
+library("regioniItalia")
+library("leaflet")
+library("lubridate")
+
+
+knitr::opts_chunk$set(layout="l-body-outset",warning = FALSE,message = FALSE,echo=FALSE,fig.height=4,include = TRUE,eval = TRUE)
+set.seed(1)
+```
+
+# `r params$inquinante`  
+
+
+```{r leggiRisultati,include=FALSE}
+inquinante ="no2"
+regione="lombardia"
+readRDS(glue::glue("_out_pvalues_{inquinante}_{regione}.RDS"))->out_pvalues
+readRDS(glue::glue("_dati_staz_list_{inquinante}_{regione}.RDS"))->dati_staz_list
+```
+
+Il periodo del lockdown va dal 9 marzo al 3 maggio 2021.
+
+---
+
+## P-values
+
+
+```{r}
+table(out_pvalues[,c("sign","zona_tipo")])
+```
+
+---
+
+```{r}
+DT::datatable(out_pvalues %>% dplyr::select(station_eu_code,sign,zona_tipo))
+```
+
+---
+
+### Mappa stazioni
+
+```{r}
+
+awesomeIcons(library="fa",markerColor = "white",icon="asterisk")->noeffect_icon
+awesomeIcons(library="fa",markerColor = "lightblue",icon="arrows-alt-v")->levelonly_icon
+awesomeIcons(library="fa",markerColor = "blue",icon="chart-line")->slopeonly_icon
+awesomeIcons(library="fa",markerColor = "lightred",icon="dove")->levelslope_icon
+
+
+leaflet() %>%
+  addTiles()->map
+
+st_transform(lombardia,crs=4326)->lombardia
+
+map %>%
+  addPolygons(data=lombardia,opacity = 0.25,weight = 0.5)%>%
+  addAwesomeMarkers(data=out_pvalues %>% filter(sign=="no effect"),lat=~st_y,lng=~st_x,group = "No effect",icon = noeffect_icon,popup = ~station_eu_code) %>%
+  addAwesomeMarkers(data=out_pvalues %>% filter(sign=="level only"),lat=~st_y,lng=~st_x,group="Level only",icon = levelonly_icon,popup = ~station_eu_code) %>%
+  addAwesomeMarkers(data=out_pvalues %>% filter(sign=="slope only"),lat=~st_y,lng=~st_x,group="Slope only",icon = slopeonly_icon,popup = ~station_eu_code) %>%
+  addAwesomeMarkers(data=out_pvalues %>% filter(sign=="level & slope"),lat=~st_y,lng=~st_x,group="Level & slope",icon = levelslope_icon,popup = ~station_eu_code)%>%
+  addLayersControl(overlayGroups = c("No effect","Level only","Slope only","Level & slope"),options = layersControlOptions(collapsed=FALSE))
+
+
+```
+
+```{r,eval=FALSE}
+##### Map  
+tmap_mode("view")
+tmap_options(basemaps = c("OpenStreetMap", "Esri.WorldGrayCanvas",
+                          "Esri.WorldTopoMap")) 
+
+lombardiakm = in_km(lombardia)
+st_crs(lombardiakm)->crsKM
+
+staz_Lomb = SpatialPointsDataFrame(coords=out_pvalues[,c("coordx","coordy")]/1000,
+                                  data = data.frame(sign=as.numeric(out_pvalues$sign),
+                                                    station_eu_code =out_pvalues$station_eu_code),
+                                  proj4string = CRS(crsKM$input))
+
+tm_shape(st_geometry(lombardiakm)) +
+  tm_fill(alpha=0.5) +
+  tm_borders()  +
+  tm_shape(staz_Lomb) +
+  tm_dots(col = "sign", size=0.1,
+        breaks = c(1,2,3,4,Inf),
+        labels = c("no effet", "level only", "slope only", "level & slope"),
+        id ="station_eu_code",
+        palette = c ("white", "aquamarine2", "cornflowerblue","violet"),
+        title = "")
+
+
+#lf <- tmap_leaflet(lomb_map)
+#library(mapview)
+#mapshot(lf, file = "Lombardia_map.png")
+```
+
+
+
+
+```{r,eval=FALSE}
+annotation1 <- data.frame(
+  x = ymd("2020-03-08"),
+  y = 5,
+  label = c("Lockdown")
+)
+
+
+for(i in 1:length(dati_staz_list)){
+  dati_staz = dati_staz_list[[i]]
+  # plot fitted and observed time series
+    map = dati_staz %>% 
+        ggplot() +
+        geom_line(aes(x=date,y=value,col="Observed"),size=1.1) +
+        geom_line(aes(x=date,y=predfitted,col = "Fitted"),size=1.1) +
+        geom_line(aes(x=date,y=predcounterf,col= "Counterfactual"),linetype=2,size=1.1) +
+        geom_vline(aes(xintercept=annotation1$x),linetype=2, size=1.5, col="darkgreen") + 
+        geom_label(data=annotation1, aes(x=x, y=y, label=label),                 
+                   color="orange", size=6 , angle=45, fontface="bold") +
+        labs(color="", y=bquote("NO2 concentration (" ~ mu ~ g/m^3 ~ ")"))+
+        labs(title=paste("NO2 -",dati_staz$station_eu_code)) +
+        theme(axis.title.x = element_text(size = rel(2.)),
+              axis.text.x = element_text(size = rel(2.)),
+              axis.title.y = element_text(size = rel(2.)),
+              axis.text.y = element_text(size = rel(2.)),
+              legend.text = element_text(size = rel(1.5)),
+              legend.title = element_text(size = rel(2))) +
+        theme(legend.position="top")
+    print(map)
+      
+ #     ggsave(paste0("./Figures/",dati_staz$station_eu_code[1],".pdf"),
+  #           width = 20, height = 20, units = "cm")
+}    
+```
+
