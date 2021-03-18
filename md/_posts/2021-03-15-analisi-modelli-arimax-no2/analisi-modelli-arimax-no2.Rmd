@@ -1,6 +1,6 @@
 ---
 title: "Analisi modelli ARIMAX, NO2"
-description: "Serie gennaio-maggio 2021"
+description: "Serie gennaio-maggio 2020"
 author: Michela Cameletti
 date: 03-15-2021
 params:
