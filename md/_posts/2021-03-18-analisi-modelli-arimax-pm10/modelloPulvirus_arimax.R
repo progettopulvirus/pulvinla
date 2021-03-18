@@ -60,7 +60,7 @@ WEEKEND<-c(TRUE,FALSE)[1] #effetto weekend
 #############################
 REGIONI<-PULVIRUS_REGIONI[-2]
 purrr::walk(REGIONI,.f=installa_pacchetto_pulvirus)
-INQUINANTE<-"no2" #inquinante su cui lavorare 
+INQUINANTE<-"pm10" #inquinante su cui lavorare 
 
 
 #############################

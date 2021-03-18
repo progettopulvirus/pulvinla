@@ -6,14 +6,14 @@
       "description": "Some additional details about the blog",
       "author": [],
       "contents": "\n\n\n\n",
-      "last_modified": "2021-03-15T16:28:31+01:00"
+      "last_modified": "2021-03-18T15:27:23+01:00"
     },
     {
       "path": "index.html",
       "title": "pulvinla",
       "author": [],
       "contents": "\n\n\n\n",
-      "last_modified": "2021-03-15T16:28:31+01:00"
+      "last_modified": "2021-03-18T15:27:23+01:00"
     }
   ],
   "collections": ["posts/posts.json"]
