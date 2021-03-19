@@ -59,7 +59,7 @@ WEEKEND<-c(TRUE,FALSE)[1] #effetto weekend
 ###Regione e inquinante: fissare REGIONE e INQUINANTE
 #############################
 REGIONI<-PULVIRUS_REGIONI[-2]
-purrr::walk(REGIONI,.f=installa_pacchetto_pulvirus)
+purrr::walk(REGIONI,.f=installa_pacchetto_pulvirus) ####<- se si vogliono installare i pacchetti aggiornati
 INQUINANTE<-"no2" #inquinante su cui lavorare 
 
 
@@ -88,6 +88,14 @@ terms(myformula)->termini
 attr(termini,which="term.labels")->VARIABILI #
 
 
+
+#estraggo le info sulla disponibilita di dati dell'inquinante
+stazioni[,c("station_eu_code",INQUINANTE)]->subStazioni
+names(subStazioni)[2]<-"inquinante"
+
+subStazioni %>%
+  filter(inquinante=="completa solo 2020" | inquinante=="completa 2016-2020")->subStazioni
+
 purrr::map(REGIONI,.f=function(REGIONE){
 
 tryCatch({
@@ -107,7 +115,15 @@ if(is.null(datiTemp)) return()
 
 message(glue::glue("Elaboro regione {REGIONE}"))  
   
-datiTemp %>% 
+
+# datiTemp %>%
+#     filter(date>=as.Date("2019-01-10") & date<=as.Date("2020-05-31")) %>%
+#     mutate(originali=value)->datiTemp
+# # # 
+# imputeTS::na_ma(datiTemp$value,maxgap = 1)->datiTemp$value
+
+datiTemp %>%
+  filter(station_eu_code %in% subStazioni$station_eu_code) %>% #seleziono le serie complete per il periodo 2016-2020 o che sono complete nel solo 2020
   filter(mm %in% MESI & yy==ANNO)->datiTemp #gennaio..maggio 2020 
 
 stopifnot(nrow(datiTemp)!=0)
@@ -198,7 +214,7 @@ purrr::imap(CODICI,.f=function(.codice,i){
 
   if(is.null(modts)){
     sink("_error_arimax.csv",append = TRUE)
-    cat(glue::glue("{.codice};{REGIONE}\n"))
+    writeLines(glue::glue("{.codice};{REGIONE}"))
     sink()
     return()
   }
@@ -213,9 +229,57 @@ purrr::imap(CODICI,.f=function(.codice,i){
                    pvalue=pvalue)->out
   
   # compute residuals and fitted values
-  residuals(modts, type="regression")->regerr
-  residuals(modts, type="innovation")->armaerr
-
+  tryCatch({
+    residuals(modts, type="regression")->regerr
+    residuals(modts, type="innovation")->armaerr
+    
+    list(regerr,armaerr)
+  },error=function(e){
+    sink("_error_arimax.csv",append = TRUE)
+    writeLines(glue::glue("{.codice};{REGIONE}"))
+    sink()
+    NULL
+  })->residui
+  
+  if(is.null(residui)) return()
+  
+  residui[[1]]->regerr
+  residui[[2]]->armaerr
+  
+  #normality
+  shapiro.test(armaerr)->risShapiro
+  if(risShapiro$p.value<0.05){
+    sink("_shapiro_arimax.csv",append = TRUE)
+    writeLines(glue::glue("{.codice};{REGIONE}","\n"))
+    sink()
+  }
+  
+  #Lagrange Multiplier (LM) test for autoregressive conditional heteroscedasticity (ARCH)
+  FinTS::ArchTest(armaerr,lags = 7)->risArch
+  
+  if(risArch$p.value<0.05){
+    sink("_arch_arimax.csv",append = TRUE)
+    writeLines(glue::glue("{.codice};{REGIONE}","\n"))
+    sink()
+  }  
+  
+  #test per autocorrelazione residui
+  tryCatch({
+    portes::LjungBox(armaerr,lags = seq(1,7))
+  },error=function(e){
+    NULL
+  })->risTest
+  
+  if(!is.null(risTest)){
+  
+      if(!all(risTest[,4]>=0.05)){
+        sink("_lbtest_arimax.csv",append = TRUE)
+        writeLines(glue::glue("{.codice};{REGIONE}","\n"))
+        sink()
+      }
+  
+  }
+ 
   if ("intercept" %in% names(modts$coef)){
       predfitted <- as.numeric(regerr + (X_est %*% matrix(modts$coef[colnames(X_est)],ncol=1) + modts$coef["intercept"]) - armaerr )
       predcounterf <- as.numeric(regerr + (X_pred %*% matrix(modts$coef[colnames(X_pred)],ncol=1) + modts$coef["intercept"]) - armaerr)

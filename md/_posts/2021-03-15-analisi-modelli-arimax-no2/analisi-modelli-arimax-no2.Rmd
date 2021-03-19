@@ -2,7 +2,7 @@
 title: "Analisi modelli ARIMAX, NO2"
 description: "Serie gennaio-maggio 2020"
 author: Michela Cameletti
-date: 03-15-2021
+date: 03-19-2021
 params:
   regione: lombardia
   inquinante: no2
@@ -59,7 +59,7 @@ out_pvalues %>%
 left_join(out_pvalues,stazioni[,c("station_eu_code","st_x","st_y","zona_tipo")])->out_pvalues
 ```
 
-Il periodo del lockdown va dal 9 marzo al 3 maggio 2021.
+Il periodo del lockdown va dal 9 marzo al 3 maggio 2021. Le serie analizzate soddisfano i criteri di completezza per il 2020 (indipendentemente dal fatto di essere complete nel periodo 2016-2019).
 
 ---
 
