@@ -43,7 +43,8 @@ METEO<-c("t2m","tp","ptp","sp","wdir","wspeed","pblmax","pblmin","dtr")
 
 ###############################
 ###Usare come predittore il valore dell'inquinante nel giorno precedente? Questa variabile  si chiamera' "pvalue" (previous value). Se LOGARITMO==TRUE pvalue sara' il logaritmo del giorno precedente.
-###############################
+#########################out#
+#####
 PREVIOUS<-c(TRUE,FALSE)[2]
 
 #####
@@ -59,7 +60,8 @@ WEEKEND<-c(TRUE,FALSE)[1] #effetto weekend
 ###Regione e inquinante: fissare REGIONE e INQUINANTE
 #############################
 REGIONI<-PULVIRUS_REGIONI[-2]
-purrr::walk(REGIONI,.f=installa_pacchetto_pulvirus) ####<- se si vogliono installare i pacchetti aggiornati
+#REGIONI<-c("piemonte","lombardia")
+#purrr::walk(REGIONI,.f=installa_pacchetto_pulvirus) ####<- se si vogliono installare i pacchetti aggiornati
 INQUINANTE<-"no2" #inquinante su cui lavorare 
 
 
@@ -86,8 +88,6 @@ print(myformula)
 
 terms(myformula)->termini
 attr(termini,which="term.labels")->VARIABILI #
-
-
 
 #estraggo le info sulla disponibilita di dati dell'inquinante
 stazioni[,c("station_eu_code",INQUINANTE)]->subStazioni
@@ -123,6 +123,7 @@ message(glue::glue("Elaboro regione {REGIONE}"))
 # imputeTS::na_ma(datiTemp$value,maxgap = 1)->datiTemp$value
 
 datiTemp %>%
+  filter(date<=fineL & date >=as.Date("2020-01-01")) %>%
   filter(station_eu_code %in% subStazioni$station_eu_code) %>% #seleziono le serie complete per il periodo 2016-2020 o che sono complete nel solo 2020
   filter(mm %in% MESI & yy==ANNO)->datiTemp #gennaio..maggio 2020 
 
@@ -133,7 +134,9 @@ which(is.na(datiTemp$pollutant_fk))->righe
 if(length(righe)) stop("pollutant_fk NA???")
 
 #dati meteo standardizzati
-meteo_standardizzati[,c("station_eu_code","date","coordx","coordy",METEO)] ->meteo
+meteo_standardizzati[,c("station_eu_code","date","coordx","coordy",METEO)] %>%
+  sjlabelled::remove_all_labels() %>%
+  tibble()->meteo
 
 #rpulvinla::prepara_dati
 #aggiunge la variabile banda (per l'SPDE o trend temporale sui giorni), fa il logaritmo della variabile value (var target) e aggiunge la variabile lockdown
@@ -147,6 +150,8 @@ prepara_dati(.x = datiTemp,
              day=DAY_TREND,
              week=WEEK_TREND,
              weekend = WEEKEND)->dati
+
+
 
 rm(datiTemp)
 
@@ -184,14 +189,14 @@ purrr::imap(CODICI,.f=function(.codice,i){
   # Select data and create matrices for estimation/prediction
   dati %>% 
     filter(station_eu_code==.codice)->dati_staz
-  
+
   if(!nrow(dati_staz)) stop(glue::glue("Nessun dato per la stazione {.codice}, impossibile!"))
   
-  X = dati_staz %>%  
+  X= dati_staz %>%  
     dplyr::select(all_of(VARIABILI),banda)
   
-  X_est = X %>%
-    mutate(bandalockdown = lockdown*banda)
+  X_est = X %>%  
+    mutate(bandalockdown =lockdown*banda)
 
   X_est = as.matrix(X_est)
   
@@ -199,7 +204,7 @@ purrr::imap(CODICI,.f=function(.codice,i){
     mutate(lockdown=0,bandalockdown=0)
 
   X_pred = as.matrix(X_pred)
-  
+
   # Estimate the ARIMAX model
   tryCatch({
     
@@ -290,7 +295,8 @@ purrr::imap(CODICI,.f=function(.codice,i){
     
   dati_staz %>% 
     mutate(predfitted=predfitted,predcounterf=predcounterf) %>%
-    dplyr::select(station_eu_code,date,value,predfitted,predcounterf)->df_finale
+    mutate(armaerr=armaerr,regerr=regerr) %>%
+    dplyr::select(station_eu_code,date,value,predfitted,predcounterf,armaerr,regerr)->df_finale
     
   list("dati_staz"=df_finale,"out"=out)
 
@@ -305,16 +311,16 @@ if(!length(dati_staz_list)){
   return()
 }
 
-purrr::map_dfr(dati_staz_list,"out") %>%
-  filter(grepl("lockdown",variabili)) %>%
-  dplyr::select(station_eu_code,variabili,pvalue) %>%
-  tidyr::spread(key=variabili,value=pvalue)->out_pvalues
+purrr::map_dfr(dati_staz_list,"out")->out
+  # filter(grepl("lockdown",variabili)) %>%
+  # dplyr::select(station_eu_code,variabili,pvalue) %>%
+  # tidyr::spread(key=variabili,value=pvalue)->out_pvalues
 
 
 
 purrr::map_dfr(dati_staz_list,"dati_staz")->dati_staz
 
-list(out_pvalues=out_pvalues,dati_staz=dati_staz)
+list(out=out,dati_staz=dati_staz)
 
 })->listaFinale
 
@@ -326,6 +332,6 @@ if(!length(listaFinale)) stop(glue::glue("Nessuna stazione vaida per l''inquinan
 purrr::map_dfr(listaFinale,"dati_staz")->dati_staz
 saveRDS(dati_staz,glue::glue("_dati_staz_{INQUINANTE}.RDS")) 
 
-purrr::map_dfr(listaFinale,"out_pvalues")->out_pvalues
-saveRDS(out_pvalues,glue::glue("_out_pvalues_{INQUINANTE}.RDS")) 
+purrr::map_dfr(listaFinale,"out")->out
+saveRDS(out,glue::glue("_out_{INQUINANTE}.RDS")) 
 

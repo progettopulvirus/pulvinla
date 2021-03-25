@@ -42,10 +42,17 @@ set.seed(1)
 
 
 ```{r leggiRisultati,include=FALSE}
-readRDS(glue::glue("_out_pvalues_{params$inquinante}.RDS"))->out_pvalues
+readRDS(glue::glue("_out_{params$inquinante}.RDS"))->out
 
 # Create a table with the significative change in the level and/or trend slope
 LABELS<-c("no effect", "level only","slope only", "level & slope")
+
+out %>%
+  filter(grepl("lockdown",variabili)) %>%
+  dplyr::select(station_eu_code,variabili,pvalue) %>%
+  tidyr::spread(key=variabili,value=pvalue)->out_pvalues
+
+
 out_pvalues %>%
    mutate(lockdown_sign= ifelse(out_pvalues$lockdown<0.05, 1, 0)) %>%
    mutate(bandalockdown_sign= ifelse(out_pvalues$bandalockdown<0.05, 1, 0)) %>%
