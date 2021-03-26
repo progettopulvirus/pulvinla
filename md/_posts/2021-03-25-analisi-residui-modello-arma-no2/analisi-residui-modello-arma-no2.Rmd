@@ -1,0 +1,127 @@
+---
+title: "Analisi residui modello arma, NO2"
+description: |
+  Serie Lombardia.
+author:
+  - name: guidofioravanti
+date: 03-25-2021
+params:
+  regione: lombardia
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+Residui del modello arma (`armaerr`), regione Lombardia. Serie dal 1 gennaio al 3 maggio 2020. 
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,error=FALSE,include=FALSE}
+library("stazioniMonitoraggio")
+library("datiMeteo")
+library("TSclust")
+library("TSrepr")
+library("tidyverse")
+library("imputeTS")
+library("cluster")
+library("seplyr")
+library("dtwclust")
+library("rpulvinla")
+library("mgcv")
+library("patchwork")
+library("scico")
+
+
+
+knitr::opts_chunk$set(layout="l-page")
+
+theme_set(theme_bw())
+
+readRDS("_dati_staz_no2.RDS")->dati
+
+#solo serie lombardia
+dati %>%
+  mutate(date2=date) %>%
+  separate(date2,into=c("yy","mm","dd"),sep="-")%>%
+  mutate(yy=as.integer(yy),mm=as.integer(mm),dd=as.integer(dd)) %>%
+  filter(station_eu_code %in% lombardia::no2$station_eu_code) %>%
+  mutate(value=armaerr) %>%
+  dplyr::select(station_eu_code,date,yy,mm,dd,value)->dati
+
+
+purrr::map(2020:2020,.f=function(annoAnalisi){
+inizioLockdown<-glue::glue("{annoAnalisi}-03-09")
+fineLockdown<-glue::glue("{annoAnalisi}-05-03")
+
+inizioSerie<-glue::glue("{annoAnalisi}-01-01")
+fineSerie<-glue::glue("{annoAnalisi}-05-31")
+
+dati %>%
+  filter((mm %in% 1:5 & yy==annoAnalisi))->dati
+
+dati %>%
+  spread(key=station_eu_code,value=value) %>% #per riempire evntuali buchi faccio spread e gather dei dati
+  gather(key="station_eu_code",value="value",-date,-yy,-mm,-dd,na.rm = FALSE) %>%
+  dplyr::select(station_eu_code,date,yy,mm,dd,value) %>%
+  spread(key=station_eu_code,value=value) %>%
+  mutate(across(.cols=starts_with("IT"),.fns =na_kalman,model="auto.arima",smooth=TRUE,maxgap=10)) %>% #filtro di Kalman
+  #mutate(across(.cols=starts_with("IT"),.fns =norm_min_max)) %>%  #normalizzazione serie
+  filter(date>=inizioSerie & date<=fineSerie) %>%
+  arrange(yy,mm,dd) %>%
+  gather(key="station_eu_code",value="value",-date,-yy,-mm,-dd)->dati
+
+prepara_dati(.x=dati,previous = FALSE,inizio_lockdown = inizioLockdown,fine_lockdown =fineLockdown ,logaritmo = FALSE,lockdown = TRUE,weekend =FALSE)->datiInterpolati
+
+unique(datiInterpolati[which(is.na(datiInterpolati$value)),]$station_eu_code)->codiciEscludere
+
+if(length(codiciEscludere)){
+  
+  datiInterpolati %>%
+  filter(!station_eu_code %in% codiciEscludere)->datiInterpolati
+}
+
+datiInterpolati %>%
+  dplyr::select(yy,mm,dd,lockdown,station_eu_code,value) %>%
+  spread(key=station_eu_code,value=value) %>%
+  arrange(yy,mm,dd)->datiInterpolati2
+
+
+diss(datiInterpolati2 %>% dplyr::select(matches("^IT")),METHOD = "DTWARP")->matriceDistanze
+hclust(matriceDistanze,method="complete")->dati_hclust
+
+
+#plot(dati_hclust)
+cutree(dati_hclust,k=2) %>%
+  as.data.frame() %>%
+  dplyr::rename(.,cluster_group=.) %>%
+  mutate(cluster_group=as.character(cluster_group)) %>%
+  tibble::rownames_to_column() %>%
+  dplyr::rename(station_eu_code=rowname)->ris_clust
+
+datiInterpolati2$banda<-1:nrow(datiInterpolati2)
+
+left_join(datiInterpolati2 %>%
+            rename(lockdown2=lockdown) %>%
+  gather(key="station_eu_code",value="value",-yy,-mm,-dd,-banda,-lockdown2),ris_clust)->finale
+
+finale %>%
+  mutate(date=as.Date(glue::glue("{yy}-{mm}-{dd}")))->finale
+
+ggplot(data=finale,aes(x=date,y=value))+
+  geom_rect(aes(xmin=as.Date(glue::glue("{annoAnalisi}-03-09")),xmax=as.Date(glue::glue("{annoAnalisi}-05-03")),ymin=-1,ymax=1),alpha=0.05,fill="lightgray")+
+  geom_point(aes(group=station_eu_code),alpha=0.25)+
+  geom_smooth(aes(x=date,y=value,colour=cluster_group),se=FALSE)+
+  geom_text(aes(x=as.Date(glue::glue("{annoAnalisi}-04-15")),y=0.8,label="Lockdown",family="Lato"))+
+  ggtitle(label = glue::glue("Anno: {annoAnalisi}"))+  
+  ylab("NO2 (standardizzato)")+
+  scale_color_scico_d(palette="roma")->grafico
+
+  grafico
+
+})->listaGrafici
+```
+
+
+Cluster analysis serie `r params$regione`
+
+```{r,include=TRUE,message=FALSE,warning=FALSE,echo=FALSE,error=FALSE,fig.width=12,fig.height=6}
+reduce(listaGrafici,`+`)
+```
