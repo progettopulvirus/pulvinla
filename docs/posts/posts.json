@@ -170,6 +170,23 @@
     "input_file": {}
   },
   {
+    "path": "posts/2021-03-28-modello-armax-con-slope-su-lockdown-cams-no2/",
+    "title": "Modello ARMAX con slope su lockdown & CAMS, NO2",
+    "description": "Serie Lombardia - Piemonte.",
+    "author": [
+      {
+        "name": "guidofioravanti",
+        "url": {}
+      }
+    ],
+    "date": "2021-03-25",
+    "categories": [],
+    "contents": "\nAnalisi dei risultati del modello ARMAX. Il modello include le serie counterfactual gennaio-maggio 2020 di CAMS come predittore.\n\\(y=\\alpha_{0}+\\beta_{1} * meteo+\\beta_{2} * banda+\\beta_{3} * lockdown+\\beta_{4} * lockdown * banda+\\beta_{5} * weekend+\\varepsilon\\)\nbanda: da 1 a numero di giorni dal primo gennaio 2020 al 3 gennaio 2020\nlockdown: pari a 1 durante il lockdown (9 marzo - 3 maggio 2020) altrimenti pari a 0\nweekend: pari a 1 il sabato e la domenica, altrimenti pari a zero\nPercentuale dei parametri significativi e non\nMissing: parametro non significativo\nPresent: parametro significativo (pvalue<0.05)\n\n\n\nStima dei beta (heatmap)\nIl grafico riporta solo i beta significativi (pvalue < 0.05).\n\n\n\n\n\n\n",
+    "preview": "posts/2021-03-28-modello-armax-con-slope-su-lockdown-cams-no2/modello-armax-con-slope-su-lockdown-cams-no2_files/figure-html5/unnamed-chunk-1-1.png",
+    "last_modified": "2021-03-28T23:35:33+02:00",
+    "input_file": {}
+  },
+  {
     "path": "posts/2021-03-15-analisi-modelli-arimax-no2/",
     "title": "Analisi modelli ARIMAX, NO2",
     "description": "Serie gennaio-maggio 2020",
