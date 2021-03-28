@@ -1,0 +1,88 @@
+---
+title: "Serie CAMS vs serie osservate, PM25"
+description: |
+  PM25, serie Lombardia gennaio-febbraio 2020.
+author:
+  - name: guidofioravanti
+date: 03-28-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+```{r,include=FALSE,message=FALSE,warning=FALSE,error=FALSE,echo=FALSE}
+rm(list=objects())
+library("lombardia")
+library("tidyverse")
+library("stazioniMonitoraggio")
+library("rpulvinla")
+
+knitr::opts_chunk$set(include=FALSE,message=FALSE,warning=FALSE,error=FALSE,echo=FALSE)
+
+pm25 %>%
+  filter(yy==2020 & mm %in% 1:2)->dati
+
+cams %>%
+  dplyr::select(station_eu_code,yy,mm,dd,date,counter_pm25) %>%
+  mutate(yy=as.integer(yy),mm=as.integer(mm),dd=as.integer(dd))->cams
+
+left_join(dati,cams)->dati
+
+dati %>%
+  group_by(station_eu_code) %>%
+  summarise(correlazione=cor(value,counter_pm25,use = "pairwise.complete.obs"))->correlazioni
+
+RMSE<-function(x,y){
+  sqrt(mean((x-y)^2,na.rm=TRUE))
+}
+
+dati %>%
+  group_by(station_eu_code) %>%
+  summarise(correlazione=cor(value,counter_pm25,use = "pairwise.complete.obs"))->correlazioni
+
+dati %>%
+  group_by(station_eu_code) %>%
+  summarise(correlazione=RMSE(value,counter_pm25))->rmse
+```
+
+### Correlazione serie CAMS vs serie osservate
+
+```{r,include=TRUE}
+skimr::skim(correlazioni)
+```
+
+### RMSE serie CAMS vs serie osservate
+
+```{r,include=TRUE}
+skimr::skim(rmse)
+```
+
+### Scatterplot CAMS vs serie osservate
+
+```{r,include=TRUE,fig.width=4,fig.height=4}
+ggplot(data=dati,aes(x=value,y=counter_pm25))+
+  geom_point(alpha=0.25)+
+  geom_abline(a=0,b=1,col="red")+
+  geom_smooth(aes(x=value,y=counter_pm25),se=FALSE)
+```
+
+### Boxplot mensile (gennaio e febbraio) CAMS vs serie osservate
+
+```{r,include=TRUE,fig.width=4,fig.height=4}
+dati %>%
+  gather(key="tipo_serie",value="value",-date,-yy,-mm,-dd,-station_eu_code,-pollutant_fk,-regione) %>%
+  mutate(mm=as.character(mm)) %>%
+  mutate(tipo_serie=ifelse(tipo_serie=="value","serie osservata",tipo_serie))->dati2
+
+ggplot(data=dati2,aes(x=mm,y=value))+
+  geom_boxplot(aes(fill=tipo_serie))
+```
+
+### Serie osservate (in nero) vs serie CAMS (in rosso)
+
+```{r,include=TRUE,fig.width=8,fig.height=12}
+ggplot(data=dati)+
+  geom_line(aes(x=date,y=value),colour="black")+
+  geom_line(aes(x=date,y=counter_pm25),colour="red")+
+  facet_wrap(~station_eu_code,scales = "free_y",ncol = 6)
+```  

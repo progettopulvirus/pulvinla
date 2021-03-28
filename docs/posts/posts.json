@@ -1,5 +1,56 @@
 [
   {
+    "path": "posts/2021-03-28-serie-cams-vs-serie-osservate-pm10/",
+    "title": "Serie CAMS vs serie osservate, PM10",
+    "description": "PM10, serie Lombardia gennaio-febbraio 2020.",
+    "author": [
+      {
+        "name": "guidofioravanti",
+        "url": {}
+      }
+    ],
+    "date": "2021-03-28",
+    "categories": [],
+    "contents": "\nCorrelazione serie CAMS vs serie osservate\n\nSkim summary statistics\n n obs: 54 \n n variables: 2 \n group variables:  \n\n── Variable type:character ───────────────────────────────────────────\n        variable missing complete  n min max empty n_unique\n station_eu_code       0       54 54   7   7     0       54\n\n── Variable type:numeric ─────────────────────────────────────────────\n     variable missing complete  n mean    sd  p0  p25  p50  p75 p100\n correlazione       0       54 54 0.73 0.091 0.4 0.69 0.75 0.79 0.84\n     hist\n ▁▁▁▂▂▆▆▇\n\nRMSE serie CAMS vs serie osservate\n\nSkim summary statistics\n n obs: 54 \n n variables: 2 \n group variables:  \n\n── Variable type:character ───────────────────────────────────────────\n        variable missing complete  n min max empty n_unique\n station_eu_code       0       54 54   7   7     0       54\n\n── Variable type:numeric ─────────────────────────────────────────────\n     variable missing complete  n  mean   sd   p0  p25   p50   p75\n correlazione       0       54 54 22.28 5.92 8.28 18.1 21.85 25.81\n  p100     hist\n 35.89 ▁▂▇▆▆▃▃▂\n\nScatterplot CAMS vs serie osservate\n\n\n\nBoxplot mensile (gennaio e febbraio) CAMS vs serie osservate\n\n\n\nSerie osservate (in nero) vs serie CAMS (in rosso)\n\n\n\n\n\n\n",
+    "preview": "posts/2021-03-28-serie-cams-vs-serie-osservate-pm10/serie-cams-vs-serie-osservate-pm10_files/figure-html5/unnamed-chunk-4-1.png",
+    "last_modified": "2021-03-28T23:13:10+02:00",
+    "input_file": {}
+  },
+  {
+    "path": "posts/2021-03-28-serie-cams-vs-serie-osservate-pm25/",
+    "title": "Serie CAMS vs serie osservate, PM25",
+    "description": "PM25, serie Lombardia gennaio-febbraio 2020.",
+    "author": [
+      {
+        "name": "guidofioravanti",
+        "url": {}
+      }
+    ],
+    "date": "2021-03-28",
+    "categories": [],
+    "contents": "\nCorrelazione serie CAMS vs serie osservate\n\nSkim summary statistics\n n obs: 28 \n n variables: 2 \n group variables:  \n\n── Variable type:character ───────────────────────────────────────────\n        variable missing complete  n min max empty n_unique\n station_eu_code       0       28 28   7   7     0       28\n\n── Variable type:numeric ─────────────────────────────────────────────\n     variable missing complete  n mean  sd   p0 p25  p50  p75 p100\n correlazione       0       28 28 0.72 0.1 0.37 0.7 0.74 0.78 0.86\n     hist\n ▁▁▁▁▁▇▇▅\n\nRMSE serie CAMS vs serie osservate\n\nSkim summary statistics\n n obs: 28 \n n variables: 2 \n group variables:  \n\n── Variable type:character ───────────────────────────────────────────\n        variable missing complete  n min max empty n_unique\n station_eu_code       0       28 28   7   7     0       28\n\n── Variable type:numeric ─────────────────────────────────────────────\n     variable missing complete  n mean   sd   p0   p25   p50   p75\n correlazione       0       28 28   15 4.52 6.31 11.61 14.81 18.22\n  p100     hist\n 28.33 ▁▇▅▆▆▁▁▁\n\nScatterplot CAMS vs serie osservate\n\n\n\nBoxplot mensile (gennaio e febbraio) CAMS vs serie osservate\n\n\n\nSerie osservate (in nero) vs serie CAMS (in rosso)\n\n\n\n\n\n\n",
+    "preview": "posts/2021-03-28-serie-cams-vs-serie-osservate-pm25/serie-cams-vs-serie-osservate-pm25_files/figure-html5/unnamed-chunk-4-1.png",
+    "last_modified": "2021-03-28T23:15:45+02:00",
+    "input_file": {}
+  },
+  {
+    "path": "posts/2021-03-28-serie-cams-vs-serie-osservate/",
+    "title": "Serie CAMS vs serie osservate",
+    "description": "NO2, serie Lombardia gennaio-febbraio 2020.",
+    "author": [
+      {
+        "name": "guidofioravanti",
+        "url": {}
+      }
+    ],
+    "date": "2021-03-28",
+    "categories": [],
+    "contents": "\nCorrelazione serie CAMS vs serie osservate\n\nSkim summary statistics\n n obs: 66 \n n variables: 2 \n group variables:  \n\n── Variable type:character ───────────────────────────────────────────\n        variable missing complete  n min max empty n_unique\n station_eu_code       0       66 66   7   7     0       66\n\n── Variable type:numeric ─────────────────────────────────────────────\n     variable missing complete  n mean   sd   p0  p25  p50  p75 p100\n correlazione       0       66 66 0.67 0.12 0.26 0.59 0.69 0.77 0.88\n     hist\n ▁▁▃▃▆▇▇▅\n\nRMSE serie CAMS vs serie osservate\n\nSkim summary statistics\n n obs: 66 \n n variables: 2 \n group variables:  \n\n── Variable type:character ───────────────────────────────────────────\n        variable missing complete  n min max empty n_unique\n station_eu_code       0       66 66   7   7     0       66\n\n── Variable type:numeric ─────────────────────────────────────────────\n     variable missing complete  n  mean   sd   p0  p25   p50   p75\n correlazione       0       66 66 16.98 7.83 6.55 11.5 14.79 20.73\n  p100     hist\n 37.82 ▅▇▅▃▂▁▁▂\n\nScatterplot CAMS vs serie osservate\n\n\n\nBoxplot mensile (gennaio e febbraio) CAMS vs serie osservate\n\n\n\nSerie osservate (in nero) vs serie CAMS (in rosso)\n\n\n\n\n\n\n",
+    "preview": "posts/2021-03-28-serie-cams-vs-serie-osservate/serie-cams-vs-serie-osservate_files/figure-html5/unnamed-chunk-4-1.png",
+    "last_modified": "2021-03-28T23:07:53+02:00",
+    "input_file": {}
+  },
+  {
     "path": "posts/2021-03-25-analisi-residui-modello-arma-no2/",
     "title": "Analisi residui modello arma, NO2",
     "description": "Serie Lombardia.",
