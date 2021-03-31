@@ -19,6 +19,6 @@ Risultati modello per il periodo gennaio-maggio 2020, lockdown dal 9 marzo 2020 
 
 [Variogramma spazio temporale](./disegnaVariogramma.html)
 
-[Risultati spde](./risultati-spde_2020.html)
+[Risultati spde](./risultati-spde.html)
 
 [Esempio serie fittate vs serie osservate: non si tratta di serie di validazione!](./serieFittate.html)
