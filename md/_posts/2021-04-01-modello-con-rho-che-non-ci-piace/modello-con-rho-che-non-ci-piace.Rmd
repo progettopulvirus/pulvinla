@@ -1,0 +1,26 @@
+---
+title: "Modello con rho che non ci piace"
+description: |
+  Gennaio-Maggio 2020,concentrazioni NO2 Lombardia
+author:
+  - name: guidofioravanti
+date: 03-31-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+Risultati modello per il periodo gennaio-maggio 2020, lockdown dal 9 marzo 2020 al 3 maggio 2020. La variabile target sono le concentrazioni giornaliere di NO2.
+
+
+[Sintesi generale del modello](./analisi-covariate.html)
+
+[Analisi dei residui del modello](./analisi-residui-modello.html)
+
+[Variogramma spazio temporale](./disegnaVariogramma.html)
+
+[Risultati spde](./risultati-spde.html)
+
+[Esempio serie fittate vs serie osservate: serie di training](./serieFittate.html)
+
+[Esempio serie fittate vs serie osservate: serie di validazione!](./serieFittateVAL.html)
