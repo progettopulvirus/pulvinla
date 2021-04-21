@@ -1,5 +1,22 @@
 [
   {
+    "path": "posts/2021-04-21-effetto-del-meteogiorni-festivi/",
+    "title": "Effetto del meteo,giorni festivi e feriali",
+    "description": "Confronto effetto meteo con o senza spde, Lombardia.",
+    "author": [
+      {
+        "name": "guidofioravanti",
+        "url": {}
+      }
+    ],
+    "date": "2021-04-21",
+    "categories": [],
+    "contents": "\nDue modelli:\nmodello con spde+ cams + meteo\nmodello con cams + meteo (no_spde)\nUsando inla.posterior.sample: 1000 samples per ciascun modello.\n\nPer ciascuna stazione (station_eu_code), anno, feriale/festivo calcolo la media mensile (e.g.: media aprile 2019 per la stazione X per i giorni festivi) sia nel caso del modello con spde che nel caso del modello senza spde.\n\nRapporto (variazione) media 2019 vs 2020.\n\nGiorni festivi\n\n\n\nGiorni feriali\n\n\n\n\n\n\n",
+    "preview": "posts/2021-04-21-effetto-del-meteogiorni-festivi/distill-preview.png",
+    "last_modified": "2021-04-21T09:22:25+02:00",
+    "input_file": {}
+  },
+  {
     "path": "posts/2021-03-31-no2-lombardia-2018-serie-differenze/",
     "title": "NO2 Lombardia 2018, serie differenze",
     "description": "Gennaio-Maggio",
