@@ -1,5 +1,5 @@
 ---
-title: "Effetto del meteo,giorni festivi e feriali"
+title: "Effetto del meteo, pm10"
 description: |
   Confronto effetto meteo con o senza spde, Lombardia.
 author:
