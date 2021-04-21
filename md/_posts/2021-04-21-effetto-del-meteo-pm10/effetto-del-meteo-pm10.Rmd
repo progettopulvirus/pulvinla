@@ -73,7 +73,7 @@ gris %>%
   summarise(media=mean(svalue,na.rm=TRUE)) %>%
   ungroup()  %>%
   spread(key=yy,value=media) %>%
-  mutate(rapporto=((`2020`-`2019`)/`2019`),mm_week=glue::glue("{mm}_{week}"))->finale
+  mutate(rapporto=((`2019`)/`2020`),mm_week=glue::glue("{mm}_{week}"))->finale
 ```
 
 ### Giorni festivi
@@ -113,7 +113,7 @@ gris %>%
   summarise(media=mean(svalue,na.rm=TRUE)) %>%
   ungroup()  %>%
   spread(key=yy,value=media) %>%
-  mutate(rapporto=((`2020`-`2019`)/`2019`))->finale
+  mutate(rapporto=((`2019`)/`2020`))->finale
 
 ggplot(data=finale %>% mutate(giorno=factor(giorno,levels=1:121,ordered=TRUE,labels = 1:121)) )+
   # geom_hline(yintercept=1,colour="black")+
