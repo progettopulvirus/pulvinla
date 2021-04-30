@@ -33,12 +33,7 @@ set.seed(1)
 # `r params$inquinante`  
 
 
-```{r download,include=TRUE}
-download_file(path="analisi-covariate.Rmd",output_name = "analisi-covariate.Rmd",button_label="Scarica codice analisi covariate",button_type = "primary")
-```
-
-
-```{r leggiRisultati}
+```{r leggiRisultati,eval=FALSE}
 readRDS(glue::glue("dati_{params$regione}.RDS"))->dati
 numero_giorni(dati)->n_giorni
 
@@ -62,15 +57,23 @@ as.formula(inla.out$.args$formula)->myformula
 
 ## Random effects
 
-### rw1 su day
 
-```{r day,include=TRUE,fig.height=6,layout="l-page",eval=T}
-try(brinla::bri.band.ggplot(inla.out,name="day"))
+### rw1 su pbl00
+
+```{r wspeed,include=TRUE,fig.height=6,layout="l-page",eval=F}
+try(brinla::bri.band.ggplot(inla.out,name="Transport"))
+```
+
+
+### rw1 su aviation
+
+```{r aviation,include=TRUE,fig.height=6,layout="l-page",eval=F}
+try(brinla::bri.band.ggplot(inla.out,name="Aviation"))
 ```
 
 ### rw1 su wday
 
-```{r wday,include=TRUE,fig.height=6,layout="l-page",eval=T}
+```{r wday,include=TRUE,fig.height=6,layout="l-page",eval=F}
 try(brinla::bri.band.ggplot(inla.out,name="wday"))
 ```
 

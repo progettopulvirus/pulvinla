@@ -7,7 +7,7 @@ params:
   inquinante: no2
 output:
   distill::distill_article:
-    self_contained: false
+    self_contained: true
 ---
 
 ```{r, echo=FALSE,message=FALSE,warning=FALSE}
@@ -16,30 +16,27 @@ library("purrr")
 library("tidyverse")
 library("downloadthis")
 knitr::opts_chunk$set(layout="l-screen")
+set.seed(1)
 ```
 
 # `r params$inquinante`  
 
 
-```{r download,include=TRUE}
-download_file(path="serieFittate.Rmd",output_name = "serieFittate.Rmd",button_label="Scarica codice analisi covariate",button_type = "primary")
-```
-
 
 ```{r leggiRisultati}
-readRDS(glue::glue("dati_{params$regione}.RDS"))->dati
-unique(dati$station_eu_code)->CODICI
-sample(CODICI,size = 8,replace = FALSE)->CAMPIONE
-
+readRDS(glue::glue("datiValidazione_{params$regione}.RDS"))->dati
+unique(dati$station_eu_code)->CAMPIONE
 ```
 
 
-```{r esempio1,echo=FALSE,fig.height=12}
+```{r esempio1,echo=FALSE,fig.height=20,fig.width=10}
 #grafico tutti mesi, con residui insieme a valori osservati
+length(unique(dati$date))->numeroDati
 ggplot(data=dati %>% filter(station_eu_code %in% CAMPIONE))+
-  geom_line(aes(x=date,y=value),colour="black",lwd=0.5)+
-  geom_line(aes(x=date,y=fitted),colour="red",lty=1,alpha=1,lwd=0.5)+
-  facet_wrap(~station_eu_code,scales = "free",nrow = 8)+
+  geom_ribbon(aes(x=banda,ymin=fitted025,ymax=fitted975),fill="lightgray")+
+  geom_line(aes(x=banda,y=value),colour="black",lwd=0.5)+
+  geom_line(aes(x=banda,y=fitted),colour="red",lty=1,alpha=1,lwd=0.5)+
+  facet_wrap(~station_eu_code,scales = "free",ncol = 1)+
   theme_bw()+
   theme(panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank(),
@@ -53,7 +50,7 @@ ggplot(data=dati %>% filter(station_eu_code %in% CAMPIONE))+
 ggplot(data=dati %>% filter(station_eu_code %in% CAMPIONE))+
   geom_point(aes(x=value,y=fitted,fill=residui,alpha=residui),pch=21)+
   geom_abline(colour="red",slope = 1,intercept = 0)+
-  facet_wrap(~station_eu_code,scales = "free",nrow = 8)+
+  facet_wrap(~station_eu_code,scales = "free",ncol=3)+
   scale_fill_viridis_c()+
   theme_bw()+
   theme(panel.grid.major.x = element_blank(),

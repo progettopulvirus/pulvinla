@@ -27,16 +27,25 @@ library("raster")
 library("sp")
 library("rpulvinla")
 library("downloadthis")
+library("ggspatial")
+library("guido")
+library("scico")
 
 eval(substitute(`::`(regioniItalia,reg),list(reg=params$regione)))->shapeRegione
 knitr::opts_chunk$set(layout="l-body-outset",warning = FALSE,message = FALSE,echo=FALSE,fig.height=4,include = FALSE,eval = TRUE)
 set.seed(1)
+creaCalendario(annoI=2019,annoF=2020)->calendario
+
+calendario %>%
+  mutate(date=as.Date(glue::glue("{yy}-{mm}-{dd}"))) %>%
+  filter(date >= as.Date("2019-01-02") & date<= as.Date("2020-05-03"))->calendario
+
 ```
 
 # `r params$inquinante`  
 
 
-```{r download,include=TRUE}
+```{r download,include=TRUE,eval=FALSE}
 download_file(path="risultati-spde.Rmd",output_name = "risultati-spde.Rmd",button_label="Scarica codice analisi spde",button_type = "primary")
 ```
 
@@ -89,28 +98,44 @@ st_bbox(shapeRegione)->estensione
 as_Spatial(shapeRegione)->sp_shapeRegione
 
 
-purrr::walk(seq(1,n_giorni,by = 20),.f=function(BB){
+purrr::map(1:60,.f=function(BB){
   
-  
+  calendario[BB,]$yy->anno
+  calendario[BB,]$mm->mese
+  calendario[BB,]$dd->giorno
+      
   inla.out$summary.random$i[iset$i.group==BB,"mean"]->campo #
   inla.mesh.projector(mesh,xlim=c(estensione["xmin"],estensione["xmax"]),ylim=c(estensione["ymin"],estensione["ymax"]),dims = c(250,250))->myproj
   inla.mesh.project(myproj,campo)->campoProj
   raster(list(x=myproj$x,y=myproj$y,z=campoProj))->myraster
+  exp(myraster)->myraster
   crs(myraster)<-crsKM
 
   mask(myraster,sp_shapeRegione)->myraster
-  plot(myraster)
-  plot(mesh,add=TRUE,lwd=0.5)
-  plot(st_geometry(shapeRegione),add=TRUE,lwd=2)
+  
+  ggplot()+
+    ggspatial::layer_spatial(data=myraster)+
+    #geom_sf(data=shapeRegione)+
+    scale_fill_scico(palette="vik",na.value="transparent")+
+    ylab(BB)->grafico
+  print(grafico)
+  # plot(myraster)
+  # plot(mesh,add=TRUE,lwd=0.5)
+  # plot(st_geometry(shapeRegione),add=TRUE,lwd=2)
 
-})
+  myraster
+  
+})->listaRaster
+
+stack(listaRaster)->mystack
+#writeRaster(mystack,"mystack.tif")
 ```
 
 
 ```{r graficoLatentFieldSd,fig.height=5,fig.width=5,eval=FALSE}
 ## Latent field (SD)
 
-purrr::walk(seq(1,n_giorni,by=5),.f=function(BB){
+purrr::walk(seq(1,n_giorni,by=7),.f=function(BB){
   
   inla.out$summary.random$i[iset$i.group==BB,"sd"]->campo #
   
