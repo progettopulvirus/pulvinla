@@ -1,0 +1,49 @@
+---
+title: "Sintesi mappe Lombardia"
+description: |
+  Modello 2020 vs 2019/2018.
+author:
+  - name: guidofioravanti
+date: 05-10-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+Le mappe qui riportate sintetizzano i risultati dei modelli mensili ottenuti confrontando le concentrazioni di NO2 del 2020 vs le concentrazioni del 2019 (MODELLO1920) e le concentrazioni del 2020 vs le concentrazioni del 2018 (MODELLO1820).
+
+### Giorni feriali
+
+<a href="./feriali.html" alt="Mappa giorni feriali" target="_blank">Mappe delle variazioni medie settimanali delle concentrazioni di NO2</a> per i giorni feriali (dal lunedi al sabato).
+
+### Giorni festivi
+
+<a href="./festivi.html" alt="Mappa giorni festivi" target="_blank">Mappe delle variazioni medie settimanali delle concentrazioni di NO2</a> per i giorni festivi (solo domeniche).
+
+### Come leggere le mappe
+
+Le mappe riportano le variazioni medie settimanali su scala esponenziale delle concentrazioni 2020 rispetto all'anno 2019 e all'anno 2018 ((2020-2019)/2019 e (2020-2018)/2018). 
+
+Le medie settimanali sono state calcolate partendo dai confronti delle mappe a scala giornaliera. I confronti a livello giornaliero non seguono le date del calendario (quindi NON si confronta il primo aprile 2019 vs 1 aprile 2020) per non confondere i giorni feriali con le domeniche. Piuttosto: il primo lunedi di aprile 2020 viene confrontato con il primo lunedi di aprile 2019 e cosi' via (tuttavia un giorno festivo che non cade di domenica nel 2020 puo' essere confrontato con un giorno non festivo del 2019 o del 2018).
+
+Le mappe seguono un ordine temporale (dalla prima settimana di Gennaio, mese1.1, all'ultima settimana di Aprile, mese4.5).
+
+Lo sfondo grigio di ciascuna mappa rappresenta l'`impervious surface` della Lombardia, una covariata importante nel nostro modello. In rosso (in basso al centro) la zona del Lodigiano, la prima a essere messa in quarantena a Febbraio 2020.
+
+Le variazioni medie settimanali delle concentrazioni sono rappresentate mediante una scala di colori che va dal blu (decremento) al giallo (aumento).
+
+Le mappe riportano <strong>solo</strong> le variazioni statisticamente significative (percentili 2.5 e 97.5 calcolati mediante il comando `timpctl` di CDO) identificate sia da MODELLO1820 che da MODELLO1920. <strong>Incrementi/decrementi non comuni ai due modelli sono stati invalidati</strong> (ovvero mascherati). Inoltre: il modello utilizzato per confrontare il 2020 vs 2018/2019 e' stato fatto girare anche per confrontare l'anno 2018 vs 2019. <strong>Eventuali incrementi/decrementi statisticamente significativi identificati da questo ulteriore modello sono stati eliminati dalle mappe medie che coinvolgono il 2020</strong>.
+
+Da quanto detto sopra ne consegue che le mappe 2018 vs 2020 e 2019 vs 2020 qui riprodotte presentano gli stessi pattern spaziali. Quello che puo' cambiare e' l'intensita' degli incrementi/decrementi settimanali medi calcolati.
+
+### FAQ
+
+- Perche' il numero delle settimane cambia tra giorni feriali e giorni festivi? Dipende da come termina l'ultima settimana del mese.
+
+- Hai detto proprio tutto riguardo l'elaborazioni delle mappe? No. Ad esempio non ho detto che dalle mappe ho eliminato clumps (gruppi di pixexl) con un'area inferiore a 5 km^2 (comando `areaSieve` dal pacchetto `bfastSpatial`).
+
+- Hai detto veramente tutto riguardo l'elaborazioni delle mappe? No. Ad esempio non ho detto che nelle mappe ho riportato solo incrementi piu' grandi di 0.3 o decrementi al di sotto di -0.3.
+
+- Perche' ci infliggi dei testi cosi' lunghi? Per cercare di essere il piu' chiaro possibile riguardo al senso dei risultati.
+
+
