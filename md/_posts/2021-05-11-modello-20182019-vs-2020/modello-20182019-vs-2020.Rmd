@@ -1,0 +1,28 @@
+---
+title: "Modello 2018/2019 vs 2020"
+description: |
+  Risultati dei singoli modelli.
+author:
+  - name: guidofioravanti
+date: 05-11-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+### Risultati modello 2019 vs 2020
+
+
+<a href="modello_1920.html" target="_blank">Mappe e grafici</a> per il modello che confronta le concentrazioni 2019 di NO2 rispetto al 2020.
+
+
+### Risultati modello 2018 vs 2020
+
+
+<a href="modello_1820.html" target="_blank">Mappe e grafici</a> per il modello che confronta le concentrazioni 2018 di NO2 rispetto al 2020.
+
+
+
+
+
+

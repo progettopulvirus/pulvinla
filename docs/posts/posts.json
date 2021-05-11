@@ -1,5 +1,22 @@
 [
   {
+    "path": "posts/2021-05-11-modello-20182019-vs-2020/",
+    "title": "Modello 2018/2019 vs 2020",
+    "description": "Risultati dei singoli modelli.",
+    "author": [
+      {
+        "name": "guidofioravanti",
+        "url": {}
+      }
+    ],
+    "date": "2021-05-11",
+    "categories": [],
+    "contents": "\nRisultati modello 2019 vs 2020\nMappe e grafici per il modello che confronta le concentrazioni 2019 di NO2 rispetto al 2020.\nRisultati modello 2018 vs 2020\nMappe e grafici per il modello che confronta le concentrazioni 2018 di NO2 rispetto al 2020.\n\n\n\n",
+    "preview": {},
+    "last_modified": "2021-05-11T17:04:39+02:00",
+    "input_file": {}
+  },
+  {
     "path": "posts/2021-05-10-sintesi-mappe-lombardia/",
     "title": "Sintesi mappe Lombardia",
     "description": "Modello 2020 vs 2019/2018.",
