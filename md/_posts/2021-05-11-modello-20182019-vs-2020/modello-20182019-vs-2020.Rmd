@@ -10,6 +10,11 @@ output:
     self_contained: false
 ---
 
+### Risultati modello 2018 vs 2019
+
+<a href="mappa_1819_versione1.html" target="_blank">Mappe e grafici</a> per il modello che confronta le concentrazioni 2018 di NO2 rispetto al 2019.
+
+
 ### Risultati modello 2019 vs 2020
 
 
