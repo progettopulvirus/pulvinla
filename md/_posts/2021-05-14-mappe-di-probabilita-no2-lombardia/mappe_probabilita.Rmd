@@ -1,0 +1,110 @@
+---
+title: Modello 2019 vs 2020, NO2 Lombardia
+description: "Mappe di probabilita' (soglia: -0.3)"
+output: html_document
+params:
+  modello: "METEO1920"
+  soglia: -0.3
+  anni: "2019 vs 2020"
+---
+  
+```{r setup, include=FALSE,message=FALSE,warning=FALSE,error=FALSE,echo=FALSE}
+
+library("tidyverse")
+library("scico")
+library("raster")
+library("regioniItalia")
+library("patchwork")
+library("sf")
+library("ggnewscale")
+library("bfastSpatial")
+library("osmdata")
+library("ggspatial")
+library("stazioniMonitoraggio")
+
+knitr::opts_chunk$set(include=FALSE,warning=FALSE,message=FALSE,echo=FALSE)
+
+
+MODELLO<-params$modello
+SOGLIA<- params$soglia
+ANNI<-params$anni
+
+st_as_sf(stazioni,coords=c("st_x","st_y"),crs=4326)->sfStazioni
+st_transform(sfStazioni,crs=32632)->sfStazioni
+sfStazioni %>%
+  filter(regione=="LOMBARDIA" & no2=="completa 2016-2020")->sfStazioni
+
+preparaDati<-function(.ffile){
+  
+  purrr::map(.ffile,.f=function(nomeFile){
+    
+    str_extract(nomeFile,"mese[0-9]")->mese
+    str_extract(nomeFile,"settimana[0-9]")->settimana
+    str_remove(settimana,"settimana")->settimana
+    raster(nomeFile)->myraster
+    
+    names(myraster)<-paste0(mese,".",settimana)
+    
+    myraster
+    
+  })->listaRasters
+  
+  
+  brick(listaRasters)
+  
+}#fine preparaDati
+
+graficoMappe<-function(.mappa,tipo,anni){
+  
+  numeroLayers<-nlayers(.mappa)
+  
+  purrr::map(1:numeroLayers,.f=function(ll){
+    
+    #mese mi serve per l'etichetta delle mappe, per distinguere mesi e settimane 
+    names(.mappa[[ll]])->mese
+    
+    tabularaster::as_tibble(.mappa[[ll]],xy=TRUE)->df
+    
+    ggplot()+
+      geom_sf(data=lombardia,fill="transparent")+
+      geom_tile(data=df,aes(x=x,y=y,fill=cellvalue),alpha=1)+
+      scico::scale_fill_scico(palette="bilbao",limits=c(0,1),na.value=NA,direction=1)+
+      geom_sf(data=sfStazioni,pch=21,fill="firebrick",size=0.3)+
+      ylab(mese)+
+      theme_minimal()+
+      theme(panel.grid = element_blank(),axis.title.x = element_blank(),axis.text = element_blank())
+    
+  })->listaGrafici
+  
+  purrr::reduce(listaGrafici[1:length(listaGrafici)],.f=`+`)+
+    plot_layout(guides="collect",ncol = 4)+plot_annotation(title=anni,subtitle=tipo)
+  
+} #fine grafico
+```
+
+Probabili di osservare un decremento minore o uguale a `r params$soglia`
+
+### Giorni feriali
+
+```{r feriali,include=TRUE,fig.width=12,fig.height=15}
+#mappe con media mascherata e non
+TIPO<-"feriali"
+list.files(pattern = glue::glue("^probabilita_{TIPO}.+modello{MODELLO}.+nc"),full.names = TRUE,include.dirs = TRUE,recursive = TRUE)->ffile_feriali
+
+preparaDati(.ffile=ffile_feriali)->brickFeriali
+graficoMappe(.mappa = brickFeriali,tipo=TIPO,anni=ANNI)->grafico_feriali
+print(grafico_feriali)
+```
+
+### Giorni festivi
+
+```{r festivi,include=TRUE,fig.width=12,fig.height=15}
+TIPO<-"festivi"
+list.files(pattern = glue::glue("^probabilita_{TIPO}.+modello{MODELLO}.+nc"),full.names = TRUE,include.dirs = TRUE,recursive = TRUE)->ffile_festivi
+
+preparaDati(.ffile=ffile_festivi)->brickFestivi
+graficoMappe(.mappa =brickFestivi,tipo=TIPO,anni=ANNI)->grafico_festivi
+print(grafico_festivi)
+```
+
+

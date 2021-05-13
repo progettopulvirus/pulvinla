@@ -1,0 +1,18 @@
+---
+title: "Mappe di probabilita, NO2 - Lombardia"
+description: |
+  Probabilita' decremento nelle concentrazioni di NO2 minore o uguale di -0.3
+author:
+  - name: guidofioravanti
+date: 05-14-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+### Modello 2019 vs 2020
+
+[Mappe](./mappe_probabilita_1920.html)
+
+
