@@ -16,3 +16,11 @@ output:
 [Mappe](./mappe_probabilita_1920.html)
 
 
+### Modello 2018 vs 2020
+
+[Mappe](./mappe_probabilita_1820.html)
+
+### Modello 2018 vs 2019
+
+[Mappe](./mappe_probabilita_1819.html)
+
