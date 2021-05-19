@@ -10,21 +10,30 @@ output:
     self_contained: false
 ---
 
+## Pianura Padana (senza Friuli)
+
+### Risultati modello 2019 vs 2020
+
+<a href="mappa_1920_pianurapadana.html" target="_blank">Mappe e grafici</a> per il modello che confronta le concentrazioni 2019 di NO2 rispetto al 2020.
+
+
+## Lombardia
+
 ### Risultati modello 2018 vs 2019
 
-<a href="mappa_1819_versione1.html" target="_blank">Mappe e grafici</a> per il modello che confronta le concentrazioni 2018 di NO2 rispetto al 2019.
+<a href="mappa_1819.html" target="_blank">Mappe e grafici</a> per il modello che confronta le concentrazioni 2018 di NO2 rispetto al 2019.
 
 
 ### Risultati modello 2019 vs 2020
 
 
-<a href="modello_1920.html" target="_blank">Mappe e grafici</a> per il modello che confronta le concentrazioni 2019 di NO2 rispetto al 2020.
+<a href="mappa_1920.html" target="_blank">Mappe e grafici</a> per il modello che confronta le concentrazioni 2019 di NO2 rispetto al 2020.
 
 
 ### Risultati modello 2018 vs 2020
 
 
-<a href="modello_1820.html" target="_blank">Mappe e grafici</a> per il modello che confronta le concentrazioni 2018 di NO2 rispetto al 2020.
+<a href="mappa_1820.html" target="_blank">Mappe e grafici</a> per il modello che confronta le concentrazioni 2018 di NO2 rispetto al 2020.
 
 
 
