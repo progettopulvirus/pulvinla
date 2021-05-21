@@ -1,0 +1,71 @@
+---
+title: "Argomenti in sospeso"
+author:
+  - name: guidofioravanti
+date: 05-21-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+![](./chefare.png) 
+
+### Modello attuale:
+
+$$y \sim \mu+\beta_{1} day_{2019}+\beta_{2} day_{2020}+\beta_{3} weekend_{2019}+\beta_{4} weekend_{2020}+\beta_{5} x_{ meteo/spaziali}+u_{spde}+z_{iidcentraline}+\epsilon$$
+
+**Il modello attuale non include CAMS**
+
+Covariate meteo:
+
+- t2m (temperatura a 2 metri)
+
+- dtr (diurnal temperature range): ha senso?
+
+- tp/ptp: total precipitation, previous (day) total precipitation
+
+- wspeed, pwspeed: wind speed, previous (day) wind speed
+
+- pbl00, pbl12: planet boundary layer ore 00 e ore 12 (o planet boundary layer massimo e minimo?)
+
+Covariate spaziali (risoluzione 1km x 1km):
+
+- altitudedem: quota
+
+- i_surface: impervious surface
+
+- d_a2: distanza lineare da strade a2 
+
+Altro:
+
+- Il modello attuale include due trend lineari **distinti**: uno per il 2019 e uno per il 2020. Usare un unico trend lineare?
+
+- Il modello attuale include due effetti weekend **distinti**: uno per il 2019 e uno per il 2020. Usare un unico effetto weekend? **L'effetto weekend include le domeniche e i giorni festivi**
+
+### Che fare?
+
+1. I risultati attuali sono ragionevoli o no? Quale livello di decremento percentuale nelle concentrazioni di NO2 e' interessante per chi si occupa di qualita' dell'aria (oltre ad essere statisticamente significativo).
+
+2. Che confronti presentare? 2018 vs 2020? 2018 vs 2019? 
+
+3. Tentare un modello mensile con i dati 2018, 2019 e 2020?
+
+4. Ha senso l'aggregazione settimanale (NB: nell'aggregazione settimanale, i giorni festivi diversi dalla domenica vengono aggregati con i giorni feriali come se fossero giorni qualsiasi)?
+
+5. Ha senso distinguere tra giorni feriali e domeniche nei risultati?
+
+6. Nella creazione delle mappe inserire l'effetto iid sulle centraline? Inserire l'errore residui gaussiano?
+
+7. Inserire il Friuli?
+
+8. Rivedere la mesh
+
+9. Definire le priors o utilizzare le priors di default? Dipende da chi e' il nostro interlocutore.
+
+10. Che fare con CAMS?
+
+11. Dati mobilita'? Google, apple?
+
+
+

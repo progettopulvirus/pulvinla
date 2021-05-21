@@ -1,5 +1,22 @@
 [
   {
+    "path": "posts/2021-05-21-argomenti-in-sospeso/",
+    "title": "Argomenti in sospeso",
+    "description": {},
+    "author": [
+      {
+        "name": "guidofioravanti",
+        "url": {}
+      }
+    ],
+    "date": "2021-05-21",
+    "categories": [],
+    "contents": "\n\nModello attuale:\n\\[y \\sim \\mu+\\beta_{1} day_{2019}+\\beta_{2} day_{2020}+\\beta_{3} weekend_{2019}+\\beta_{4} weekend_{2020}+\\beta_{5} x_{ meteo/spaziali}+u_{spde}+z_{iidcentraline}+\\epsilon\\]\nIl modello attuale non include CAMS\nCovariate meteo:\nt2m (temperatura a 2 metri)\ndtr (diurnal temperature range): ha senso?\ntp/ptp: total precipitation, previous (day) total precipitation\nwspeed, pwspeed: wind speed, previous (day) wind speed\npbl00, pbl12: planet boundary layer ore 00 e ore 12 (o planet boundary layer massimo e minimo?)\nCovariate spaziali (risoluzione 1km x 1km):\naltitudedem: quota\ni_surface: impervious surface\nd_a2: distanza lineare da strade a2\nAltro:\nIl modello attuale include due trend lineari distinti: uno per il 2019 e uno per il 2020. Usare un unico trend lineare?\nIl modello attuale include due effetti weekend distinti: uno per il 2019 e uno per il 2020. Usare un unico effetto weekend? L’effetto weekend include le domeniche e i giorni festivi\nChe fare?\nI risultati attuali sono ragionevoli o no? Quale livello di decremento percentuale nelle concentrazioni di NO2 e’ interessante per chi si occupa di qualita’ dell’aria (oltre ad essere statisticamente significativo).\nChe confronti presentare? 2018 vs 2020? 2018 vs 2019?\nTentare un modello mensile con i dati 2018, 2019 e 2020?\nHa senso l’aggregazione settimanale (NB: nell’aggregazione settimanale, i giorni festivi diversi dalla domenica vengono aggregati con i giorni feriali come se fossero giorni qualsiasi)?\nHa senso distinguere tra giorni feriali e domeniche nei risultati?\nNella creazione delle mappe inserire l’effetto iid sulle centraline? Inserire l’errore residui gaussiano?\nInserire il Friuli?\nRivedere la mesh\nDefinire le priors o utilizzare le priors di default? Dipende da chi e’ il nostro interlocutore.\nChe fare con CAMS?\nDati mobilita’? Google, apple?\n\n\n\n",
+    "preview": {},
+    "last_modified": "2021-05-21T13:59:05+02:00",
+    "input_file": {}
+  },
+  {
     "path": "posts/2021-05-14-mappe-di-probabilita-no2-lombardia/",
     "title": "Mappe di probabilita, NO2 - Lombardia",
     "description": "Probabilita' decremento nelle concentrazioni di NO2 minore o uguale di -0.3",
