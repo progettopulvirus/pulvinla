@@ -1,0 +1,304 @@
+---
+title: "Concentrazioni 2019/2020, no2"
+description: |
+  Concentrazioni giornaliere per mese di marzo.
+author:
+  - name: guidofioravanti
+date: 06-14-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,warning = FALSE,message = FALSE,error = FALSE,eval=TRUE,include=FALSE)
+```
+
+### Parallel plot
+
+Confronto fra le concentrazioni assolute di NO2 del 2019 e 2020.
+
+```{r,include=TRUE,fig.width=10,fig.height=14}
+library("tidyverse")
+library("sf")
+library("sp")
+library("rpulvinla")
+library("stazioniMonitoraggio")
+library("seplyr")
+library("scico")
+library("fontawesome")
+library("patchwork")
+library("latex2exp")
+options(warn=0)
+
+#coppia di anni da confrontare
+ANNI<-c(2019,2020)
+
+#su quali mesi lavorare
+LISTA_MESI<-3:3
+#giorni di festa variabili (pasqua, carnevale)
+as.Date(c("2018-02-12","2018-02-13","2018-04-01","2018-04-02",
+          "2019-03-04","2019-03-05","2019-04-21","2019-04-22",
+          "2020-02-24","2020-02-25","2020-04-12","2020-04-13"))->giorniFestivi
+
+purrr::map(ANNI,.f=function(qualeAnno){
+  
+  paste0(qualeAnno,c("-01-01","-01-06","-04-25","-05-01","-11-01"))
+  
+}) %>% unlist()->giorniFestiviFissi
+
+c(as.Date(giorniFestiviFissi,format="%Y-%m-%d"),giorniFestivi)->giorniFestivi
+
+
+#############################
+###Regione e inquinante: fissare REGIONE e INQUINANTE
+#############################
+REGIONE<-"lombardia" #viene usato come suffisso per file output e per disegnare la regione nella mesh (solo disegnare, non per costruire la mesh)
+INQUINANTE<-"no2" #inquinante su cui lavorare 
+
+#gli output riportano il suffisso lombardia ma l'analisi riguarda pianura
+c("lombardia","veneto","piemonte","emiliaromagna","toscana","valleaosta","patrento","pabolzano","friuliveneziagiulia")->pianura
+
+#metto lockdown su tutto 2020 perche faccio il confronto fra 2019 vs 2020, quindi non il confronto fra gennaio febraio 2020 vs marzo aprile 2020
+INIZIO_LOCKDOWN<-"2020-01-01"
+FINE_LOCKDOWN<-"2020-12-31"
+
+###############################
+###Quali variabili meteo? 
+###############################
+METEO<-c("t2m","tp","ptp","dtr","wspeed","pblmax","pblmin","pwspeed","rh","nirradiance","sp")
+
+###############################
+###Quali variabili spaziali? 
+###############################
+SPATIAL<-c("i_surface","altitudedem","d_a2","d_a1","clc_arable","tipo_zona") #"clc_agricultural","clc_deciduous","clc_evergreen","clc_pasture","clc_shrub","clc_crop"
+
+###############################
+###Trasformazione logaritmica della variabile target?
+###############################
+LOGARITMO<-c(TRUE,FALSE)[1]
+
+#####
+# iid su centraline (station_eu_code)?
+#####
+IID_STAZIONI<-c(TRUE,FALSE)[1] 
+
+
+####### i_surface, d_a1,altitudedem le standardizzo su TUTTE le stazioni dell'anagrafica..sono questi i parametri che ho poi usato per standardizzare i corrispettivi rasters
+scala<-function(x){
+  
+  mean(x,na.rm=TRUE)->media
+  sd(x,na.rm=TRUE)->deviazione
+  
+  (x-media)/deviazione
+  
+}#fine scala
+####### 
+
+
+
+stazioni$clc_arable<-stazioni$clc_agricultural+stazioni$clc_arable
+stazioni$clc_arable<-scala(stazioni$clc_arable)
+stazioni$altitudedem<-scala(stazioni$altitudedem)
+stazioni$d_a2<-scala(stazioni$d_a2)
+stazioni$d_a1<-scala(stazioni$d_a1)
+stazioni$i_surface<-scala(stazioni$i_surface)
+
+
+purrr::walk(LISTA_MESI,.f=function(MESE){
+
+  purrr::map_dfr(pianura[!grepl("bolzano",pianura)],.f=~caricaDati(pacchetto=.,inquinante=INQUINANTE))->datiTemp
+  
+
+  bind_rows(datiTemp,pabolzano::no2)->datiTemp
+  
+  #prendo solo le stazioni complete 2016-2020
+  stazioni %>%
+    seplyr::rename_se("inquinante" :=INQUINANTE) %>%
+    filter(inquinante %in% c("completa 2016-2020")) %>%
+    filter(grepl("^I.+",station_eu_code)) %>%
+    filter(tolower(regione) %in% tolower(unique(datiTemp$regione)))->stazioni
+
+  datiTemp %>% 
+    filter(station_eu_code %in% stazioni$station_eu_code) %>%
+    filter(yy %in% ANNI & mm %in% c(MESE))->datiTemp  
+
+  datiTemp %>%
+    mutate(oldvalue=value)->datiTemp
+  
+  left_join(datiTemp,stazioni[,c("station_eu_code",SPATIAL)])->datiTemp
+  
+ 
+  #crea la formula di base con effetti fissi
+
+  #####
+  # Inserire trend temporale (esterno a spde)?
+  #####
+  DAY_TREND<-c(TRUE,FALSE)[1] #rw1 su giorno? ..usare variabile day
+
+  WEEK_TREND<-c(TRUE,FALSE)[1] #rw1 su settimana? ... variabile week
+
+  WDAY_TREND<-c(TRUE,FALSE)[1] #rw1 su giorno della settimana, lun, mar..dom? ... variabile wday  
+
+  WEEKEND_TREND<-c(TRUE,FALSE)[1]
+
+  #dati meteo standardizzati
+  datiMeteo::meteo_standardizzati[,c("station_eu_code","date","coordx","coordy",METEO)] ->meteo
+
+  #dati ok? verifichiamo
+  which(is.na(datiTemp$pollutant_fk))->righe
+  if(length(righe)) stop("pollutant_fk NA???")
+
+  #rpulvinla::prepara_dati, aggiunge la variabile banda per l'SPDE, fa il logaritmo della variabile value (l'inquinante) e aggiunge la variabile lockdown
+  prepara_dati(.x = datiTemp,logaritmo = LOGARITMO,lockdown = TRUE,inizio_lockdown = INIZIO_LOCKDOWN,fine_lockdown = FINE_LOCKDOWN,wday=WDAY_TREND,day=DAY_TREND,week=WEEK_TREND,weekend = WEEKEND_TREND)->dati
+  rm(datiTemp)
+  
+  #Sia che lavoriamo con il logaritmo dell'inquinante, sia che lavoriamo con la variabile originale, nella creazione dello stack chiamiamo la variabile
+  #target "value", in modo di avere un'unica interfaccia e toccare il meno possibile il codice
+  if(LOGARITMO){
+    
+    dati$value<-dati$lvalue
+    dati$lvalue<-NULL
+    
+  }#fine LOGARITMO  
+
+  #associo dati meteo
+  
+  left_join(dati,meteo)->dati
+  BACKUP<-dati
+  
+  dati$rest<-0
+  dati[dati$date %in% giorniFestivi,]$rest<-1
+
+  dati %>%
+    filter(yy==2019)->dati19
+  
+  dati %>%
+    filter(yy==2020)->dati20
+
+  right_join(dati19 %>% dplyr::select(-day,-dd,-yy,-pollutant_fk,-regione,-mm),
+             dati20 %>% dplyr::select(-mm,-clc_arable,  #-clc_agricultural,-clc_deciduous,-clc_evergreen,-clc_pasture,-clc_shrub,-clc_crop,
+                                      -regione,-tipo_zona,-coordx,-coordy,-Intercept,-dd,-yy,-pollutant_fk,-i_surface,-altitudedem,-d_a1,-d_a2,-banda,-day),
+            by=c("week"="week","wday"="wday","station_eu_code"="station_eu_code"))->datiJoin
+
+  #cerchiamo di cogliere l'effetto di un giorno festivo nel 2019 ma non festivo nel 2020 o viceversa
+  datiJoin %>%
+    mutate(rest=ifelse((rest.x+rest.y)==1 ,1,0))->datiJoin
+
+  
+  #creo variabili differenze
+  purrr::map_dfc(c("value",METEO),.f=function(nomeVar){
+  
+    tibble(datiJoin[[paste0(nomeVar,".y")]]-datiJoin[[paste0(nomeVar,".x")]])->temp
+    
+    names(temp)<-nomeVar
+    
+    temp
+    
+  })->differenze
+
+  rm(dati)
+
+  bind_cols(datiJoin[,c("station_eu_code","banda","wday","week","coordx","coordy","Intercept","rest","oldvalue.x","oldvalue.y",SPATIAL)],differenze)->dati
+
+  dati %>%
+    filter(!is.na(coordx))->dati
+
+  if(WEEKEND_TREND){
+    
+    dati %>%
+      mutate(weekend=ifelse(wday==7,1,0))->dati
+    
+  }
+
+
+  min(dati$banda)->banda_first
+  
+  dati %>%
+    mutate(banda=banda-banda_first+1,day=banda)->dati
+
+  #invalidiamo dati anomali
+
+  dati %>%
+    mutate(evalue=exp(value)-1)->dati
+    #mutate(value=ifelse(abs(evalue)>1,NA,value))->dati
+
+dati->subDati
+
+unique(subDati$station_eu_code)->codici_da_verificare
+stazioniMonitoraggio::stazioni %>%
+  filter(station_eu_code %in% codici_da_verificare)->subStazioni
+
+
+#spaghetti plot
+min(dati$week)->min_week
+
+dati %>%
+  filter(!is.na(value) & wday==7) %>%
+  mutate(week=week-min_week+1)->dati
+
+
+purrr::map(unique(dati$week),.f=function(WW){
+
+  dati %>%
+  filter(week==WW) %>%
+  rename(`2019`=oldvalue.x,`2020`=oldvalue.y) %>%
+  dplyr::select(`2019`,`2020`,station_eu_code,banda,evalue,week) %>%
+  mutate(station_eu_code2=paste0(station_eu_code,banda),evalue2=ifelse(evalue>=0,fontawesome::fa("arrow-up"),fontawesome::fa("arrow-down"))) %>%
+  mutate(evalue3=cut(evalue,breaks = seq(-1,1,by=0.2)),evalue2=factor(evalue2,levels = c(fontawesome::fa("arrow-down"),fontawesome::fa("arrow-up")),ordered = TRUE))->subDati
+  
+  purrr::map(c(fontawesome::fa("arrow-down"),fontawesome::fa("arrow-up")),.f=function(ARROW){
+    
+    
+  if(WW==WW){ 
+    
+      ifelse(ARROW==fontawesome::fa("arrow-down"),"Decremento","Incremento")->more_text
+
+  }else{
+    
+      more_text<-""
+    
+  }    
+    
+  ifelse(ARROW==fontawesome::fa("arrow-down"),"#4575b4","#d73027")->COLORE
+  
+  subDati %>%
+  mutate(week=glue::glue("Week {week} {more_text}")) %>%
+  filter(evalue2==ARROW) %>%
+  filter(!is.na(evalue3)) %>%
+  filter(abs(evalue)>0.0) %>%
+  gather(key="yy",value="no2",-station_eu_code,-banda,-station_eu_code2,-evalue,-evalue2,-evalue3,-week) %>%
+  ggplot(data=.,aes(x=yy,y=no2))+
+  geom_line(aes(group=station_eu_code),alpha=0.25,color=COLORE)+#+facet_wrap(week~evalue2,scales = "free_x",ncol=2)+
+  scale_color_scico_d(palette="roma")+
+  scale_x_discrete(expand=c(0,0))+
+  scale_y_continuous(limits = c(0,100),breaks = seq(0,100,by=20),sec.axis = sec_axis(trans=~.*1),expand = c(0,0))+
+  ggtitle(glue::glue("Week {WW}"))+
+  xlab("")+
+  ylab(TeX('$no2 \\; (\\mu g / m^3)$'))+
+  theme_bw()+
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.grid.major.y = element_line(color="white",size = 0.25),
+        panel.spacing.x = unit(c(5),units = "mm"),
+        #plot.margin = unit(c(15,25,15,25),"mm"),
+        strip.background = element_blank(),
+        axis.text.x = element_text(margin = margin(t=0.5,unit="cm")),
+        panel.border = element_rect(),
+        aspect.ratio=2/3)
+  
+  })->graficiArrow
+  
+  reduce(graficiArrow,.f=`+`)
+  
+  })->graficiSettimane
+
+  reduce(graficiSettimane,.f=`/`)->grafico
+
+
+  print(grafico+plot_annotation(title = "Marzo 2019 vs 2020"))  
+  
+}) #su MESE
+```

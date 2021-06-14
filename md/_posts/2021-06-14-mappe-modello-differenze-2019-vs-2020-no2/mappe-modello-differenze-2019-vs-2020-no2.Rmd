@@ -1,0 +1,34 @@
+---
+title: "Mappe modello differenze 2019 vs 2020, NO2"
+description: |
+  Medie settimanali differenze.
+author:
+  - name: guidofioravanti
+date: 06-14-2021
+output:
+  distill::distill_article:
+    self_contained: true
+---
+
+Mappe per i soli giorni feriali.
+
+### Gennaio
+
+Paletta di colori "cork"
+
+![](./_mappe_1_feriali.png) 
+
+### Febbraio
+
+Paletta di colori "broc"
+
+![](./_mappe_2_feriali.png) 
+
+
+### Marzo
+
+![](./_mappe_3_feriali.png) 
+
+### Aprile
+
+![](./_mappe_4_feriali.png) 

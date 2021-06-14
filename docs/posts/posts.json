@@ -1,5 +1,39 @@
 [
   {
+    "path": "posts/2021-06-14-concentrazioni-20192020-no2/",
+    "title": "Concentrazioni 2019/2020, no2",
+    "description": "Concentrazioni giornaliere per mese di marzo.",
+    "author": [
+      {
+        "name": "guidofioravanti",
+        "url": {}
+      }
+    ],
+    "date": "2021-06-14",
+    "categories": [],
+    "contents": "\nParallel plot\nConfronto fra le concentrazioni assolute di NO2 del 2019 e 2020.\n\n\n\n\n\n\n",
+    "preview": "posts/2021-06-14-concentrazioni-20192020-no2/concentrazioni-20192020-no2_files/figure-html5/unnamed-chunk-1-1.png",
+    "last_modified": "2021-06-14T15:23:35+02:00",
+    "input_file": {}
+  },
+  {
+    "path": "posts/2021-06-14-mappe-modello-differenze-2019-vs-2020-no2/",
+    "title": "Mappe modello differenze 2019 vs 2020, NO2",
+    "description": "Medie settimanali differenze.",
+    "author": [
+      {
+        "name": "guidofioravanti",
+        "url": {}
+      }
+    ],
+    "date": "2021-06-14",
+    "categories": [],
+    "contents": "\nMappe per i soli giorni feriali.\nGennaio\nPaletta di colori “cork”\n\nFebbraio\nPaletta di colori “broc”\n\nMarzo\n\nAprile\n\n\n\n\n",
+    "preview": {},
+    "last_modified": "2021-06-14T15:31:00+02:00",
+    "input_file": {}
+  },
+  {
     "path": "posts/2021-03-25-lombardia-serie-2016-2020-no2/",
     "title": "Lombardia, serie 2016 - 2020, NO2",
     "description": "Serie Lombardia.",
