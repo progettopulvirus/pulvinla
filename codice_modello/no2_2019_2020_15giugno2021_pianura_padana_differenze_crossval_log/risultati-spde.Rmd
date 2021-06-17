@@ -45,20 +45,16 @@ calendario %>%
 # `r params$inquinante`  
 
 
-```{r download,include=TRUE,eval=FALSE}
-download_file(path="risultati-spde.Rmd",output_name = "risultati-spde.Rmd",button_label="Scarica codice analisi spde",button_type = "primary")
-```
-
-
 ```{r leggiRisultati}
-readRDS(glue::glue("dati_{params$regione}.RDS"))->dati
-numero_giorni(dati)->n_giorni
+MESE<-1
+readRDS(glue::glue("dati{MESE}_{params$regione}.RDS"))->dati
+30->n_giorni
 
-if(!exists("inla.out")) {readRDS(glue::glue("result_{params$regione}.RDS"))->inla.out}
-readRDS(glue::glue("iset_{params$regione}.RDS"))->iset
-readRDS(glue::glue("stack.training_{params$regione}.RDS"))->mystack
-try({readRDS(glue::glue("spde_{params$regione}.RDS"))->spde})
-readRDS(glue::glue("mesh_{params$regione}.RDS"))->mesh
+if(!exists("inla.out")) {readRDS(glue::glue("result{MESE}_{params$regione}.RDS"))->inla.out}
+readRDS(glue::glue("iset{MESE}_{params$regione}.RDS"))->iset
+readRDS(glue::glue("stack.training{MESE}_{params$regione}.RDS"))->mystack
+try({readRDS(glue::glue("spde{MESE}_{params$regione}.RDS"))->spde})
+readRDS(glue::glue("mesh{MESE}_{params$regione}.RDS"))->mesh
 ```
 
 
@@ -98,17 +94,16 @@ st_bbox(shapeRegione)->estensione
 as_Spatial(shapeRegione)->sp_shapeRegione
 
 
-purrr::map(1:60,.f=function(BB){
+purrr::map(1:28,.f=function(BB){
   
-  calendario[BB,]$yy->anno
-  calendario[BB,]$mm->mese
-  calendario[BB,]$dd->giorno
+
+  BB->giorno
       
   inla.out$summary.random$i[iset$i.group==BB,"mean"]->campo #
   inla.mesh.projector(mesh,xlim=c(estensione["xmin"],estensione["xmax"]),ylim=c(estensione["ymin"],estensione["ymax"]),dims = c(250,250))->myproj
   inla.mesh.project(myproj,campo)->campoProj
   raster(list(x=myproj$x,y=myproj$y,z=campoProj))->myraster
-  exp(myraster)->myraster
+  #exp(myraster)->myraster
   crs(myraster)<-crsKM
 
   mask(myraster,sp_shapeRegione)->myraster
@@ -135,7 +130,7 @@ stack(listaRaster)->mystack
 ```{r graficoLatentFieldSd,fig.height=5,fig.width=5,eval=FALSE}
 ## Latent field (SD)
 
-purrr::walk(seq(1,n_giorni,by=7),.f=function(BB){
+purrr::walk(seq(1,1,by=1),.f=function(BB){
   
   inla.out$summary.random$i[iset$i.group==BB,"sd"]->campo #
   

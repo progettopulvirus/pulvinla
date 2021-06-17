@@ -1,0 +1,15 @@
+#parametri calcolati su tutte le stazioni in anagrafica. Parametri usati per standardizzare i rasters.
+parametro;mean;sd
+dem;190.0172;274.0262
+i_surface;37.00786;30.60618
+d_a1;28764.43;72615.58
+d_a2;2386.007;7813.084
+clc_agricultural;11.45985;19.32037
+clc_arable_agri;25.61314;30.07103
+clc_arable;14.15328;25.91584
+clc_deciduous;3.3503650;11.936244
+clc_evergreen;0.7944039;5.533010
+clc_pasture;0.6350365;5.041184
+clc_shrub;2.0717762;8.761751
+clc_crop;3.6265207;13.345514
+

@@ -1,0 +1,46 @@
+---
+title: no2
+output: html_document
+---
+
+```{r setup, include=FALSE}
+rm(list = objects())
+library("INLA")
+library("tidyverse")
+library("patchwork")
+
+list.files(pattern="^samples[1-4].csv$")->ffile
+purrr::map_dfr(ffile,.f=read_delim,delim=";",col_names = TRUE)->dati
+```
+
+```{r,include=FALSE}
+unique(dati$station_eu_code)->CODICI
+
+purrr::map(CODICI,.f=function(codex){
+
+  dati %>%
+    filter(station_eu_code==codex)->subDati
+  
+  subDati %>%
+    gather(key="sample",value="svalue",-value,-date,-banda,-yy,-mm,-dd,-station_eu_code,-media,-weekend)->subDati
+  
+  subDati %>%
+    mutate(sy=glue::glue("{yy}_{sample}")) %>%
+    mutate(secy=glue::glue("{yy}_{station_eu_code}"))->subDati
+  
+  # ggplot(data=subDati)+
+  #   geom_line(aes(x=banda,y=svalue,group=sy,color=as.character(yy)),alpha=0.1)+
+  #   geom_line(aes(x=banda,y=media,group=secy,lty=as.character(yy)))+theme_bw()
+
+    ggplot(data=subDati)+
+    geom_boxplot(aes(x=as.character(mm),y=svalue,fill=as.character(yy)))+facet_wrap(~as.character(weekend))+
+      ylab(codex)+
+      theme_bw()
+  
+})->listaGrafici
+```
+
+
+```{r,include=TRUE,fig.width=18,fig.height=80,echo=FALSE}
+purrr::reduce(listaGrafici,.f=`+`)+plot_layout(ncol=3,guides="collect")
+```

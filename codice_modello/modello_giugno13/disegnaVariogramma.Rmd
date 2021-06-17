@@ -1,0 +1,88 @@
+---
+title: "Variogrammi residui/osservazioni"
+author: Guido
+date: 02-19-2021
+params:
+  regione: lombardia
+  inquinante: pm10
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE}
+library("gstat")
+library("sp")
+library("spacetime")
+library("vroom")
+library("sf")
+library("tidyverse")
+library("purrr")
+library("tidyverse")
+library("downloadthis")
+```
+
+# `r params$inquinante`  
+
+
+
+```{r leggiRisultati}
+MESE<-1
+readRDS(glue::glue("dati{MESE}_{params$regione}.RDS"))->dati
+max(dati$banda)->n_giorni
+
+if(!exists("inla.out")) {readRDS(glue::glue("result{MESE}_{params$regione}.RDS"))->inla.out}
+readRDS(glue::glue("iset{MESE}_{params$regione}.RDS"))->iset
+readRDS(glue::glue("stack.training{MESE}_{params$regione}.RDS"))->mystack
+try({readRDS(glue::glue("spde_{params$regione}.RDS"))->spde})
+readRDS(glue::glue("mesh{MESE}_{params$regione}.RDS"))->mesh
+```
+
+
+```{r myformula,include=TRUE}
+as.formula(inla.out$.args$formula)->myformula
+```
+
+```{r}
+left_join(dati,datiMeteo::meteo[,c("station_eu_code","date","coordx","coordy")])->dati
+
+as.data.frame(dati)->dati
+dati %>%
+  mutate(date=as.Date(glue::glue("2020-{MESE}-{banda}")))->dati
+stConstruct(x=dati,space=c("coordx","coordy"),time="date",SpatialObj = SpatialPoints(subDati[,c("coordx","coordy")]))->STFDF_value
+as(STFDF_value,"STFDF")->STFDF_value
+variogram(value~1,STFDF_value,width=50000,cutoff=250000,tlags=0:7)->myVariogram
+variogram(residui~1,STFDF_value,width=50000,cutoff=250000,tlags=0:7)->myVariogramResiduals
+
+myVariogram$dati<-"observations"
+myVariogramResiduals$dati<-"residuals"
+
+bind_rows(myVariogram,myVariogramResiduals)->dfVariogramma
+ 
+dfVariogramma %>%
+  mutate(id2=str_replace(id,"lag","")) %>%
+  mutate(id2=str_replace(id2,"$"," days")) %>%
+  mutate(id2=case_when(id2=="1 days"~"1 day",
+                       TRUE~id2))->dfVariogramma
+```
+
+Variogrammi spazio-temporali costruiti con le librerie spacetime e gstat. I variogrammi mettono in evidenza che il modello cattura la struttura di correlazione spazio-temporale dei dati.
+
+### Variogramma osservazioni e residui
+
+```{r esempio1,echo=FALSE,fig.height=10,fig.width=8}
+#grafico tutti mesi, con residui insieme a valori osservati
+ggplot(data=dfVariogramma)+
+  geom_line(aes(x=spacelag,y=gamma,colour=id2,lty=dati))+
+  xlab("distance (km)")+
+  ylab("semivariance")+
+#  facet_wrap(~mese,scales = "free_y",ncol = 3)+
+  scale_x_continuous(breaks =seq(0,225000,by=25000),labels=seq(0,225,by=25))+
+  scale_colour_viridis_d(name="Time lag")+
+  scale_linetype_discrete(name="Data")+
+  theme_bw()+
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.grid.major.y = element_blank())
+```

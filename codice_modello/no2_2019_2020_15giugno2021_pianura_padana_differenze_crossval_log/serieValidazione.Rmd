@@ -24,17 +24,16 @@ set.seed(1)
 
 
 ```{r leggiRisultati}
-readRDS(glue::glue("dati_{params$regione}.RDS"))->dati
-unique(dati$station_eu_code)->CODICI
-sample(CODICI,size = 16,replace = FALSE)->CAMPIONE
-
+readRDS(glue::glue("datiValidazione_{params$regione}.RDS"))->dati
+unique(dati$station_eu_code)->CAMPIONE
 ```
 
 
-```{r esempio1,echo=FALSE,fig.height=12,fig.height=40}
+```{r esempio1,echo=FALSE,fig.height=20,fig.width=10}
 #grafico tutti mesi, con residui insieme a valori osservati
 length(unique(dati$date))->numeroDati
 ggplot(data=dati %>% filter(station_eu_code %in% CAMPIONE))+
+  geom_ribbon(aes(x=banda,ymin=fitted025,ymax=fitted975),fill="lightgray")+
   geom_line(aes(x=banda,y=value),colour="black",lwd=0.5)+
   geom_line(aes(x=banda,y=fitted),colour="red",lty=1,alpha=1,lwd=0.5)+
   facet_wrap(~station_eu_code,scales = "free",ncol = 1)+

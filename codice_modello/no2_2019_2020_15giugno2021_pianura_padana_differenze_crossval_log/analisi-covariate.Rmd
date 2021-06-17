@@ -58,18 +58,13 @@ as.formula(inla.out$.args$formula)->myformula
 ## Random effects
 
 
-### rw1 su pbl00
+### rw1 su Transport
 
-```{r wspeed,include=TRUE,fig.height=6,layout="l-page",eval=F}
-try(brinla::bri.band.ggplot(inla.out,name="Transport"))
+```{r wspeed,include=TRUE,fig.height=6,layout="l-page",eval=FALSE}
+unique(dati$mm)->mese
+if(mese %in% c(3,4)) try(brinla::bri.band.ggplot(inla.out,name="Transport"))
 ```
 
-
-### rw1 su aviation
-
-```{r aviation,include=TRUE,fig.height=6,layout="l-page",eval=F}
-try(brinla::bri.band.ggplot(inla.out,name="Aviation"))
-```
 
 ### rw1 su wday
 

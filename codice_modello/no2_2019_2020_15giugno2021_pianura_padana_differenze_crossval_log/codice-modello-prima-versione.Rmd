@@ -1,0 +1,22 @@
+---
+title: "Codice modello, prima versione"
+description: |
+  Implementazione mediante INLA del modello descritto da Cameletti, regione Lombardia (NO2).
+author:
+  - name: Guido Fioravanti
+date: 02-19-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+```{r download,echo=FALSE}
+library("downloadthis")
+downloadthis::download_file(path="modelloPulvirus.R",output.name="modelloPulvirus.R",button_label="Scarica codice modello",button_type = "primary")
+```
+
+
+```{r codice, include=TRUE,echo=TRUE,code=xfun::read_utf8("modelloPulvirus.R"),eval=FALSE}
+```
+
+
