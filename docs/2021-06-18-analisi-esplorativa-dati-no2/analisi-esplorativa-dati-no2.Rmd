@@ -1,0 +1,299 @@
+---
+title: "Analisi esplorativa dati NO2"
+description: |
+  Alcuni appunti e dati.
+author:
+  - name: guidofioravanti
+date: 06-18-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup,echo=FALSE,warning=FALSE,message=FALSE,include=FALSE,error=FALSE}
+#18 giugno 2021: descrizione dei dati di NO2 per il paper
+#I dati qui (a differenza del modello) non sono invalidati, in quanto vogliamo descrivere i dati cosi come li osserviamo
+library("tidyverse")
+library("sf")
+library("sp")
+library("rpulvinla")
+library("stazioniMonitoraggio")
+library("seplyr")
+library("latex2exp")
+options(warn=0)
+
+knitr::opts_chunk$set(include=TRUE,echo=FALSE,warning = FALSE,message = FALSE,error=FALSE)
+
+#coppia di anni da confrontare
+ANNI<-c(2019,2020)
+
+#su quali mesi lavorare
+LISTA_MESI<-1:4
+
+#giorni di festa variabili (pasqua, carnevale)
+as.Date(c("2018-02-12","2018-02-13","2018-04-01","2018-04-02",
+          "2019-03-04","2019-03-05","2019-04-21","2019-04-22",
+          "2020-02-24","2020-02-25","2020-04-12","2020-04-13"))->giorniFestivi
+
+purrr::map(ANNI,.f=function(qualeAnno){
+  
+  paste0(qualeAnno,c("-01-01","-01-06","-04-25","-05-01","-11-01"))
+  
+}) %>% unlist()->giorniFestiviFissi
+
+c(as.Date(giorniFestiviFissi,format="%Y-%m-%d"),giorniFestivi)->giorniFestivi
+
+
+#############################
+###Regione e inquinante: fissare REGIONE e INQUINANTE
+#############################
+REGIONE<-"lombardia" #viene usato come suffisso per file output e per disegnare la regione nella mesh (solo disegnare, non per costruire la mesh)
+INQUINANTE<-"no2" #inquinante su cui lavorare 
+
+#gli output riportano il suffisso lombardia ma l'analisi riguarda pianura
+c("lombardia","veneto","piemonte","emiliaromagna","toscana","valleaosta","patrento","pabolzano","friuliveneziagiulia")->pianura
+
+#metto lockdown su tutto 2020 perche faccio il confronto fra 2019 vs 2020, quindi non il confronto fra gennaio febraio 2020 vs marzo aprile 2020
+INIZIO_LOCKDOWN<-"2020-01-01"
+FINE_LOCKDOWN<-"2020-12-31"
+
+###############################
+###Quali variabili meteo? 
+###############################
+METEO<-c("t2m","tp","dtr","wspeed","pblmax","pblmin","pwspeed","rh","nirradiance","sp")
+
+###############################
+###Quali variabili spaziali? 
+###############################
+SPATIAL<-c("altitudedem","d_a2","clc_arable_agri","tipo_zona") #"clc_agricultural","clc_deciduous","clc_evergreen","clc_pasture","clc_shrub","clc_crop"
+
+###############################
+###Trasformazione logaritmica della variabile target?
+###############################
+LOGARITMO<-c(TRUE,FALSE)[1]
+
+#####
+# iid su centraline (station_eu_code)?
+#####
+IID_STAZIONI<-c(TRUE,FALSE)[1] 
+
+stazioni$clc_arable_agri<-stazioni$clc_agricultural+stazioni$clc_arable
+
+
+### Ciclo map_dfr per preparare i dati (il dataframe dati) su cui fare l'analisi
+
+purrr::map_dfr(LISTA_MESI,.f=function(MESE){
+
+  purrr::map_dfr(pianura,.f=~caricaDati(pacchetto=.,inquinante=INQUINANTE))->datiTemp
+
+  #prendo solo le stazioni complete 2016-2020
+  stazioni %>%
+    seplyr::rename_se("inquinante" :=INQUINANTE) %>%
+    filter(inquinante %in% c("completa 2016-2020")) %>%
+    filter(grepl("^I.+",station_eu_code)) %>%
+    filter(tolower(regione) %in% tolower(unique(datiTemp$regione)))->stazioni
+
+  datiTemp %>% 
+    filter(station_eu_code %in% stazioni$station_eu_code) %>%
+    filter(yy %in% ANNI & mm %in% c(MESE))->datiTemp  
+
+  datiTemp %>%
+    mutate(oldvalue=value)->datiTemp
+  
+  left_join(datiTemp,stazioni[,c("station_eu_code",SPATIAL)])->datiTemp
+  
+ 
+  #####
+  # Inserire trend temporale (esterno a spde)?
+  #####
+  DAY_TREND<-c(TRUE,FALSE)[1] #rw1 su giorno? ..usare variabile day
+
+  WEEK_TREND<-c(TRUE,FALSE)[1] #rw1 su settimana? ... variabile week
+
+  WDAY_TREND<-c(TRUE,FALSE)[1] #rw1 su giorno della settimana, lun, mar..dom? ... variabile wday  
+
+  MONTH_TREND<-c(TRUE,FALSE)[2] #trend (lineare) sul mese?...variabile mm  
+
+  WEEKEND_TREND<-c(TRUE,FALSE)[1]
+
+  #dati meteo standardizzati
+  datiMeteo::meteo[,c("station_eu_code","date","coordx","coordy",METEO)] ->meteo
+
+  #dati ok? verifichiamo
+  which(is.na(datiTemp$pollutant_fk))->righe
+  if(length(righe)) stop("pollutant_fk NA???")
+
+  #rpulvinla::prepara_dati, aggiunge la variabile banda per l'SPDE, fa il logaritmo della variabile value (l'inquinante) e aggiunge la variabile lockdown
+  prepara_dati(.x = datiTemp,logaritmo = LOGARITMO,lockdown = TRUE,inizio_lockdown = INIZIO_LOCKDOWN,fine_lockdown = FINE_LOCKDOWN,wday=WDAY_TREND,day=DAY_TREND,week=WEEK_TREND,weekend = WEEKEND_TREND)->dati
+  rm(datiTemp)
+  
+  #Sia che lavoriamo con il logaritmo dell'inquinante, sia che lavoriamo con la variabile originale, nella creazione dello stack chiamiamo la variabile
+  #target "value", in modo di avere un'unica interfaccia e toccare il meno possibile il codice
+  if(LOGARITMO){
+    
+    dati$value<-dati$lvalue
+    dati$lvalue<-NULL
+    
+  }#fine LOGARITMO  
+
+  #associo dati meteo
+  left_join(dati,meteo)->dati
+
+  dati %>%
+    filter(yy==2019)->dati19
+  
+  dati %>%
+    filter(yy==2020)->dati20
+
+  right_join(dati19 %>% dplyr::select(-day,-dd,-yy,-pollutant_fk,-regione,-mm),
+             dati20 %>% dplyr::select(-mm,-clc_arable_agri,  #-clc_agricultural,-clc_deciduous,-clc_evergreen,-clc_pasture,-clc_shrub,-clc_crop,
+                                      -regione,-tipo_zona,-coordx,-coordy,-Intercept,-dd,-yy,-pollutant_fk,-altitudedem,-d_a2,-banda,-day),
+            by=c("week"="week","wday"="wday","station_eu_code"="station_eu_code"))->datiJoin
+
+  #creo variabili differenze
+  purrr::map_dfc(c("value",METEO),.f=function(nomeVar){
+  
+    tibble(datiJoin[[paste0(nomeVar,".y")]]-datiJoin[[paste0(nomeVar,".x")]])->temp
+    
+    names(temp)<-nomeVar
+    
+    temp
+    
+  })->differenze
+
+  rm(dati)
+
+  bind_cols(datiJoin[,c("station_eu_code","banda","wday","week","coordx","coordy","Intercept","oldvalue.x","oldvalue.y",SPATIAL)],differenze)->dati
+
+  dati %>%
+    filter(!is.na(coordx))->dati
+
+  if(WEEKEND_TREND){
+    
+    dati %>%
+      mutate(weekend=ifelse(wday==7,1,0))->dati
+    
+  }
+
+
+  min(dati$banda)->banda_first
+  
+  dati %>%
+    mutate(banda=banda-banda_first+1,day=banda)->dati
+
+  #Per l'analisi dei dati NON invalidiamo dati anomali
+  dati %>%
+    mutate(evalue=exp(value)-1)->finale
+    #mutate(value=ifelse(abs(evalue)>1,NA,value))->dati
+
+  finale %>%
+    mutate(mm=as.integer(MESE)) %>%
+    rename(yy_2019=oldvalue.x,yy_2020=oldvalue.y)
+
+})->dati
+
+dati %>%
+  mutate(mese=factor(month.name[mm],levels=month.name[1:4],ordered = TRUE))->dati
+
+unique(dati$station_eu_code)->codici_stazioni
+length(codici_stazioni)->numero_stazioni
+
+
+stazioni %>%
+  mutate(tipo_zona=ifelse(tipo_zona %in% c("R-remote","R-nearcity","R-regional"),"R",tipo_zona))->stazioni
+
+stazioni %>%
+  filter(station_eu_code %in% codici_stazioni)->subStazioni
+
+length(unique(subStazioni$regione))->numero_regioni
+```
+
+### Study area
+
+The input dataset  contains `r numero_stazioni` monitoring stations  distributed in `r numero_regioni-1` regions in the north of Italy, plus Tuscany region in the centre. At the moment of the analysis the NO2 data from Liguria region were not available.
+
+Interestingly, the investigated area features: the Po Valley (Pianura Padana), the northern Italian Alps and the Apennines range.
+
+The Po Valley is an area characterized by intense human pressure, because of high population density, urban sprawl, intensive agricultural practice and livestock management ([Pezzagno et al., 2020](https://www.mdpi.com/2071-1050/12/3/947/pdf);[Romano et al., 2020](https://www.mdpi.com/2073-445X/9/9/301)). Consequently, high emission levels characterize the Po Valley.
+
+NO2 is a pollutant mostly associated with urban phenomena. 
+
+
+```{r}
+table(subStazioni$regione)
+```
+
+### Input data
+
+The ground NO2 measurements are expressed as µg/m3. Such measurements are mostly concentrated in urban areas (urban `r nrow(subStazioni[subStazioni$tipo_zona=='U',])`, suburban  `r nrow(subStazioni[subStazioni$tipo_zona=='S',])`, rural `r nrow(subStazioni[subStazioni$tipo_zona=='R',])`).
+
+The input data belong to the regional Environmental Protection Agencies (ARPA). Data were quality-controlled and aggregated by the Italian Institute for Environmental Protection and Research (ISPRA). 
+
+For the study purposes, we restricted our data to those monitoring stations with at least 75% of available data for each month (March-April/January-April...dipende). The resulting dataset was organized as data frames for the R statistical language [R Core Team, 2018] and stored in packages freely available through a dedicated [Github](https://github.com/progettopulvirus/) repository.      
+
+### Spatial covariates
+
+Station elevations: data from
+
+```{r}
+skimr::skim(subStazioni$altitudedem)
+```
+
+----
+
+Zone agricole: rielaborazione del dataset Corine Land Cover (qui agricole comprende le due voci: "arable" e "agricultural").
+
+```{r}
+skimr::skim(subStazioni$clc_arable_agri)
+```
+
+----
+
+Linear distance from the Openstreetmap (OSM)  major road (a2) network [John E. Vargas-Munoz et al., 2020](https://arxiv.org/pdf/2007.06277.pdf).
+
+```{r}
+skimr::skim(subStazioni$d_a2)
+```
+
+### NO2 data
+
+NO2 concentrations per month and year
+
+```{r}
+skimr::skim(dati %>% dplyr::select(mese,yy_2019,yy_2020) %>% group_by(mese))
+```
+
+
+```{r, include=FALSE} 
+dati %>%
+  dplyr::select(mese,yy_2019,yy_2020) %>%
+  gather(key="yy",value="no2",-mese) %>%
+  mutate(yy=str_remove(yy,"yy_")) %>%
+  mutate(anno=factor(yy,levels=c("2019","2020"),ordered=TRUE))->gdati
+```
+
+
+```{r}
+ggplot(data=gdati,aes(x=mese,y=no2))+
+  geom_boxplot()+
+  facet_wrap(~yy)+
+  theme_bw()
+```
+
+
+### Descrizione variazioni relative (2020-2019)/2019
+
+*evalue* sono le variazioni percentuali con cui sono rappresentate le mappe finali.
+
+Valori di NO2 corrispondenti a variazioni percentuali superiori al 100% (in valore assoluto) sono state eliminate dalla stima del modello di regressione.
+
+```{r}
+skimr::skim(dati %>% dplyr::select(mese,evalue) %>% group_by(mese))
+```
+
+
+
+
+
+
