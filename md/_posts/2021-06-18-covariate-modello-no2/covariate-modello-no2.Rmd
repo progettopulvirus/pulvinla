@@ -1,0 +1,74 @@
+---
+title: "Covariate modello NO2"
+description: |
+  Risultati del modello: effetti fissi e random.
+author:
+  - name: guidofioravanti
+date: 06-18-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+Model parameters: 
+
+- description
+
+- estimates
+
+### Spatio-temporal regressors (ECMWF)
+
+
+| Predictor                                | Variable code                       | Unit           |
+|------------------------------------------|-------------------------------------|----------------|
+| Average temperature at 2 meters          | t2m                                 | &#176;C        |
+| Total precipitation                      | tp                                  | mm             |
+| Planet Boundary Layer, daily maximum     | pblmax                              | km             |
+| Planet Boundary Layer, daily minimum     | pblmin                              | km             |
+| Diurnal temperature range                | dtr                                 | &#176;C        |
+| Net irradiance                           | nirradiance                         | W/m^2          |
+| Wind speed                               | wspeed                              | m/s            |
+| Wind speed, previous day                 | pwspeed                             | m/s            |
+| Relative humidity                        | rh                                  | %              |
+| Surface pressure                         | sp                                  | hPa            |
+
+### Spatial regressors
+
+| Predictor                                | Variable code                       | Unit           |
+|------------------------------------------|-------------------------------------|----------------|
+| Elevation                                | altitudedem                         | m              |
+| Linear distance to the nearest major road (OSM classification) | d_a2          | km             |
+| Percentage of agricultural land type     | clc_arable_agri                     | %              |
+
+### Temporal regressors
+
+| Predictor                                | Variable code                       | Unit           |
+|------------------------------------------|-------------------------------------|----------------|
+| Daily linear trend                       | day                                 |                |
+| Weekend effect                                  | weekend                             |                |
+
+----
+
+Model parameters (fixed and random effects).
+
+
+### January
+
+[Results](./analisi-covariate1.html)
+
+### February
+
+[Results](./analisi-covariate2.html)
+
+### March
+
+[Results](./analisi-covariate3.html)
+
+### April
+
+[Results](./analisi-covariate4.html)
+
+
+
+
+

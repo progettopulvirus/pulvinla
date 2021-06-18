@@ -1,16 +1,18 @@
 ---
 title: "Mappe modello differenze 2019 vs 2020, NO2"
 description: |
-  Medie settimanali differenze.
+  Medie settimanali differenze, giorni feriali.
 author:
   - name: guidofioravanti
-date: 06-14-2021
+date: 06-18-2021
 output:
   distill::distill_article:
     self_contained: true
 ---
 
-Mappe per i soli giorni feriali.
+Queste mappe sono state realizzate inserendo nel modello solo le covariate significative in almeno uno dei due mesi interessati dal lockdown (marzo e aprile). 
+
+Coviariate significative nei mesi di gennaio e febbraio non sono state inserite nel modello finale.
 
 ### Gennaio
 
