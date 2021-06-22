@@ -17,6 +17,23 @@
     "input_file": {}
   },
   {
+    "path": "posts/2021-06-22-esempio-heatmap-variazioni-percentuali-20202019-no2/",
+    "title": "Esempio heatmap, variazioni percentuali 2020/2019 no2",
+    "description": "Grafico provvisorio da sistemare (se ne vale la pena)",
+    "author": [
+      {
+        "name": "guidofioravanti",
+        "url": {}
+      }
+    ],
+    "date": "2021-06-22",
+    "categories": [],
+    "contents": "\nSull’asse delle x sono riportati i giorni dal 1 gennaio al 30 aprile, sull’asse delle y le stazioni del dataset di input, mentre la paletta dei colori rappresenta le variazioni percentuali (osservate).\nI buchi sull’asse x dipendono dal fatto che si tratta di un grafico provvisorio.\nPaletta lisbon\n\n\n\nPaletta berlin\n\n\n\nPaletta vik\n\n\n\nPaletta cork\n\n\n\nPaletta broc\n\n\n\n\n\n\n",
+    "preview": "posts/2021-06-22-esempio-heatmap-variazioni-percentuali-20202019-no2/esempio-heatmap-variazioni-percentuali-20202019-no2_files/figure-html5/unnamed-chunk-1-1.png",
+    "last_modified": "2021-06-22T15:26:28+02:00",
+    "input_file": {}
+  },
+  {
     "path": "posts/2021-06-22-no2-crossvalidation/",
     "title": "no2, crossvalidation",
     "description": {},
