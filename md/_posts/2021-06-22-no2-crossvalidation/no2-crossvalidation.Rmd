@@ -1,0 +1,299 @@
+---
+title: "no2, crossvalidation"
+description: |
+author:
+  - name: guidofioravanti
+date: 06-22-2021
+output:
+  distill::distill_article:
+    self_contained: true
+---
+
+Cross-validation strategy, **comparing predicted versus observed values: $log(2020/2019)$**
+
+For the model validation, we followed the same approach described in Fioravanti et al. (2020). Namely:
+
+- for each month (January - April), we stratified the input dataset according to the **environment type classification** which distinguishes three different station groups: urban, suburban and rural;
+
+- within each group, 10% of the stations were randomly sampled in order to define a validation dataset. The remainder of the stations (training dataset) was used to fit the model and the fitted model was used to predict the log(2020/2019) on the validation dataset. Comparing predicted and observed values allows to assess the model performance on unseen data (if the model underfits, overfits or generalizes well).
+
+- both the sampling and the estimation process were repeated **three times** for each month. 
+
+### Notation
+
+Months (mm in the results)
+
+1: January; 2: February; 3: March; 4: April
+
+Type site (tipo_zona in the results)
+
+U: urban; S: suburban; R: rural
+
+Model stage (stage in the results)
+
+Val: validation dataset; Train: training dataset
+
+### Results
+
+```{r setup,include=FALSE,echo=FALSE,message=FALSE,error=FALSE,warning=FALSE}
+rm(list=objects())
+library("tidyverse")
+library("stazioniMonitoraggio")
+knitr::opts_chunk$set(include=FALSE,echo=FALSE,message=FALSE,error=FALSE,warning=FALSE)
+
+list.files(pattern="^dati.+RDS$")->ffile
+
+purrr::map_dfr(ffile,.f=function(nomeFile){
+  
+  readRDS(nomeFile)->dati
+  ifelse(grepl("Train",nomeFile),"Train","Val")->dati$stage
+  str_extract(str_extract(nomeFile,"_indice[1234]_"),"[[:digit:]]")->dati$trial
+  
+  str_extract(str_extract(nomeFile,"^dati[[:alpha:]]+[0-9]_"),"[0-9]")->mese
+  
+  dati  %>%
+    mutate(mm=mese,yy=2020,dd=day) #%>%
+    #mutate(value=exp(value)-1,fitted=exp(fitted)-1)
+  
+})->mydf
+
+
+mydf %>%
+  mutate(station_eu_code2=paste0(station_eu_code,stage,trial,mm))->mydf
+
+left_join(mydf,stazioni %>% dplyr::select(-i_surface,-altitudedem,-d_a1,-d_a2,-clc_agricultural))->mydf
+```
+
+<br><br>
+
+### Observed vs predicted values, boxplot
+
+```{r,include=FALSE}
+mydf %>%
+  dplyr::select(station_eu_code,stage,trial,value,fitted,mm,yy,tipo_zona) %>%
+  rename(observed=value) %>%
+  tidyr::gather(key="tipo_valori",value="value",-tipo_zona,-yy,-mm,-station_eu_code,-trial,-stage)->gather_mydf
+```
+
+
+```{r,include=TRUE,fig.width=10,fig.height=12}
+ggplot(data=gather_mydf )+
+  geom_boxplot(aes(x=tipo_zona,y=value,fill=tipo_valori))+
+  facet_wrap(mm~stage,ncol = 2)+
+  theme_bw()
+```
+
+<br><br>
+
+### Scatterplot observed vs predicted, training dataset (monthly scatterplot)
+
+```{r,include=TRUE,fig.width=8,fig.asp=1}
+ggplot(data=mydf %>% filter(stage=="Train"))+
+  geom_point(aes(x=value,y=fitted))+
+  geom_abline(intercept=0,slope=1,color="red")+
+  facet_wrap(~mm)+
+  theme_bw()
+```
+
+### Scatterplot observed vs predicted, validation dataset (monthly scatterplot)
+
+```{r,include=TRUE,fig.width=8,fig.asp=1}
+ggplot(data=mydf %>% filter(stage=="Val"))+
+  geom_point(aes(x=value,y=fitted))+
+  geom_abline(intercept=0,slope=1,color="red")+
+  facet_wrap(~mm)+
+  theme_bw()
+```
+
+### Scatterplot observed vs predicted, training dataset (monthly scatterplot per type site)
+
+
+```{r,include=TRUE,fig.width=8,fig.asp=1}
+ggplot(data=mydf %>% filter(stage=="Train"))+
+  geom_point(aes(x=value,y=fitted))+
+  geom_abline(intercept=0,slope=1,color="red")+
+  facet_wrap(mm~tipo_zona)+
+  theme_bw()
+```
+
+### Scatterplot observed vs predicted, validation dataset (monthly scatterplot per type site)
+
+```{r,include=TRUE,fig.width=8,fig.asp=1}
+ggplot(data=mydf %>% filter(stage=="Val"))+
+  geom_point(aes(x=value,y=fitted))+
+  geom_abline(intercept=0,slope=1,color="red")+
+  facet_wrap(mm~tipo_zona)+
+  theme_bw()
+```
+
+### RMSE (observed vs predicted values)
+
+The boxplots show the distribution of the RMSE values for the training and validation stations.
+
+```{r,include=FALSE}
+mydf%>%
+  mutate(error=(value-fitted)^2) %>%
+  group_by(station_eu_code,mm,stage,tipo_zona) %>%
+  summarise(rmse=sqrt(mean(error,na.rm=TRUE))) %>%
+  ungroup()->valoriRmse
+```
+
+<br><br>
+
+#### RMSE values ditribution per month and stage (training/validation)
+
+```{r,include=TRUE}
+print(skimr::skim(valoriRmse %>% dplyr::select(mm,stage,rmse) %>% group_by(mm,stage)))
+```
+
+<br><br>
+
+#### RMSE values ditribution per month, type site and stage 
+
+```{r,include=TRUE}
+print(skimr::skim(valoriRmse %>% dplyr::select(mm,stage,rmse,tipo_zona) %>% group_by(mm,stage,tipo_zona)))
+```
+
+<br><br>
+
+```{r,include=TRUE,fig.height=6,fig.width=12}
+ggplot(data=valoriRmse,aes(x=mm,y=rmse))+
+  geom_boxplot()+
+  facet_wrap(~stage)+
+  theme_bw()
+```
+
+<br><br>
+
+### Correlation (observed vs predicted values)
+
+The boxplots show the distribution of the correlation values for the training and validation stations.
+
+```{r,include=FALSE}
+mydf%>%
+  group_by(station_eu_code,mm,stage,tipo_zona) %>%
+  summarise(corr=cor(value,fitted,use="pairwise.complete.obs")) %>%
+  ungroup()->valoriCor
+```
+
+<br><br>
+
+#### Correlation values ditribution per month and stage (training/validation)
+
+```{r,include=TRUE}
+print(skimr::skim(valoriCor %>% dplyr::select(mm,stage,corr) %>% group_by(mm,stage)))
+```
+
+<br><br>
+
+#### Correlation values ditribution per month, type site (urban, suburban and rural) and stage (training/validation)
+
+```{r,include=TRUE}
+print(skimr::skim(valoriCor %>% dplyr::select(mm,stage,corr,tipo_zona) %>% group_by(mm,stage,tipo_zona)))
+```
+
+<br><br>
+
+```{r,include=TRUE,fig.height=6,fig.width=12}
+ggplot(data=valoriCor,aes(x=mm,y=corr))+
+  geom_boxplot()+
+  facet_wrap(~stage)+
+  theme_bw()
+```
+
+
+```{r,include=TRUE,eval=FALSE}
+cor(mydf[mydf$stage=="Val",c("fitted","value")],use = "pairwise.complete.obs")
+```
+
+
+```{r,include=TRUE,eval=FALSE}
+cor(mydf[mydf$stage=="Train",c("fitted","value")],use = "pairwise.complete.obs")
+```
+
+
+```{r,include=TRUE,eval=FALSE}
+cor(mydf[mydf$tipo_zona=="U" & mydf$stage=="Train",c("fitted","value")],use = "pairwise.complete.obs")
+```
+
+
+```{r,include=TRUE,eval=FALSE}
+cor(mydf[mydf$tipo_zona=="U" & mydf$stage=="Val",c("fitted","value")],use = "pairwise.complete.obs")
+```
+
+
+```{r,include=TRUE,eval=FALSE}
+cor(mydf[mydf$tipo_zona=="R" & mydf$stage=="Train",c("fitted","value")],use = "pairwise.complete.obs")
+```
+
+
+```{r,include=TRUE,eval=FALSE}
+cor(mydf[mydf$tipo_zona=="R" & mydf$stage=="Val",c("fitted","value")],use = "pairwise.complete.obs")
+```
+
+```{r,include=TRUE,eval=FALSE}
+cor(mydf[mydf$tipo_zona=="S" & mydf$stage=="Train",c("fitted","value")],use = "pairwise.complete.obs")
+```
+
+```{r,include=TRUE,eval=FALSE}
+cor(mydf[mydf$tipo_zona=="S" & mydf$stage=="Val",c("fitted","value")],use = "pairwise.complete.obs")
+```
+
+<br><br>
+
+```{r,include=FALSE}
+mydf %>%
+  filter(stage=="Train") %>%
+  mutate(station_eu_code=paste0(station_eu_code,stage,trial,mm))->training
+```
+
+
+`r sqrt(mean((training$fitted-training$value)^2,na.rm=TRUE))`
+
+`r mean((training$fitted-training$value),na.rm=TRUE)`
+
+```{r,include=FALSE,eval=FALSE}
+pdf("training.pdf",width=12,height=8,onefile = TRUE)
+purrr::walk(unique(training$station_eu_code),.f=function(codex){
+  ggplot(data=training %>% filter(station_eu_code==codex) )+
+    geom_line(aes(x=dd,y=value,group=station_eu_code))+
+    geom_line(aes(x=dd,y=fitted,group=station_eu_code),color="red")+
+    facet_wrap(~yy)+
+    theme_bw()->grafico
+  
+  print(grafico)
+  
+})
+dev.off()
+```
+
+
+```{r,include=FALSE}
+mydf %>%
+  filter(stage=="Val") %>%
+  mutate(station_eu_code=paste0(station_eu_code,stage,trial,mm))->validazione
+```
+
+`r sqrt(mean((validazione$fitted-validazione$value)^2,na.rm=TRUE))`
+
+`r mean((validazione$fitted-validazione$value),na.rm=TRUE)`
+
+```{r,include=FALSE,eval=FALSE}
+pdf("validazione.pdf",width=12,height=8,onefile = TRUE)
+purrr::walk(unique(validazione$station_eu_code),.f=function(codex){
+
+  ggplot(data=validazione %>% filter(station_eu_code==codex) )+
+    geom_ribbon(aes(x=dd,ymin=fitted025,ymax=fitted975),fill="lightgray")+
+    geom_line(aes(x=dd,y=value,group=station_eu_code))+
+    geom_line(aes(x=dd,y=fitted,group=station_eu_code),color="red")+
+    facet_wrap(~yy)+
+    theme_bw()->grafico
+  
+  print(grafico)
+
+})
+dev.off()
+```
+
+
+
