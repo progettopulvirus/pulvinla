@@ -1,5 +1,22 @@
 [
   {
+    "path": "posts/2021-06-23-esempio-sintesi-risultati-mappe-interpolate-no2/",
+    "title": "Esempio sintesi risultati mappe interpolate no2",
+    "description": "Prova di grafico.",
+    "author": [
+      {
+        "name": "guidofioravanti",
+        "url": {}
+      }
+    ],
+    "date": "2021-06-23",
+    "categories": [],
+    "contents": "\nSintesi delle mappe interpolate\n\nQuesto barplot rappresenta il numero assoluto di celle nelle mappe con variazioni negative/positive e significative/non significative (nei grafici andrebbero aggiunti come etichette i valori percentuali delle variazioni positive/negative e significative/non significative)\n\n\n\n\n\n\n",
+    "preview": "posts/2021-06-23-esempio-sintesi-risultati-mappe-interpolate-no2/distill-preview.png",
+    "last_modified": "2021-06-23T11:08:26+02:00",
+    "input_file": {}
+  },
+  {
     "path": "posts/2021-06-22-esempio-heatmap-valori-no2/",
     "title": "Esempio heatmap valori no2",
     "description": "Valori di no2, grafico provvisorio da sistemare (se ne vale la pena)",
