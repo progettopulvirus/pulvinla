@@ -9,7 +9,7 @@ output:
     self_contained: true
 ---
 
-Cross-validation strategy, **comparing predicted versus observed values: $log(2020/2019)$**
+Cross-validation strategy, **comparing predicted versus observed values on exponential scale: $exp(log(2020/2019))-1$**
 
 For the model validation, we followed the same approach described in Fioravanti et al. (2020). Namely:
 
@@ -52,8 +52,8 @@ purrr::map_dfr(ffile,.f=function(nomeFile){
   str_extract(str_extract(nomeFile,"^dati[[:alpha:]]+[0-9]_"),"[0-9]")->mese
   
   dati  %>%
-    mutate(mm=mese,yy=2020,dd=day) #%>%
-    #mutate(value=exp(value)-1,fitted=exp(fitted)-1)
+    mutate(mm=mese,yy=2020,dd=day) %>%
+    mutate(value=exp(value)-1,fitted=exp(fitted)-1)
   
 })->mydf
 
